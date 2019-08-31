@@ -54,6 +54,8 @@ public class Example {
         System.out.println("pass: "+passed);
         System.out.println("failed: "+(tests-passed));
 
+        System.out.println("");
+
     }
 
 
