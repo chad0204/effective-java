@@ -1,6 +1,6 @@
 package com.pc.enumpackage;
 
-import com.pc.Constraints;
+import com.pc.something.Constraints;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
