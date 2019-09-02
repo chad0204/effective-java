@@ -1,4 +1,4 @@
-package com.pc;
+package com.pc.something;
 
 public class Parcel1 {
 

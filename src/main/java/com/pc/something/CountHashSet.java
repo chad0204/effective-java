@@ -1,4 +1,4 @@
-package com.pc;
+package com.pc.something;
 
 import java.util.Collection;
 import java.util.Set;

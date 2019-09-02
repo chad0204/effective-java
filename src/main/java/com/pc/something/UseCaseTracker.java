@@ -1,11 +1,9 @@
-package com.pc;
+package com.pc.something;
 
-import com.pc.enumpackage.Food;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UseCaseTracker {
 

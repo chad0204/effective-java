@@ -1,7 +1,4 @@
-package com.pc;
-
-import org.junit.Test;
-import java.util.Random;
+package com.pc.something;
 
 interface Me {
     void apply();
