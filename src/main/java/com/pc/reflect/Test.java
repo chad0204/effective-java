@@ -19,10 +19,11 @@ public class Test {
 
 }
 
+/**
+ *
+ */
 class Value {
     private int value;
-
-
 
     public void setValue(int value) {
         this.value = value;
