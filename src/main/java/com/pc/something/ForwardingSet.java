@@ -4,14 +4,14 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
-public class DecoratorSet<E> implements Set<E> {
+public class ForwardingSet<E> implements Set<E> {
 
     //注入set
     private final Set<E> s;
 
     private int count;
 
-    public DecoratorSet(Set<E> s) { this.s = s; }
+    public ForwardingSet(Set<E> s) { this.s = s; }
 
 
     @Override

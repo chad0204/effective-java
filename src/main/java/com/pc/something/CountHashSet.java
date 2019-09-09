@@ -3,7 +3,7 @@ package com.pc.something;
 import java.util.Collection;
 import java.util.Set;
 
-public class CountHashSet<E> extends DecoratorSet<E> {
+public class CountHashSet<E> extends ForwardingSet<E> {
 
     private int count = 0;
 

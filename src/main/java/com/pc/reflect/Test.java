@@ -14,6 +14,14 @@ public class Test {
         field.setAccessible(true);
         System.out.println(field.get(value));
 
+
+        //甚至可以修改private final域
+        Field field1 = value.getClass().getDeclaredField("finalValue");
+        field1.setAccessible(true);
+        field1.set(value,99);
+        System.out.println(field1.get(value));
+
+
     }
 
 
@@ -24,6 +32,7 @@ public class Test {
  */
 class Value {
     private int value;
+    private final int finalValue = 11;
 
     public void setValue(int value) {
         this.value = value;

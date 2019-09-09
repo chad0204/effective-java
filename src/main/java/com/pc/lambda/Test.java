@@ -1,5 +1,6 @@
 package com.pc.lambda;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,7 +22,22 @@ public class Test {
         new ArrayList<String>().sort(comparingInt(String::length));
 
 
+        new ArrayList<Date1>().sort(Comparator.comparing(Date1::getTime));
 
 
+
+
+    }
+}
+
+class Date1 {
+    private LocalDateTime time;
+
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalDateTime time) {
+        this.time = time;
     }
 }
