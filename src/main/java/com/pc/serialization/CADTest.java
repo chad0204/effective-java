@@ -11,7 +11,7 @@ import java.util.List;
  * @author pengchao
  * @since 20:12 2019-09-09
  */
-public class Test {
+public class CADTest {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         //读取
         ObjectInputStream in = new ObjectInputStream(new FileInputStream("CADstate.out"));

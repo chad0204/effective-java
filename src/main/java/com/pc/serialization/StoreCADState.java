@@ -120,7 +120,7 @@ public class StoreCADState {
      * 静态成员变量不能被序列化
      * @author pengchao
      * @since 20:13 2019-09-09
-     * @see Test#main(String[])
+     * @see CADTest#main(String[])
      *
      */
     @SuppressWarnings("unchecked")
