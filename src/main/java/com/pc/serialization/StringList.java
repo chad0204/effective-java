@@ -20,7 +20,7 @@ public final class StringList implements Serializable {
     private static class Entry {
         String data;
         Entry next;
-        Entry previous;
+        Entry previous;//
     }
 
     public final void add(String s) {
