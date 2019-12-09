@@ -1,4 +1,4 @@
-package com.pc.something;
+package com.pc.concurrent.countDownLatch;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;

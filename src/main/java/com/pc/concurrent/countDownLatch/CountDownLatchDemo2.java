@@ -1,4 +1,4 @@
-package com.pc.something;
+package com.pc.concurrent.countDownLatch;
 
 /**
  *

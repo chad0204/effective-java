@@ -1,4 +1,4 @@
-package com.pc.something;
+package com.pc.concurrent.countDownLatch;
 
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
@@ -21,7 +21,7 @@ public class CountDownLatchDemo implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            latch.countDown();//计数减一,当计数变为0之后结束等待
+            latch.countDown();//线程结束计数减一,当计数变为0之后结束等待
         }
     }
 
@@ -32,7 +32,7 @@ public class CountDownLatchDemo implements Runnable {
 //            executorService.submit(demo);//开启10个任务
         }
 
-        //等待任务完成，才执行下面的操作
+        //等待任务完成，当count值减为0时，主线程才继续执行操作
         latch.await();
 
         System.out.println("Bingo!");
