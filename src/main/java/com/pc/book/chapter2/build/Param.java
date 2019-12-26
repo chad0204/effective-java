@@ -15,7 +15,7 @@ public class Param {
 
 
     /**
-     * 提供创建构建器的方法
+     * 提供两种（有参和无参）创建构建器的方法
      */
     public static Param.ParamBuilder newBuilder() {
         return new ParamBuilder();

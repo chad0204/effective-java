@@ -1,4 +1,4 @@
-package com.pc.serialization;
+package com.pc.book.chapter3.clone;
 
 import java.io.*;
 import java.util.ArrayList;
