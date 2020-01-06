@@ -23,6 +23,8 @@ remove、pop等方法最后，将数组索引位置的对象引用置为null,让
 
 ### 第3章 对于所有对象都通用的方法
 
+Object类包含的方法：getClass,clone,finalize,equals,hashCode,wait/wait(time),notify/notifyAll,toString
+
 #### equals&hashCode
 
 当值类有自己的逻辑相等概念，需要覆盖equals。
@@ -38,12 +40,31 @@ hash冲突，尽量让不相等的元素hashCode值也不相等是提高hash算�
 
 Cloneable接口是一个标记接口(Serializable也是)，作用是不实现该接口，Object的clone方法会抛出CloneNotSupportedException异常。
 
+深拷贝就是对象包括对象包含的属性对象都存在两份。实现深拷贝的方式有clone方法、序列化和各种复制工具等。
 
 
+#### Comparable&Comparator
+
+几乎Java平台类库中的所有值类（值类只是一个表示值的类，例如Integer或String类）以及所有枚举类型都实现了Comparable接口。
 
 ### 第4章 类和接口
 
+访问权限：public>protected(子类继承方法+包级访问)>default(包级访问)>private
+
+#### 组合优先继承
+继承覆盖了父类的方法，如果方法是自用的，例如父类的addAll调用父类的add方法，那么子类覆盖了这两个方法，父类调用子类的方法，导致重复。自如模式
+的方法不能覆盖。
+
+#### 继承
+不要在构造器中调用能被覆盖的方法，可以调用final、私有和静态的方法。
+
+#### 接口
+接口的缺省方法相当于抽象父类的实现方法，子类不用重写可以直接公用（如果实现多个接口包含相同缺省方法，必须重写）。
+不能为Object方法提供缺省方法。
+
 ### 第5章 范型
+
+
 
 ### 第6章 枚举和注解
  

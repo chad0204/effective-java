@@ -1,5 +1,7 @@
 package com.pc.book.chapter2.build;
 
+import com.pc.book.chapter3.comparable.Person;
+
 /**
  *
  *  不足之处：为了创建对象必须先创建该对象的构建器
@@ -38,6 +40,7 @@ public class Test {
         System.out.println(changedParam.getName());
         System.out.println(changedParam.getId());
 
-
     }
+
+
 }

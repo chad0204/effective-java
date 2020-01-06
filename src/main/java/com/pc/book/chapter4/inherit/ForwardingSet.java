@@ -1,5 +1,6 @@
-package com.pc.something;
+package com.pc.book.chapter4.inherit;
 
+import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
@@ -29,16 +30,19 @@ public class ForwardingSet<E> implements Set<E> {
         return s.contains(o);
     }
 
+    @NotNull
     @Override
     public Iterator<E> iterator() {
         return s.iterator();
     }
 
+    @NotNull
     @Override
     public Object[] toArray() {
         return s.toArray();
     }
 
+    @NotNull
     @Override
     public <T> T[] toArray(T[] a) {
         return s.toArray(a);
