@@ -8,21 +8,19 @@ package com.pc.book.chapter2.singleton;
  */
 public enum Elvis {
 
-    INSTANCE;
 
-//    INSTANCE(1001L,"name");
-//    private Long id;
-//    private String name;
-//
-//    private Elvis(long id, String name) {
-//        this.id = id;
-//        this.name = name;
-//    }
+    INSTANCE(1001L,"name");
+
+    private Long id;
+    private String name;
+
+    Elvis(long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
 
     public Elvis getInstance() {
-
-
         return INSTANCE;
     }
 }

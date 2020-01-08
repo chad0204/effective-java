@@ -79,6 +79,13 @@ List<? super T>
 
 ### 第6章 枚举和注解
 
+#### 枚举
+所有枚举都继承自java.lang.Enum,该类实现了Comparable<E>, Serializable接口，提供了valueOf()和ordinal()方法，并在编译期生成values()方法。
+
+使用EnumMap按照枚举类型进行对象分组
+
+可用接口扩展枚举
+
 
  
 ### 第7章 lambda和stream
