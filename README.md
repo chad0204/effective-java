@@ -90,6 +90,8 @@ List<? super T>
  
 ### 第7章 lambda和stream
 
+匿名类中的this指的是匿名类对象，lambda指的是外围类实例
+
 ### 第8章 方法
 
 ### 第9章 通用编程
