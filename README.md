@@ -98,6 +98,10 @@ List<? super T>
 
 ### 第9章 通用编程
 
+StringBuilder的append比直接String拼接快很多，因为String是不可变类，拼接时会创建两个对象拷贝。
+
+
+
 ### 第10章 异常
 
 ### 第11章 并发
