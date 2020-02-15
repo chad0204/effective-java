@@ -27,7 +27,7 @@ public class CircleHashWithoutVirtualNode {
     private static SortedMap<Integer, String> virtualNodes = new TreeMap<Integer, String>();
 
     //虚拟节点的数目，这里写死，为了演示需要，一个真实结点对应5个虚拟节点,虚拟节点越多，每个真实节点分配的资源越接近
-    private static final int VIRTUAL_NODES = 5;
+    private static final int VIRTUAL_NODES = 10000;
 
     //统计各节点获取的访问量
     private static Map<String, List<String>> countMap = new HashMap<>();
