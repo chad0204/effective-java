@@ -1,4 +1,4 @@
-package com.pc.annotation;
+package com.pc.book.chapter6.annotation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

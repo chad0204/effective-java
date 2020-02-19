@@ -1,4 +1,8 @@
-package com.pc.something;
+package com.pc.book.chapter6.enum_;
+
+/**
+ * 用接口模拟可扩展的枚举
+ */
 
 @FunctionalInterface
 interface DoubleBinaryOperator {
@@ -25,7 +29,7 @@ public enum  Operation {
 
     public static void main(String[] args) {
         double x = Operation.PLUS.apply(10,11);
-//        System.out.println(x);
+        System.out.println(x);
     }
 
 }

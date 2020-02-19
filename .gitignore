@@ -1,0 +1,55 @@
+# ignore all object file
+*.class
+*.pyc
+
+# ignore all generated package
+*.jar
+*.war
+!Service/pubtrans/lib/*.jar
+
+# ignore all compress package
+*.bz2
+*.gz
+*.tar
+*.ear
+*.zip
+
+# ingnore local properties
+application-local.properties
+
+# ignore vim swap file
+*.swp
+
+# ignore all eclipse project file and directory
+.classpath
+.project
+.settings
+
+#ignore idea project file and directory
+*.iml
+.idea
+
+# ignore output directory
+target
+
+# ignore system auto generated file
+Thumbs.db
+Desktop.ini
+
+# ignore generated log file
+pubtrans.log*
+pubtrans-web.log*
+pubtrans-ops.log*
+pubtrans-dxt.log*
+pubtrans-ldstatic.log*
+*.log
+
+#ignore c lib
+*.o
+*.a
+.cproject
+/tools/filebackup/src/main/java/META-INF/MANIFEST.MF
+Service/pubtrans/src/test/java.com.dtdream.pubtrans.backend/PubtransApplicationTests
+
+#ignore backup
+*.versionsBackup

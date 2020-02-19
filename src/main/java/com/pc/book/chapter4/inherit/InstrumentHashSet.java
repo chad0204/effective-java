@@ -1,14 +1,14 @@
-package com.pc.something;
+package com.pc.book.chapter4.inherit;
 
 import java.util.Collection;
 import java.util.Set;
 
-public class CountHashSet<E> extends ForwardingSet<E> {
+public class InstrumentHashSet<E> extends ForwardingSet<E> {
 
     private int count = 0;
 
 
-    public CountHashSet(Set<E> set) {
+    public InstrumentHashSet(Set<E> set) {
         super(set);
     }
 
