@@ -7,4 +7,8 @@ package com.pc.git;
  * @date 12:22 2020-02-17
  */
 public class Hello {
+
+    public static void main(String[] args) {
+
+    }
 }
