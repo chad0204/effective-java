@@ -9,6 +9,7 @@ package com.pc.git;
 public class Hello {
 
     public static void main(String[] args) {
+        System.out.println("这是pre-release提交");
         System.out.println("这是master-rebuild提交");
     }
 }
