@@ -36,8 +36,13 @@ public class SimpleSemaphore {
             Thread t = new Thread(() -> {
 
                 try {
-                    //获取信号量
-                    semaphore.acquire();// 如果线程超过5个,其他线程会阻塞到这来,知道线程执行结束释放许可
+                    //1.阻塞获取信号量，所有线程最后都会执行
+//                    semaphore.acquire();// 如果线程超过5个,其他线程会阻塞到这来,知道线程执行结束释放许可
+
+                    //2.尝试获取信号量，没有获取到许可的线程抛出异常
+                    if(!semaphore.tryAcquire()) {
+                        throw new InterruptedException("limited."+n);
+                    }
 
                     System.out.println(Thread.currentThread().getName()+"进来了");
 
