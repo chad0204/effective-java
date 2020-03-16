@@ -5,6 +5,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * 计数器，控制线程执行，让五个线程都执行完才开始执行主线程
+ */
 public class CountDownLatchDemo implements Runnable {
 
     static final CountDownLatch latch = new CountDownLatch(5);//数值为10的计数器
