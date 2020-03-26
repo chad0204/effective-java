@@ -32,7 +32,6 @@ public class SimpleSemaphore {
     private static TryableSemaphore semaphore = new TryableSemaphoreActual(n); // 最大线程数
 
 
-
     public static void main(String[] args) {
         //不缓存任务的不限量数据库
         ExecutorService service = Executors.newCachedThreadPool();
