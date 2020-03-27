@@ -20,12 +20,13 @@ public class TestHashMap {
         // 经是64，所以转红黑树。后面扩容的触发条件是比较size和阈值的大小。
 
 
-        HashMap<String,Integer> map = new HashMap<>(16, 10f);//loadFactor决定扩容时机，
+        HashMap<String,Integer> map = new HashMap<>(16, 10f);//loadFactor决定扩容时机，这里就是size超过数组长度的10倍才扩容
 
         //size 桶数组  阈值
         // 1    16     160//初始扩容
         // 89   32     320//转树失败扩容
         // 99   64     640//转树失败扩容
+        //下面转树成功
         // 641  128   1280//size>threshold
         // 1281  256   2560//size>threshold
         //...
@@ -37,7 +38,6 @@ public class TestHashMap {
         }
         map.put("aa",1);
         map.put("bb",1);
-
 
         System.out.println(map);
 
