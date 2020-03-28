@@ -1,6 +1,5 @@
 package com.pc.concurrent.map;
 
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -23,12 +22,6 @@ public class TestChm {
          *
          *  hm初始化时，会将threshold计算为2的幂，然后在第一次put元素时，初始化长度为threshold的数组，并将threshold计算为数组长度*loadFactor，
          *  后面只要size>threshold,进行扩容，数组长度和sizeCtl都翻倍。
-         *
-         *
-         *
-         *
-         *
-         *
          *
          *
          */
@@ -59,9 +52,9 @@ public class TestChm {
 
         /**
          *  table.length  map.size
-         *  16      12
-         *  32      24
-         *  64      48
+         *  16              12
+         *  32              24
+         *  64              48
          *
          */
 
