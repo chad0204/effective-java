@@ -1,4 +1,4 @@
-package com.pc.concurrent.map;
+package com.pc.concurrent.collection;
 
 import sun.misc.Unsafe;
 import java.io.ObjectStreamField;
@@ -162,7 +162,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
         }
 
         /**
-         * Virtualized support for map.get(); overridden in subclasses.
+         * Virtualized support for collection.get(); overridden in subclasses.
          */
         Node<K,V> find(int h, Object k) {
             Node<K,V> e = this;
@@ -280,13 +280,13 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     /* ---------------- Public operations -------------- */
 
     /**
-     * Creates a new, empty map with the default initial table size (16).
+     * Creates a new, empty collection with the default initial table size (16).
      */
     public PConcurrentHashMap() {
     }
 
     /**
-     * Creates a new, empty map with an initial table size
+     * Creates a new, empty collection with an initial table size
      * accommodating the specified number of elements without the need
      * to dynamically resize.
      *
@@ -305,9 +305,9 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
-     * Creates a new map with the same mappings as the given map.
+     * Creates a new collection with the same mappings as the given collection.
      *
-     * @param m the map
+     * @param m the collection
      */
     public PConcurrentHashMap(Map<? extends K, ? extends V> m) {
         this.sizeCtl = DEFAULT_CAPACITY;
@@ -315,7 +315,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
-     * Creates a new, empty map with an initial table size based on
+     * Creates a new, empty collection with an initial table size based on
      * the given number of elements ({@code initialCapacity}) and
      * initial table density ({@code loadFactor}).
      *
@@ -334,7 +334,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
-     * Creates a new, empty map with an initial table size based on
+     * Creates a new, empty collection with an initial table size based on
      * the given number of elements ({@code initialCapacity}), table
      * density ({@code loadFactor}), and number of concurrently
      * updating threads ({@code concurrencyLevel}).
@@ -384,9 +384,9 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
 
     /**
      * Returns the value to which the specified key is mapped,
-     * or {@code null} if this map contains no mapping for the key.
+     * or {@code null} if this collection contains no mapping for the key.
      *
-     * <p>More formally, if this map contains a mapping from a key
+     * <p>More formally, if this collection contains a mapping from a key
      * {@code k} to a value {@code v} such that {@code key.equals(k)},
      * then this method returns {@code v}; otherwise it returns
      * {@code null}.  (There can be at most one such mapping.)
@@ -427,12 +427,12 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
-     * Returns {@code true} if this map maps one or more keys to the
+     * Returns {@code true} if this collection maps one or more keys to the
      * specified value. Note: This method may require a full traversal
-     * of the map, and is much slower than method {@code containsKey}.
+     * of the collection, and is much slower than method {@code containsKey}.
      *
-     * @param value value whose presence in this map is to be tested
-     * @return {@code true} if this map maps one or more keys to the
+     * @param value value whose presence in this collection is to be tested
+     * @return {@code true} if this collection maps one or more keys to the
      *         specified value
      * @throws NullPointerException if the specified value is null
      */
@@ -539,11 +539,11 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
-     * Copies all of the mappings from the specified map to this one.
-     * These mappings replace any mappings that this map had for any of the
-     * keys currently in the specified map.
+     * Copies all of the mappings from the specified collection to this one.
+     * These mappings replace any mappings that this collection had for any of the
+     * keys currently in the specified collection.
      *
-     * @param m mappings to be stored in this map
+     * @param m mappings to be stored in this collection
      */
     public void putAll(Map<? extends K, ? extends V> m) {
         tryPresize(m.size());
@@ -552,8 +552,8 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
-     * Removes the key (and its corresponding value) from this map.
-     * This method does nothing if the key is not in the map.
+     * Removes the key (and its corresponding value) from this collection.
+     * This method does nothing if the key is not in the collection.
      *
      * @param  key the key that needs to be removed
      * @return the previous value associated with {@code key}, or
@@ -641,7 +641,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
-     * Removes all of the mappings from this map.
+     * Removes all of the mappings from this collection.
      */
     public void clear() {
         long delta = 0L; // negative number of deletions
@@ -676,10 +676,10 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
-     * Returns a {@link Set} view of the keys contained in this map.
-     * The set is backed by the map, so changes to the map are
+     * Returns a {@link Set} view of the keys contained in this collection.
+     * The set is backed by the collection, so changes to the collection are
      * reflected in the set, and vice-versa. The set supports element
-     * removal, which removes the corresponding mapping from this map,
+     * removal, which removes the corresponding mapping from this collection,
      * via the {@code Iterator.remove}, {@code Set.remove},
      * {@code removeAll}, {@code retainAll}, and {@code clear}
      * operations.  It does not support the {@code add} or
@@ -699,11 +699,11 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
-     * Returns a {@link Collection} view of the values contained in this map.
-     * The collection is backed by the map, so changes to the map are
+     * Returns a {@link Collection} view of the values contained in this collection.
+     * The collection is backed by the collection, so changes to the collection are
      * reflected in the collection, and vice-versa.  The collection
      * supports element removal, which removes the corresponding
-     * mapping from this map, via the {@code Iterator.remove},
+     * mapping from this collection, via the {@code Iterator.remove},
      * {@code Collection.remove}, {@code removeAll},
      * {@code retainAll}, and {@code clear} operations.  It does not
      * support the {@code add} or {@code addAll} operations.
@@ -722,10 +722,10 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
-     * Returns a {@link Set} view of the mappings contained in this map.
-     * The set is backed by the map, so changes to the map are
+     * Returns a {@link Set} view of the mappings contained in this collection.
+     * The set is backed by the collection, so changes to the collection are
      * reflected in the set, and vice-versa.  The set supports element
-     * removal, which removes the corresponding mapping from the map,
+     * removal, which removes the corresponding mapping from the collection,
      * via the {@code Iterator.remove}, {@code Set.remove},
      * {@code removeAll}, {@code retainAll}, and {@code clear}
      * operations.
@@ -745,10 +745,10 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
 
     /**
      * Returns the hash code value for this {@link Map}, i.e.,
-     * the sum of, for each key-value pair in the map,
+     * the sum of, for each key-value pair in the collection,
      * {@code key.hashCode() ^ value.hashCode()}.
      *
-     * @return the hash code value for this map
+     * @return the hash code value for this collection
      */
     public int hashCode() {
         int h = 0;
@@ -762,7 +762,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
-     * Returns a string representation of this map.  The string
+     * Returns a string representation of this collection.  The string
      * representation consists of a list of key-value mappings (in no
      * particular order) enclosed in braces ("{@code {}}").  Adjacent
      * mappings are separated by the characters {@code ", "} (comma
@@ -770,7 +770,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
      * followed by an equals sign ("{@code =}") followed by the
      * associated value.
      *
-     * @return a string representation of this map
+     * @return a string representation of this collection
      */
     public String toString() {
         Node<K,V>[] t;
@@ -795,14 +795,14 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
-     * Compares the specified object with this map for equality.
-     * Returns {@code true} if the given object is a map with the same
-     * mappings as this map.  This operation may return misleading
-     * results if either map is concurrently modified during execution
+     * Compares the specified object with this collection for equality.
+     * Returns {@code true} if the given object is a collection with the same
+     * mappings as this collection.  This operation may return misleading
+     * results if either collection is concurrently modified during execution
      * of this method.
      *
-     * @param o object to be compared for equality with this map
-     * @return {@code true} if the specified object is equal to this map
+     * @param o object to be compared for equality with this collection
+     * @return {@code true} if the specified object is equal to this collection
      */
     public boolean equals(Object o) {
         if (o != this) {
@@ -1041,11 +1041,11 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
 
     /**
      * Returns the value to which the specified key is mapped, or the
-     * given default value if this map contains no mapping for the
+     * given default value if this collection contains no mapping for the
      * key.
      *
      * @param key the key whose associated value is to be returned
-     * @param defaultValue the value to return if this map contains
+     * @param defaultValue the value to return if this collection contains
      * no mapping for the given key
      * @return the mapping for the key, if present; else the default value
      * @throws NullPointerException if the specified key is null
@@ -1088,12 +1088,12 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     /**
      * If the specified key is not already associated with a value,
      * attempts to compute its value using the given mapping function
-     * and enters it into this map unless {@code null}.  The entire
+     * and enters it into this collection unless {@code null}.  The entire
      * method invocation is performed atomically, so the function is
      * applied at most once per key.  Some attempted update operations
-     * on this map by other threads may be blocked while computation
+     * on this collection by other threads may be blocked while computation
      * is in progress, so the computation should be short and simple,
-     * and must not attempt to update any other mappings of this map.
+     * and must not attempt to update any other mappings of this collection.
      *
      * @param key key with which the specified value is to be associated
      * @param mappingFunction the function to compute a value
@@ -1102,7 +1102,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
      * @throws NullPointerException if the specified key or mappingFunction
      *         is null
      * @throws IllegalStateException if the computation detectably
-     *         attempts a recursive update to this map that would
+     *         attempts a recursive update to this collection that would
      *         otherwise never complete
      * @throws RuntimeException or Error if the mappingFunction does so,
      *         in which case the mapping is left unestablished
@@ -1192,10 +1192,10 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
      * If the value for the specified key is present, attempts to
      * compute a new mapping given the key and its current mapped
      * value.  The entire method invocation is performed atomically.
-     * Some attempted update operations on this map by other threads
+     * Some attempted update operations on this collection by other threads
      * may be blocked while computation is in progress, so the
      * computation should be short and simple, and must not attempt to
-     * update any other mappings of this map.
+     * update any other mappings of this collection.
      *
      * @param key key with which a value may be associated
      * @param remappingFunction the function to compute a value
@@ -1203,7 +1203,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
      * @throws NullPointerException if the specified key or remappingFunction
      *         is null
      * @throws IllegalStateException if the computation detectably
-     *         attempts a recursive update to this map that would
+     *         attempts a recursive update to this collection that would
      *         otherwise never complete
      * @throws RuntimeException or Error if the remappingFunction does so,
      *         in which case the mapping is unchanged
@@ -1282,7 +1282,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
      * Attempts to compute a mapping for the specified key and its
      * current mapped value (or {@code null} if there is no current
      * mapping). The entire method invocation is performed atomically.
-     * Some attempted update operations on this map by other threads
+     * Some attempted update operations on this collection by other threads
      * may be blocked while computation is in progress, so the
      * computation should be short and simple, and must not attempt to
      * update any other mappings of this Map.
@@ -1293,7 +1293,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
      * @throws NullPointerException if the specified key or remappingFunction
      *         is null
      * @throws IllegalStateException if the computation detectably
-     *         attempts a recursive update to this map that would
+     *         attempts a recursive update to this collection that would
      *         otherwise never complete
      * @throws RuntimeException or Error if the remappingFunction does so,
      *         in which case the mapping is unchanged
@@ -1410,7 +1410,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
      * Otherwise, replaces the value with the results of the given
      * remapping function, or removes if {@code null}. The entire
      * method invocation is performed atomically.  Some attempted
-     * update operations on this map by other threads may be blocked
+     * update operations on this collection by other threads may be blocked
      * while computation is in progress, so the computation should be
      * short and simple, and must not attempt to update any other
      * mappings of this Map.
@@ -1606,7 +1606,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
-     * Returns a {@link Set} view of the keys in this map, using the
+     * Returns a {@link Set} view of the keys in this collection, using the
      * given common mapped value for any additions (i.e., {@link
      * Collection#add} and {@link Collection#addAll(Collection)}).
      * This is of course only appropriate if it is acceptable to use
@@ -2984,7 +2984,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
         }
 
         /**
-         * Sets our entry's value and writes through to the map. The
+         * Sets our entry's value and writes through to the collection. The
          * value to return is somewhat arbitrary here. Since we do not
          * necessarily track asynchronous changes, the most recent
          * "previous" value could be different from what we return (or
@@ -3871,15 +3871,15 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
         CollectionView(PConcurrentHashMap<K,V> map)  { this.map = map; }
 
         /**
-         * Returns the map backing this view.
+         * Returns the collection backing this view.
          *
-         * @return the map backing this view
+         * @return the collection backing this view
          */
         public PConcurrentHashMap<K,V> getMap() { return map; }
 
         /**
          * Removes all of the elements from this view, by removing all
-         * the mappings from the map backing this view.
+         * the mappings from the collection backing this view.
          */
         public final void clear()      { map.clear(); }
         public final int size()        { return map.size(); }
@@ -4052,18 +4052,18 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
         public boolean contains(Object o) { return map.containsKey(o); }
 
         /**
-         * Removes the key from this map view, by removing the key (and its
-         * corresponding value) from the backing map.  This method does
-         * nothing if the key is not in the map.
+         * Removes the key from this collection view, by removing the key (and its
+         * corresponding value) from the backing collection.  This method does
+         * nothing if the key is not in the collection.
          *
-         * @param  o the key to be removed from the backing map
-         * @return {@code true} if the backing map contained the specified key
+         * @param  o the key to be removed from the backing collection
+         * @return {@code true} if the backing collection contained the specified key
          * @throws NullPointerException if the specified key is null
          */
         public boolean remove(Object o) { return map.remove(o) != null; }
 
         /**
-         * @return an iterator over the keys of the backing map
+         * @return an iterator over the keys of the backing collection
          */
         public Iterator<K> iterator() {
             Node<K,V>[] t;
@@ -4074,7 +4074,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
 
         /**
          * Adds the specified key to this set view by mapping the key to
-         * the default mapped value in the backing map, if defined.
+         * the default mapped value in the backing collection, if defined.
          *
          * @param e key to be added
          * @return {@code true} if this set changed as a result of the call
@@ -4231,7 +4231,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
         }
 
         /**
-         * @return an iterator over the entries of the backing map
+         * @return an iterator over the entries of the backing collection
          */
         public Iterator<Map.Entry<K,V>> iterator() {
             PConcurrentHashMap<K,V> m = map;

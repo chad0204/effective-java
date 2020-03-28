@@ -1,4 +1,4 @@
-package com.pc.concurrent.map;
+package com.pc.concurrent.collection;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -51,7 +51,7 @@ public class TestChm {
         System.out.println();
 
         /**
-         *  table.length  map.size
+         *  table.length  collection.size
          *  16              12
          *  32              24
          *  64              48
