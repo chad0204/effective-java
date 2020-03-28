@@ -2,6 +2,7 @@ package com.pc.concurrent.collection;
 
 import java.util.Random;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 阻塞队列
@@ -11,27 +12,25 @@ import java.util.concurrent.*;
  */
 public class TestBlockQueue {
 
-    static final int NCPU = Runtime.getRuntime().availableProcessors();
-
-
+    private static AtomicInteger atomicInteger = new AtomicInteger(0);
 
     private static final ExecutorService executorService =
-            new ThreadPoolExecutor(NCPU, NCPU, 0L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(10), r -> {
+            new ThreadPoolExecutor(1, 10, 0L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(5), r -> {
                 Thread t = new Thread(r);
-                t.setName("PC-Thread-" + Thread.currentThread().getName());
+                t.setName("PC-Thread-" +atomicInteger.incrementAndGet());
                 return t;
-            }, new ThreadPoolExecutor.AbortPolicy());
-
-
+            }, new ThreadPoolExecutor.CallerRunsPolicy());
 
     public static void main(String[] args) {
+
+
         ArrayBlockingQueue<String> blockingQueue = new ArrayBlockingQueue<>(10);
 
         executorService.execute(new Producer(blockingQueue));
         executorService.execute(new Producer(blockingQueue));
         executorService.execute(new Consumer(blockingQueue));
 
-        executorService.submit(new Producer(blockingQueue));
+//        executorService.submit(new Producer(blockingQueue));
     }
 
 }
