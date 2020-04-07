@@ -1792,7 +1792,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
      */
     private final void tryPresize(int size) {
         /*
-         * 使用tableSizeFor算出来后面table一直要扩容到这个值小于等于sizeCtrl(数组长度的3/4)才退出扩容
+         * 使用tableSizeFor算出来需要扩容到的值c，后面table一直要扩容到这个值小于等于sizeCtrl(数组长度的3/4)才退出扩容
          */
         int c = (size >= (MAXIMUM_CAPACITY >>> 1)) ? MAXIMUM_CAPACITY :
                 tableSizeFor(size + (size >>> 1) + 1);
@@ -1900,7 +1900,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
                 if (finishing) {//如果所有的节点都已经完成复制工作  就把nextTable赋值给table 清空临时对象nextTable
                     nextTable = null;
                     table = nextTab;
-                    sizeCtl = (n << 1) - (n >>> 1); //设置sizeCtl为扩容后的0.75
+                    sizeCtl = (n << 1) - (n >>> 1); //设置sizeCtl为扩容后数组长度的0.75
                     return;
                 }
                 if (U.compareAndSwapInt(this, SIZECTL, sc = sizeCtl, sc - 1)) {

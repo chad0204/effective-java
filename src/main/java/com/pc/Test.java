@@ -1,8 +1,7 @@
 package com.pc;
 
 import com.pc.concurrent.synchronized_.App;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * TODO
@@ -13,13 +12,24 @@ import java.util.concurrent.Executors;
 public class Test {
 
     public static void main(String[] args) {
-        int a = 0;
-        int b = 0;
-        boolean flag = a==b && ((a=a+1)==b);
-        System.out.println(flag);
-        System.out.println(a);
 
-        App app = new App();
+        ExecutorService executorService =
+                new ThreadPoolExecutor(2,2,0, TimeUnit.MILLISECONDS,new LinkedBlockingQueue<>());
 
+        for(;;) {
+            if(((ThreadPoolExecutor) executorService).getQueue().size()>100) {
+                System.out.println(((ThreadPoolExecutor) executorService).getQueue().size());
+                break;
+            }
+            executorService.execute(() -> {
+                try {
+                    System.out.println(Thread.currentThread().getName()+"start");
+                    TimeUnit.SECONDS.sleep(5);
+                    System.out.println(Thread.currentThread().getName()+"over");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 }
