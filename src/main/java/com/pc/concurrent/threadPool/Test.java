@@ -42,6 +42,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  *    队列已满，最多创建maximumPoolSize个线程，超出线程数+队列任务数的任务会被拒绝策略处理。
  *
  *
+ * 使用窍门：
+ *  可以根据ThreadPoolExecutor#getQueue().size()来获取线程池中堆积的任务数，来控制程序
+ *
  *
  *
  */
@@ -75,9 +78,6 @@ public class Test {
                 }
             });
         }
-
-
-
         int nThreads = 10;
         int corePoolSize = 5;
 

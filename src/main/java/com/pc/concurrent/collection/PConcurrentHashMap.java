@@ -63,6 +63,9 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     static final int MIN_TREEIFY_CAPACITY = 64;
 
 
+    /**
+     * 每次进行转移的最小值
+     */
     private static final int MIN_TRANSFER_STRIDE = 16;
 
     private static int RESIZE_STAMP_BITS = 16;
@@ -1845,7 +1848,8 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     private final void transfer(Node<K,V>[] tab, Node<K,V>[] nextTab) {
         int n = tab.length, stride;
         if ((stride = (NCPU > 1) ? (n >>> 3) / NCPU : n) < MIN_TRANSFER_STRIDE)//MIN_TRANSFER_STRIDE=16 用来控制不要占用太多CPU
-            stride = MIN_TRANSFER_STRIDE; // subdivide range
+            //每个CPU最少处理16个长度的数组元素,也就是说，如果一个数组的长度只有16，那只有一个线程会对其进行扩容的复制移动操作
+            stride = MIN_TRANSFER_STRIDE; // subdivide range ，处理边界16
 
         /*
          * 如果复制的目标nextTab为null的话，则初始化一个table两倍长的nextTab
@@ -1875,7 +1879,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
 
         //通过for自循环处理每个槽位中的链表元素，默认advace为真，通过CAS设置transferIndex属性值，
         // 并初始化i和bound值，i指当前处理的槽位序号，bound指需要处理的槽位边界，先处理槽位15的节点；
-        //相当于锁的粒度是每一个数组节点下的链表或者树
+        //i指当前处理的槽位序号，bound指需要处理的槽位边界
         for (int i = 0, bound = 0;;) {
             Node<K,V> f; int fh;
             while (advance) {
@@ -1910,7 +1914,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
                     i = n; // recheck before commit
                 }
             }
-            //如果遍历到的节点为空 则放入ForwardingNode指针
+            //每处理一个节点或者节点为null的时候会在链表的头部设置一个fwd节点，这样其他线程就会跳过他
             else if ((f = tabAt(tab, i)) == null)
                 advance = casTabAt(tab, i, null, fwd);
             //如果遍历到ForwardingNode节点  说明这个点已经被处理过了 直接跳过  这里是控制并发扩容的核心

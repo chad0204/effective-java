@@ -20,7 +20,7 @@ import sun.misc.Unsafe;
  *
  *
  * CANCELLED =  1//结束或取消
- * SIGNAL    = -1//唤醒
+ * SIGNAL    = -1//需要被唤醒
  * CONDITION = -2//等待被唤醒
  * PROPAGATE = -3//广播
  *
@@ -43,11 +43,11 @@ public abstract class AbstractQueuedSynchronizer
         static final Node EXCLUSIVE = null;
 
         /** waitStatus value to indicate thread has cancelled */
-        static final int CANCELLED =  1;
+        static final int CANCELLED =  1;//结束或取消,需要被移除队列
         /** waitStatus value to indicate successor's thread needs unparking */
-        static final int SIGNAL    = -1;
+        static final int SIGNAL    = -1;//需要被唤醒
         /** waitStatus value to indicate thread is waiting on condition */
-        static final int CONDITION = -2;
+        static final int CONDITION = -2;//等待被唤醒
         /**
          * waitStatus value to indicate the next acquireShared should
          * unconditionally propagate
@@ -439,7 +439,7 @@ public abstract class AbstractQueuedSynchronizer
             } while (pred.waitStatus > 0);
             pred.next = node;
         } else {
-            //如果前驱节点的状态ws小于0又不是SIGNAL状态，
+            //如果前驱节点的状态ws小于0又不是SIGNAL状态，（CONDITION：-2，PROPAGATE：-3）
             //则将其设置为SIGNAL状态，代表前驱结点的线程正在等待唤醒
             compareAndSetWaitStatus(pred, ws, Node.SIGNAL);
         }
@@ -488,7 +488,7 @@ public abstract class AbstractQueuedSynchronizer
                     setHead(node);
                     p.next = null; // help GC
                     failed = false;
-                    return interrupted;//false
+                    return interrupted;//false 表示拿到锁
                 }
 
                 if (shouldParkAfterFailedAcquire(p, node) &&//如果前驱结点不是head，判断是否挂起线程
@@ -819,7 +819,10 @@ public abstract class AbstractQueuedSynchronizer
     public final void acquire(int arg) {
         if (!tryAcquire(arg) &&//获取锁，模版方法子类实现
                 acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
-            selfInterrupt();//
+            selfInterrupt();//自旋
+
+        //tryAcquire返回true，执行
+        //acquireQueued返回false，则自旋拿到锁，执行
     }
 
 

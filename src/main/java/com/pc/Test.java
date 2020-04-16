@@ -1,10 +1,8 @@
 package com.pc;
 
-import com.pc.concurrent.synchronized_.App;
 import java.util.concurrent.*;
 
 /**
- * TODO
  *
  * @author dongxie
  * @date 10:24 2019-12-24
