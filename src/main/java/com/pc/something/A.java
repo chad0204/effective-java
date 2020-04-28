@@ -1,5 +1,7 @@
 package com.pc.something;
 
+import java.util.concurrent.TimeUnit;
+
 class A implements MyInterface {
 
 
@@ -8,9 +10,12 @@ class A implements MyInterface {
         print();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         A a = new A();
         a.f();
+
+        TimeUnit.SECONDS.sleep(1000);
+
     }
 
 
