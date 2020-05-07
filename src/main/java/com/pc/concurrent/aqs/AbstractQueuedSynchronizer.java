@@ -420,6 +420,10 @@ public abstract class AbstractQueuedSynchronizer
      * 2.如果是CANCELLED（ws>0），表示线程结束，应该移除，向前遍历直到找到前驱等待的线程节点
      * 3.如果即不是SIGNAL也不是CANCELLED（CONDITION），则将前驱节点设置成SIGNAL
      *
+     *  如果是SIGNAL则park
+     *  是CANCELLED则清除节点再找SIGNAL进行park
+     *  是CONDITION和PROPAGATE就设置成SIGNAL再进行park
+     *
      *
      */
     private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
@@ -432,7 +436,7 @@ public abstract class AbstractQueuedSynchronizer
              */
             //如果前驱节点的等待状态为等待唤醒（SIGNAL）状态则返回true，可以park。
             return true;
-        if (ws > 0) {
+        if (ws > 0) {//CANCELLED=1
             //如果ws>0 则说明是结束状态，遍历前驱结点直到找到没有结束状态的结点
             do {
                 node.prev = pred = pred.prev;
@@ -480,6 +484,15 @@ public abstract class AbstractQueuedSynchronizer
         boolean failed = true;
         try {
             boolean interrupted = false;
+            /*
+             * 除非拿到锁，否则这个自旋是不会结束的，只是被park，线程不执行了，
+             * 等待unpark继续自旋，要么被清除调。
+             *
+             * park的条件是前驱节点是SIGNAL,则park
+             * CANCELLED，则清除
+             * 否则是等待状态，则设置成SIGNAL
+             *
+             */
             for (;;) {
                 //获取前驱结点
                 final Node p = node.predecessor();
@@ -491,7 +504,8 @@ public abstract class AbstractQueuedSynchronizer
                     return interrupted;//false 表示拿到锁
                 }
 
-                if (shouldParkAfterFailedAcquire(p, node) &&//如果前驱结点不是head，判断是否挂起线程
+                //如果前驱结点不是head，判断是否挂起线程,前驱节点为SIGNAL则park
+                if (shouldParkAfterFailedAcquire(p, node) &&
                         parkAndCheckInterrupt())//
                     interrupted = true;
             }
@@ -821,8 +835,8 @@ public abstract class AbstractQueuedSynchronizer
                 acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
             selfInterrupt();//自旋
 
-        //tryAcquire返回true，执行
-        //acquireQueued返回false，则自旋拿到锁，执行
+        //tryAcquire返回true，线程执行
+        //acquireQueued返回false，则自旋拿到锁，线程执行
     }
 
 
