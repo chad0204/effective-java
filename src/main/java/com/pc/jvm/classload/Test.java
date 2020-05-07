@@ -1,7 +1,7 @@
 package com.pc.jvm.classload;
 
-import com.pc.model.Demo1;
-import com.pc.model.Demo2;
+import com.pc.jvm.model.Demo1;
+import com.pc.jvm.model.Demo2;
 
 /**
  * 测试双亲委派

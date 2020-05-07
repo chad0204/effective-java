@@ -17,11 +17,6 @@ public class IsPresentTest {
 
         Optional<Model> optionalModel = Optional.ofNullable(model);
 
-        if(optionalModel.isPresent()) {
-            System.out.println(optionalModel.get().getName());
-        }
-
-
 
     }
 }
