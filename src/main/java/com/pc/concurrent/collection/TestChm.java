@@ -31,7 +31,7 @@ public class TestChm {
 
 
 
-        for(int i=10;i<100;i++) {
+        for(int i=0;i<100;i++) {
             map.put(i+"",i);
         }
 

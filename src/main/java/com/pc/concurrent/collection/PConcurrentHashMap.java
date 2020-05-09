@@ -107,6 +107,9 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
 
     /**
      * The next table index (plus one) to split while resizing.
+     *
+     *  数组扩容时，用来记录需要移动元素数量
+     *
      */
     private transient volatile int transferIndex;
 
@@ -475,7 +478,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     final V putVal(K key, V value, boolean onlyIfAbsent) {
         if (key == null || value == null) throw new NullPointerException();
         int hash = spread(key.hashCode());//获取hash值
-        int binCount = 0;
+        int binCount = 0;//红黑树
         for (Node<K,V>[] tab = table;;) {//自旋
             Node<K,V> f; int n, i, fh;
             if (tab == null || (n = tab.length) == 0)
@@ -485,7 +488,8 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
                         new Node<K,V>(hash, key, value, null)))//cas给数组索引设置值，hashMap这里会出现并发覆盖的问题
                     break;//添加成功，结束自旋
             }
-            else if ((fh = f.hash) == MOVED)//表示正在扩容复制数组，此时f节点是ForwardingNode节点
+            //此时f节点是ForwardingNode节点，表示正在扩容复制数组。（扩容时会创建新数组，旧数组上的节点复制移动后，旧节点被置为ForwardingNode）
+            else if ((fh = f.hash) == MOVED)
                 tab = helpTransfer(tab, f);//当前线程也去帮助复制，因为是自旋，扩容之后会重新put
 
             //数组不为空，节点不为空（节点下是链表或者树），也没有其他线程在扩容，则通过synchronized来加锁，进行添加操作，
@@ -1692,7 +1696,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
      */
     private final Node<K,V>[] initTable() {
         Node<K,V>[] tab; int sc;
-        while ((tab = table) == null || tab.length == 0) {
+        while ((tab = table) == null || tab.length == 0) {//初始化完成
             if ((sc = sizeCtl) < 0)
                 //如果sizeCtl小于0，说明别的数组正在进行初始化，则让出执行权，不进行初始化，下次循环直接拿到初始化后的数组返回
                 Thread.yield();
@@ -1844,9 +1848,20 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
     /**
      * Moves and/or copies the nodes in each bin to new table. See
      * above for explanation.
+     *
+     *
+     *
+     *   第一个线程初始化一个2倍原数组的新数组，开始将旧元素移动到新数组中。
+     *
+     *   每个线程处理16个桶数组，移动桶及桶下的链表或者树到新数组时会给头节点加锁，当遍历到数组位置为空或者桶移动完成就把桶设置成fwd。
+     *
+     *   处理完成之后会再拿16个元素继续处理，直到所有的元素都移动完成，最后还会遍历一遍防止遗漏。
+     *
+     *
      */
     private final void transfer(Node<K,V>[] tab, Node<K,V>[] nextTab) {
         int n = tab.length, stride;
+        //每个线程最少处理数组长度是16，正常是长度除以8在除以cpu数量
         if ((stride = (NCPU > 1) ? (n >>> 3) / NCPU : n) < MIN_TRANSFER_STRIDE)//MIN_TRANSFER_STRIDE=16 用来控制不要占用太多CPU
             //每个CPU最少处理16个长度的数组元素,也就是说，如果一个数组的长度只有16，那只有一个线程会对其进行扩容的复制移动操作
             stride = MIN_TRANSFER_STRIDE; // subdivide range ，处理边界16
@@ -1868,7 +1883,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
             transferIndex = n;
         }
         /*
-         * 创建一个fwd节点，这个是用来控制并发的，当一个节点为空或已经被转移之后，就设置为fwd节点
+         * 创建一个fwd节点，这个是用来控制并发的，当一个节点为空或已经被转移到新数组之后，就设置为fwd节点
          * 这是一个空的标志节点
          */
         int nextn = nextTab.length;
@@ -1877,25 +1892,26 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
         boolean finishing = false; // to ensure sweep(清扫) before committing nextTab,在完成之前重新在扫描一遍数组，检查是否有未完成的
 
 
-        //通过for自循环处理每个槽位中的链表元素，默认advace为真，通过CAS设置transferIndex属性值，
-        // 并初始化i和bound值，i指当前处理的槽位序号，bound指需要处理的槽位边界，先处理槽位15的节点；
-        //i指当前处理的槽位序号，bound指需要处理的槽位边界
+        //每个协助线程处理一段数组元素，遇到fwd节点就跳过。所有线程每次处理长度为16的数组，直到所有数组元素都移动完成。
+        // 初始化i和bound值，i指当前处理的槽位序号，bound指需要处理的槽位边界，每次处理i-bound个数组（一般为stride=16，除非cpu变态该值大于16）
+        // 处理完stride个数组之后，i和bound都会减少stride
         for (int i = 0, bound = 0;;) {
             Node<K,V> f; int fh;
             while (advance) {
                 int nextIndex, nextBound;
-                if (--i >= bound || finishing)
+                if (--i >= bound || finishing)//边界值
                     advance = false;
-                else if ((nextIndex = transferIndex) <= 0) {
-                    i = -1;
+                else if ((nextIndex = transferIndex) <= 0) {//transferIndex总共要移动的元素个数，每次减16，当transferIndex=0遍历完了，设置i=-1
+                    i = -1;//i=-1
                     advance = false;
                 }
-                else if (U.compareAndSwapInt
+                else if (U.compareAndSwapInt//transferIndex是通过TRANSFERINDEX来变化的
                         (this, TRANSFERINDEX, nextIndex,
                                 nextBound = (nextIndex > stride ?
                                         nextIndex - stride : 0))) {
-                    bound = nextBound;
-                    i = nextIndex - 1;
+                    //每处理完16个，重新划定边界
+                    bound = nextBound;//每次遍历bound~i的数组，i-bound = stride = 16，也就是每次复制stride个
+                    i = nextIndex - 1;//
                     advance = false;
                 }
             }
@@ -1908,23 +1924,25 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
                     return;
                 }
                 if (U.compareAndSwapInt(this, SIZECTL, sc = sizeCtl, sc - 1)) {
-                    if ((sc - 2) != resizeStamp(n) << RESIZE_STAMP_SHIFT)
+                    if ((sc - 2) != resizeStamp(n) << RESIZE_STAMP_SHIFT)//RESIZE_STAMP_SHIFT=16
                         return;
                     finishing = advance = true;
-                    i = n; // recheck before commit
+                    i = n; // recheck before commit，再次设置成扩容前的值，目的是扫描一遍是否遗漏
                 }
             }
-            //每处理一个节点或者节点为null的时候会在链表的头部设置一个fwd节点，这样其他线程就会跳过他
+            //节点为null的时候会在链表的头部设置一个fwd节点，说明不需要复制转移，这样其他线程就会跳过他
             else if ((f = tabAt(tab, i)) == null)
                 advance = casTabAt(tab, i, null, fwd);
-            //如果遍历到ForwardingNode节点  说明这个点已经被处理过了 直接跳过  这里是控制并发扩容的核心
+            //如果遍历到ForwardingNode节点  说明这个点已经被处理完成或者本来就是空节点 那么直接跳过  这里是控制并发扩容的核心
             else if ((fh = f.hash) == MOVED)
                 advance = true; // already processed
             else {
+                //如果两个线程分配的数组有重叠，正好都处理到同一个fwd节点，那么拿到锁的线程执行完，阻塞的线程会再执行一遍？
+                //不会 ，因为下面的复制只会执行fh >= 0 的链表节点，或者TREEBIN   = -2的树节点，MOVED = -1就不执行了。
                 synchronized (f) {
-                    if (tabAt(tab, i) == f) {
+                    if (tabAt(tab, i) == f) {//确认下值
                         Node<K,V> ln, hn;
-                        if (fh >= 0) {// 链表节点
+                        if (fh >= 0) {// 链表节点或者普通节点，树是-2
                             int runBit = fh & n;
                             Node<K,V> lastRun = f;
                             for (Node<K,V> p = f.next; p != null; p = p.next) {
@@ -1951,6 +1969,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
                             }
                             setTabAt(nextTab, i, ln);
                             setTabAt(nextTab, i + n, hn);
+                            //每处理完成一个节点也设置fwd,其他线程跳过
                             setTabAt(tab, i, fwd);
                             advance = true;
                         }
@@ -1986,6 +2005,7 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
                                     (lc != 0) ? new TreeBin<K,V>(hi) : t;
                             setTabAt(nextTab, i, ln);
                             setTabAt(nextTab, i + n, hn);
+                            //每处理完成一个节点也设置fwd，其他线程跳过
                             setTabAt(tab, i, fwd);
                             advance = true;
                         }
