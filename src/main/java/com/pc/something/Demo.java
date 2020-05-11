@@ -6,7 +6,7 @@ public class Demo {
 
 
     public Demo() {
-        System.out.println("demo contract");
+        System.out.println("dubbo contract");
     }
 
 

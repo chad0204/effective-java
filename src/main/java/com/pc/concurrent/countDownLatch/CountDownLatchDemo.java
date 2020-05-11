@@ -32,7 +32,7 @@ public class CountDownLatchDemo implements Runnable {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         for (int i=0;i<10;i++) {
             executorService.execute(demo);
-//            executorService.submit(demo);//开启10个任务
+//            executorService.submit(dubbo);//开启10个任务
         }
 
         //等待任务完成，当count值减为0时，主线程才继续执行操作

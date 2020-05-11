@@ -12,5 +12,5 @@ public @interface UseCase {
     int id();
     String description() default "no description";
 
-//    Demo demo();
+//    Demo dubbo();
 }

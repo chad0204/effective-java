@@ -5,7 +5,7 @@ package com.pc.jvm.memory;
  *
  *
  *
- *  java -Xss144k -jar jvm-demo-1.0-SNAPSHOT.jar
+ *  java -Xss144k -jar jvm-dubbo-1.0-SNAPSHOT.jar
  *
  * @author dongxie
  * @date 10:43 2020-04-27
