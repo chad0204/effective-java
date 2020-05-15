@@ -1,4 +1,4 @@
-package com.pc.util;
+package com.pc.util.chain;
 
 /**
  * TODO
@@ -6,10 +6,10 @@ package com.pc.util;
  * @author dongxie
  * @date 15:57 2020-05-15
  */
-public class TwoFilter implements Filter {
+public class ThreeFilter implements Filter {
     @Override
     public String invoke(Invoker invoker,String param) {
-        System.out.println("two");
+        System.out.println("three");
         return invoker.invoke(param);
     }
 }
