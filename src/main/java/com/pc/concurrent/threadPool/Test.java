@@ -87,7 +87,7 @@ public class Test {
         ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
         ExecutorService cachedThreadPool1 = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
                 60L, TimeUnit.SECONDS,
-                new SynchronousQueue<>());
+                new SynchronousQueue<>());//SynchronousQueue没有容量，即存即用
 
 
         /**

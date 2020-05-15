@@ -1,5 +1,6 @@
 package com.pc;
 
+import java.time.LocalDate;
 import java.util.concurrent.*;
 
 /**
@@ -10,6 +11,10 @@ import java.util.concurrent.*;
 public class Test {
 
     public static void main(String[] args) {
+
+
+
+        LocalDate startDate = LocalDate.now().minusDays(90);
 
         ExecutorService executorService =
                 new ThreadPoolExecutor(2,2,0, TimeUnit.MILLISECONDS,new LinkedBlockingQueue<>());
