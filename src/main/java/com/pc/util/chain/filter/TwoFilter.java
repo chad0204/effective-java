@@ -1,4 +1,6 @@
-package com.pc.util.chain;
+package com.pc.util.chain.filter;
+
+import com.pc.util.chain.Invoker;
 
 /**
  * TODO
@@ -8,7 +10,7 @@ package com.pc.util.chain;
  */
 public class TwoFilter implements Filter {
     @Override
-    public String invoke(Invoker invoker,String param) {
+    public String invoke(Invoker invoker, String param) {
         System.out.println("two");
         return invoker.invoke(param);
     }

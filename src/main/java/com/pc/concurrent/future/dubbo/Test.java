@@ -15,6 +15,7 @@ public class Test {
 
         DefaultFuture future = new DefaultFuture(request);
 
+        //FutureFilter中实现
         future.setCallback(new ResponseCallback() {
             @Override
             public void done(Object response) {
