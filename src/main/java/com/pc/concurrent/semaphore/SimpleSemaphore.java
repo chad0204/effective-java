@@ -1,5 +1,6 @@
 package com.pc.concurrent.semaphore;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
@@ -26,10 +27,12 @@ public class SimpleSemaphore {
 
     private static final int n = 5;
     //创建一个数量为5的信号量
-//    private static Semaphore semaphore = new Semaphore(n,true); // 最大线程数
+    private static Semaphore semaphore = new Semaphore(n,true); // 最大线程数
 
 
-    private static TryableSemaphore semaphore = new TryableSemaphoreActual(n); // 最大线程数
+
+
+//    private static TryableSemaphore semaphore = new TryableSemaphoreActual(n); // 最大线程数
 
 
     public static void main(String[] args) {
