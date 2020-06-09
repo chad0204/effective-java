@@ -4,7 +4,9 @@ import com.google.common.base.Charsets;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnel;
 import com.google.common.hash.PrimitiveSink;
+import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.List;
 
 /**
  * 布隆过滤器
@@ -25,7 +27,6 @@ import java.util.BitSet;
  */
 public class BloomFilterTest {
 
-    private int a;
 
 
     private static final BloomFilter<String> dealIdBloomFilter = BloomFilter.create(new Funnel<String>() {
@@ -38,7 +39,7 @@ public class BloomFilterTest {
             arg1.putString(arg0, Charsets.UTF_8);
         }
 
-    }, 1024*1024*32,0.1d);//expectedInsertions：位数组长度, fpp：误判率
+    }, 1024*1024*32,0.5d);//expectedInsertions：位数组长度, fpp：误判率
 
 
 
@@ -79,11 +80,22 @@ public class BloomFilterTest {
 
 
         for (int i=0;i<10000000;i++) {
-            dealIdBloomFilter.put("aa"+1);
+            dealIdBloomFilter.put("aa"+i);
         }
 
         System.out.println("BloomFilter:"+dealIdBloomFilter.mightContain("aa1"));
 
+
+        List<Integer> errorList = new ArrayList<Integer>(1000);
+        //故意取10000个不在过滤器里的值，看看有多少个会被认为在过滤器里
+        for (int i = 10000000 + 10000; i < 10000000 + 20000; i++) {
+            if (dealIdBloomFilter.mightContain("aa"+i)) {
+                errorList.add(i);
+            }
+        }
+
+        System.out.println("错误个数:"+errorList.size());
+        System.out.println("错误率:"+errorList.size()/10000d);
 
     }
 }

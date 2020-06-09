@@ -832,8 +832,8 @@ public abstract class AbstractQueuedSynchronizer
      */
     public final void acquire(int arg) {
         if (!tryAcquire(arg) &&//获取锁，模版方法子类实现
-                acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
-            selfInterrupt();//自旋
+                acquireQueued(addWaiter(Node.EXCLUSIVE), arg))//自旋
+            selfInterrupt();
 
         //tryAcquire返回true，线程执行
         //acquireQueued返回false，则自旋拿到锁，线程执行

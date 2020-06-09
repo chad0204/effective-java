@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  *
  * 1.参数：
- * corePoolSize:线程最大并发数。当线程池中的线程数小于corePoolSize时，新提交的任务将创建一个新线程去执行，即使此时线程池中存在空闲线程。
+ * corePoolSize:线程池核心线程数。当线程池中的线程数小于corePoolSize时，新提交的任务将创建一个新线程去执行，即使此时线程池中存在空闲线程。
  *              当线程池中的线程数大于corePoolSize时，且队列未满时新提交的任务将被放入workQueue中，等待线程池中的任务调度。
  * maximumPoolSize:队列满后，线程最大并发数(队列未满无效)。如果maximumPoolSize>corePoolSize(此时corePoolSize就是运行线程数,因为workQueue都满了）,
  *              新提交的任务会创建新线程执行，否则（未执行的任务已经占满队列，且线程已经开启到maximumPoolSize=corePoolSize），新的任务由

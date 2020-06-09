@@ -50,6 +50,7 @@ public class SimpleSemaphore {
                     if(!semaphore.tryAcquire()) {
                         throw new InterruptedException("limited."+n);
                     }
+//                    semaphore.acquire();
 
                     System.out.println(Thread.currentThread().getName()+"进来了");
 

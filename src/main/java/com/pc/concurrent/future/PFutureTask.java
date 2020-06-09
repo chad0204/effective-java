@@ -451,7 +451,7 @@ public class PFutureTask<V> implements RunnableFuture<V> {
             //第一次自旋，线程还未创建WaitNode，此时为当前线程创建WaitNode
             else if (q == null)
                 q = new WaitNode();
-            //第二次自旋，当前线程已经创建WaitNode但为入对，此时入队
+            //第二次自旋，当前线程已经创建WaitNode但未入队，此时入队
             else if (!queued)
                 //q.next = waiters 当前线程节点的next指向原队列的头节点（waiters一直指向队列的头）
                 //cas成功则入队成功，失败说明其他线程先入队，自旋下一次继续入队，直到成功为止

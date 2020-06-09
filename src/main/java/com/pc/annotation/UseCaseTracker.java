@@ -1,4 +1,4 @@
-package com.pc.something;
+package com.pc.annotation;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
