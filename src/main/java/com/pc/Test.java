@@ -13,6 +13,9 @@ public class Test {
     public static void main(String[] args) {
 
 
+        int a = "abc".hashCode();
+
+
 
         LocalDate startDate = LocalDate.now().minusDays(90);
 

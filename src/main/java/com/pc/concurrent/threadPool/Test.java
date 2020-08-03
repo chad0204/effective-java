@@ -78,11 +78,18 @@ public class Test {
                 }
             });
         }
+
+        executorService.submit(() -> {
+
+        });
+
+
         int nThreads = 10;
         int corePoolSize = 5;
 
         /**
-         * 无最大线程数，无任务缓存，提交任务就开启线程执行或者获取任务执行，线程执行完60秒回收
+         * 无最大线程数，无任务缓存，提交任务就开启线程执行或者获取任务执行，线程执行完60秒回收。
+         * 如果每个线程都执行很慢，那么一直放入任务线程也会一直增多，因为SynchronousQueue随时都是满的。
          */
         ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
         ExecutorService cachedThreadPool1 = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
@@ -115,5 +122,42 @@ public class Test {
 
 
 
+
+    }
+}
+
+
+class MyPolicy implements RejectedExecutionHandler {
+
+    @Override
+    public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
+        //TODO 持久化
+        //异步发送到mq，或者入库
+        Task task = (Task) r;
+        System.out.println(task.getData());
+
+
+    }
+}
+
+class Task implements Runnable {
+
+    int data;
+
+    public Task(int data) {
+        this.data = data;
+    }
+
+    @Override
+    public void run() {
+
+    }
+
+    public int getData() {
+        return data;
+    }
+
+    public void setData(int data) {
+        this.data = data;
     }
 }

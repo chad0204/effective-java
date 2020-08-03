@@ -24,7 +24,7 @@ public class Test {
             }
         });
 
-        //可以注册多个监听
+        //可以注册多个监听,执行完成后会推送结果
         futureCallBack.addListener(new BiConsumer<String, Exception>() {
             @Override
             public void accept(String s, Exception e) {
@@ -40,9 +40,9 @@ public class Test {
 
         new Thread(futureCallBack).start();
 
-        System.out.println("get----"+System.currentTimeMillis()+"---"+futureCallBack.get());
+        //也可以通过get拉取结果
+//        System.out.println("get----"+System.currentTimeMillis()+"---"+futureCallBack.get());
 
-        System.out.println("");
 
     }
 

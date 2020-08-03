@@ -29,6 +29,11 @@ public class TestLRU {
 
     public static void main(String[] args) {
 
+
+        LinkedHashMap<String,String> linkedHashMap = new LinkedHashMap<>();
+        linkedHashMap.put("","");//调用的是父类hashMap的put，HashMap的put方法最后会调用afterNodeInsertion(evict)，上面的removeEldestEntry就是这个方法调用的
+
+
         for (int i = 0 ; i < 15; i++) {
             cache.put(i+"",new TestLRU(i+""));
         }

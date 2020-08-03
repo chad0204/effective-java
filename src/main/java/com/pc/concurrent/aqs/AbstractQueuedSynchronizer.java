@@ -497,7 +497,7 @@ public abstract class AbstractQueuedSynchronizer
                 //获取前驱结点
                 final Node p = node.predecessor();
                 if (p == head && tryAcquire(arg)) {//当且仅当p为头结点才尝试获取同步状态
-                    //拿到锁之后，将node设置为头结点，并清除node的线程信息,但是节点的状态还在
+                    //拿到锁之后，将node设置为头结点，并清除node的线程信息,清除之前的head,但是节点的状态还在
                     setHead(node);
                     p.next = null; // help GC
                     failed = false;
@@ -1629,7 +1629,7 @@ public abstract class AbstractQueuedSynchronizer
             //释放当前线程锁即释放同步状态
             int savedState = fullyRelease(node);
             int interruptMode = 0;
-            //判断结点是否同步队列(SyncQueue)中,即是否被唤醒
+            //判断结点是否同步队列(SyncQueue)中,即是否被signal
             while (!isOnSyncQueue(node)) {
                 //挂起线程
                 LockSupport.park(this);

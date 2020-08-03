@@ -1,9 +1,7 @@
 package com.pc.concurrent.threadPool;
 
 import java.util.LinkedList;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.*;
 
 /**
  *
@@ -33,13 +31,41 @@ public class TestQueue {
          */
         SynchronousQueue<String> synchronousQueue = new SynchronousQueue<>();
 //        for(int i=0;i<1;i++) {
-//            synchronousQueue.add(i+"");
+//            synchronousQueue.add(1+"");
 //        }
         synchronousQueue.offer("11");
 
         System.out.println(synchronousQueue.poll());
 
         System.out.println(synchronousQueue.size());
+
+
+
+        ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
+        ExecutorService cachedThreadPool1 = new ThreadPoolExecutor(0, 10,
+                60L, TimeUnit.SECONDS,
+                new SynchronousQueue<>(), new RejectedExecutionHandler() {
+            @Override
+            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+                System.out.println(Thread.currentThread().getName()+"-rejectedExecution");
+            }
+        });//SynchronousQueue没有容量，即存即用
+
+
+        for(int i=0;i<100;i++) {
+            cachedThreadPool1.execute(() -> {
+
+                try {
+                    TimeUnit.MILLISECONDS.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(Thread.currentThread().getName());
+
+            });
+        }
+
+
 
     }
 }

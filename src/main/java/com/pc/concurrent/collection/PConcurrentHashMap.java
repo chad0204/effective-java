@@ -86,9 +86,9 @@ public class PConcurrentHashMap<K,V> extends AbstractMap<K,V>
 
     /* ---------------- Fields -------------- */
 
-    transient volatile Node<K,V>[] table;
+    transient volatile Node<K,V>[] table;//volatile保证并发可见性
 
-    private transient volatile Node<K,V>[] nextTable;//转移的时候用的数组
+    private transient volatile Node<K,V>[] nextTable;//转移的时候用的数组，volatile保证并发可见性
 
     /**
      * Base counter value, used mainly when there is no contention,
