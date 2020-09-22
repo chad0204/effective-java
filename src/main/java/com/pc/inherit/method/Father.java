@@ -1,7 +1,7 @@
-package com.pc.inherit;
+package com.pc.inherit.method;
 
-import com.pc.inherit.param.IReq;
-import com.pc.inherit.param.IResp;
+import com.pc.inherit.method.param.IReq;
+import com.pc.inherit.method.param.IResp;
 import java.lang.reflect.ParameterizedType;
 
 /**

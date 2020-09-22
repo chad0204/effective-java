@@ -1,4 +1,4 @@
-package com.pc.inherit.param;
+package com.pc.inherit.method.param;
 
 /**
  * TODO

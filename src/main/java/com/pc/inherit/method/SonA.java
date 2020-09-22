@@ -1,7 +1,7 @@
-package com.pc.inherit;
+package com.pc.inherit.method;
 
-import com.pc.inherit.param.ReqImpl;
-import com.pc.inherit.param.RespImpl;
+import com.pc.inherit.method.param.ReqImpl;
+import com.pc.inherit.method.param.RespImpl;
 
 /**
  * TODO

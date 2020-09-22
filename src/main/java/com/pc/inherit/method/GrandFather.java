@@ -1,4 +1,4 @@
-package com.pc.inherit;
+package com.pc.inherit.method;
 
 /**
  * TODO

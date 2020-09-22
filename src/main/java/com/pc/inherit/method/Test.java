@@ -1,4 +1,4 @@
-package com.pc.inherit;
+package com.pc.inherit.method;
 
 /**
  * 如果子类没有该方法，则向上调用父类。
