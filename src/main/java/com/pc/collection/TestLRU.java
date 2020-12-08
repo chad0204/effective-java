@@ -17,6 +17,7 @@ public class TestLRU {
 
     //这里初始是一个anonymous，作为缓存
     private static final Map<String, TestLRU> cache = new LinkedHashMap<String, TestLRU>() {
+        private static final long serialVersionUID = -1551859775286388288L;
         protected boolean removeEldestEntry(Map.Entry<String, TestLRU> var1) {
             return this.size() > MAX_SIZE;
         }
