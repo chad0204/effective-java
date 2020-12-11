@@ -1,9 +1,7 @@
-package com.pc.sort;
+package com.pc.algorithm.sort;
 
-import java.util.Collections;
 
 /**
- * TODO
  *
  * @author dongxie
  * @date 17:40 2020-04-28
@@ -14,5 +12,8 @@ public class Test {
 
 
 
+
     }
+
+
 }

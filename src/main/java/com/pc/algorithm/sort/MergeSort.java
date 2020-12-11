@@ -1,4 +1,4 @@
-package com.pc.sort;
+package com.pc.algorithm.sort;
 
 
 /**
