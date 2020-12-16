@@ -5,6 +5,18 @@ import java.util.*;
 /**
  * 快速排序
  *
+ *  时间复杂度：
+ *      长度为N
+ *      递归的层数为logN（最差为N）
+ *      每一层的运算量为N
+ *      N*logN
+ *
+ *  空间复杂度：
+ *      递归产生的栈空间复杂度,也就是递归层数
+ *      logN ～ N
+ *
+ *
+ *
  *
  *
  * @author dongxie
@@ -15,19 +27,20 @@ public class QuickSort {
     public static void main(String[] args) {
 
 //        int[] arr = {4,1,6,5,3,2,8,7};
+        int[] arr = {8,7,6,5,4,3,2,1};
 
-        int[] arr = new int[1000];
-
-        Random random = new Random(47);
-        for(int i =0;i<1000;i++) {
-            arr[i] = random.nextInt(1000);
-        }
+//        int[] arr = new int[1000];
+//
+//        Random random = new Random(47);
+//        for(int i =0;i<1000;i++) {
+//            arr[i] = random.nextInt(1000);
+//        }
 
         //排序前
         System.out.println(Arrays.toString(arr));
 
         //使用栈排序
-        System.out.println(Arrays.toString(quickSortWithStack(arr,0,arr.length-1)));
+//        System.out.println(Arrays.toString(quickSortWithStack(arr,0,arr.length-1)));
 
         //使用递归排序
         quickSort(arr,0,arr.length-1);
@@ -51,13 +64,6 @@ public class QuickSort {
      *  解决办法是每次分治都随机找一个基准值（当然也有可能 '每次' 分治后选中的基准值都是最大值，但概率极低）
      *
      *
-     *
-     * 挖坑法
-     *
-     *  指定pivot，记住索引，这个位置相当于一个坑
-     *  设置left和right指针指向最左和最右
-     *
-     *
      */
     public static void quickSort(int[] arr, int startIndex, int endIndex) {
         // 递归结束条件：startIndex大等于endIndex的时候
@@ -70,7 +76,109 @@ public class QuickSort {
         // 用分治法递归数列的两部分
         quickSort(arr, startIndex, pivotIndex - 1);
         quickSort(arr, pivotIndex + 1, endIndex);
+
+        //结束后返回上一个递归
     }
+
+
+    /**
+     * 交换法
+     *
+     * 选左1为基准值
+     * 从右边开始，一直向左寻找，直到有比基准值小的元素，right指针停下，切换到左边
+     * 从左边开始，一直向右寻找，直到有比基准值大的元素，left指针停下，交换left和right
+     * 直到left和right重合，然后将基准值和重合点交换，此时已经找到基准值的该在的位置，基准值索引左边皆小，右边皆大
+     * 按照基准值位置分别递归左右两边
+     *
+     *
+     * 相等的时候也要往前走走，不然left就停在基准值下面不走了，所以要arr[left] >= pivot
+     * 左基右找
+     *
+     *
+     */
+    private static int partitionUseIndexSwap(int[] arr, int startIndex, int endIndex) {
+
+        int pivot = arr[startIndex];//选第一个元素为基准值
+
+        int left = startIndex;
+        int right = endIndex;
+
+
+        while (left < right) {
+
+            //右边开始,找到小于pivot的第一个值
+            while (left<right) {
+                if(arr[right] >= pivot) {//相等的时候也要往前走走
+                    right--;
+                }  else {
+                    break;
+                }
+            }
+
+
+            //左边开始，找到大于pivot的第一个值
+            while (left<right) {
+                if(arr[left] <= pivot) {
+                    left++;
+                } else {
+                    break;
+                }
+            }
+
+            //这时left停在大于pivot的位置，right停在小于pivot的位置，且left<right，交换
+            if(left<right) {
+                int temp = arr[left];
+                arr[left] = arr[right];
+                arr[right] = temp;
+            }
+        }
+
+
+        //最后将基准值赋值到left和right重合点
+        arr[startIndex] = arr[left];
+        arr[left] = pivot;
+
+
+        return left;
+    }
+
+
+    /**
+     * 使用栈来替代递归
+     *
+     */
+    public static int[] quickSortWithStack(int[] arr, int startIndex, int endIndex) {
+        // 用一个集合栈来代替递归的函数栈
+        Stack<Map<String, Integer>> quickSortStack = new Stack<>();
+        // 整个数列的起止下标，以哈希的形式入栈
+        Map<String,Integer> rootParam = new HashMap<>();
+        rootParam.put("startIndex", startIndex);
+        rootParam.put("endIndex", endIndex);
+        quickSortStack.push(rootParam);
+        // 循环结束条件：栈为空时结束
+        while (!quickSortStack.isEmpty()) {
+            // 栈顶元素出栈，得到起止下标
+            Map<String, Integer> param = quickSortStack.pop();
+            // 得到基准元素位置
+            int pivotIndex = partitionUseIndexSwap(arr, param.get("startIndex"), param.get("endIndex"));
+            // 根据基准元素分成两部分, 把每一部分的起止下标入栈
+            if(param.get("startIndex") < pivotIndex -1){
+                Map<String, Integer> leftParam = new HashMap<>();
+                leftParam.put("startIndex", param.get("startIndex"));
+                leftParam.put("endIndex", pivotIndex -1);
+                quickSortStack.push(leftParam);
+            }
+            if(pivotIndex + 1 < param.get("endIndex")){
+                Map<String, Integer> rightParam = new HashMap<>();
+                rightParam.put("startIndex", pivotIndex + 1);
+                rightParam.put("endIndex", param.get("endIndex"));
+                quickSortStack.push(rightParam);
+            }
+        }
+
+        return arr;
+    }
+
 
 
     /**
@@ -121,106 +229,6 @@ public class QuickSort {
 
         return index;
     }
-
-
-    /**
-     * 交换法
-     *
-     * 选左1为基准值
-     * 从右边开始，一直向左寻找，直到有比基准值小的元素，right指针停下，切换到左边
-     * 从左边开始，一直向右寻找，直到有比基准值大的元素，left指针停下，交换left和right
-     * 直到left和right重合，然后将基准值和重合点交换，此时已经找到基准值的该在的位置，基准值索引左边皆小，右边皆大
-     * 分别递归左右两边
-     *
-     *
-     * 相等的时候也要往前走走，不然left就停在基准值下面不走了
-     * 左基右找
-     *
-     *
-     */
-    private static int partitionUseIndexSwap(int[] arr, int startIndex, int endIndex) {
-
-        int pivot = arr[startIndex];//选第一个元素为基准值
-
-        int left = startIndex;
-        int right = endIndex;
-
-
-        while (left < right) {
-
-            //右边开始,找到小于pivot的第一个值
-            while (left<right) {
-                if(arr[right] >= pivot) {//相等的时候也要往前走走
-                    right--;
-                }  else {
-                    break;
-                }
-            }
-
-
-            //左边开始，找到大于pivot的第一个值
-            while (left<right) {
-                if(arr[left] <= pivot) {
-                    left++;
-                } else {
-                    break;
-                }
-            }
-
-            //这时left停在大于pivot的位置，right停在小于pivot的位置，交换
-            if(left<right) {
-                int temp = arr[left];
-                arr[left] = arr[right];
-                arr[right] = temp;
-            }
-        }
-
-
-        //最后将基准值赋值到left和right重合点
-        arr[startIndex] = arr[left];
-        arr[left] = pivot;
-
-
-        return left;
-    }
-
-
-
-    public static int[] quickSortWithStack(int[] arr, int startIndex, int endIndex) {
-        // 用一个集合栈来代替递归的函数栈
-        Stack<Map<String, Integer>> quickSortStack = new Stack<>();
-        // 整个数列的起止下标，以哈希的形式入栈
-        Map<String,Integer> rootParam = new HashMap<>();
-        rootParam.put("startIndex", startIndex);
-        rootParam.put("endIndex", endIndex);
-        quickSortStack.push(rootParam);
-        // 循环结束条件：栈为空时结束
-        while (!quickSortStack.isEmpty()) {
-            // 栈顶元素出栈，得到起止下标
-            Map<String, Integer> param = quickSortStack.pop();
-            // 得到基准元素位置
-            int pivotIndex = partitionUseIndexSwap(arr, param.get("startIndex"), param.get("endIndex"));
-            // 根据基准元素分成两部分, 把每一部分的起止下标入栈
-            if(param.get("startIndex") < pivotIndex -1){
-                Map<String, Integer> leftParam = new HashMap<>();
-                leftParam.put("startIndex", param.get("startIndex"));
-                leftParam.put("endIndex", pivotIndex -1);
-                quickSortStack.push(leftParam);
-            }
-            if(pivotIndex + 1 < param.get("endIndex")){
-                Map<String, Integer> rightParam = new HashMap<>();
-                rightParam.put("startIndex", pivotIndex + 1);
-                rightParam.put("endIndex", param.get("endIndex"));
-                quickSortStack.push(rightParam);
-            }
-        }
-
-        return arr;
-    }
-
-
-
-
 
 
 

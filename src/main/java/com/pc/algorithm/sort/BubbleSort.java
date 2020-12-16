@@ -11,8 +11,16 @@ import java.util.Arrays;
  * 3.通过标志记录一次冒泡完成后，是否发生比较来判断是否已经有序，可节约时间，实现O(n)
  *
  *
- * 空间复杂度：O(1)
- * 时间复杂度：O(n) ～ O(n^2)
+ *
+ * 时间复杂度：
+ *      共需要N-1次冒泡（最好情况为1次）
+ *      每次冒泡需要比较N-1次
+ *      O(n) ～ O(n^2)
+ *
+ * 空间复杂度：
+ *      没有递归
+ *      没有创建数组
+ *      O(1)
  *
  *
  */
@@ -20,14 +28,17 @@ public class BubbleSort {
 
     public static void main(String[] args) {
 
-//        int[] arr = {6,5,4,3,2,1};
-        int [] arr = {1,2,3,4,5,6};
+        int[] arr = {6,5,4,3,2,1};
+//        int [] arr = {1,2,3,4,5,6};
         sort(arr);
+
+
+        System.out.println("result:"+Arrays.toString(arr));
 
     }
 
 
-    public static int[] sort(int[] array) {
+    public static void sort(int[] array) {
         /*
             i:n-1趟冒泡
             j:一轮冒泡
@@ -55,7 +66,6 @@ public class BubbleSort {
                 break;
             }
         }
-        return array;
     }
 
 
