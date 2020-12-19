@@ -24,9 +24,15 @@ public class Test {
         System.out.println(Arrays.toString(arr));
 
 //        quickSort(arr,0,arr.length-1);
-        bubbleSort(arr);
+//        bubbleSort(arr);
+
+        BinaryHeap.heapSort(arr);
 
         System.out.println(Arrays.toString(arr));
+
+
+
+
 
     }
 
