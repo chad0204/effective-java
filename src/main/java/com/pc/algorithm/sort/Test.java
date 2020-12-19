@@ -4,6 +4,8 @@ package com.pc.algorithm.sort;
 import java.util.Arrays;
 import java.util.Random;
 
+import static com.pc.algorithm.sort.BinaryHeap.heapSort;
+
 /**
  *
  * @author dongxie
@@ -26,7 +28,7 @@ public class Test {
 //        quickSort(arr,0,arr.length-1);
 //        bubbleSort(arr);
 
-        BinaryHeap.heapSort(arr);
+        heapSort(arr);
 
         System.out.println(Arrays.toString(arr));
 
@@ -153,6 +155,9 @@ public class Test {
         }
 
     }
+
+
+
 
 
 }

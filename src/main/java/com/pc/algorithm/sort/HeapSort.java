@@ -204,9 +204,11 @@ class BinaryHeap {
 
         //循环替换堆顶元素
         for(int i =0;i<array.length;i++) {
+            //头尾替换
             int temp = array[0];
             array[0] = array[array.length-1-i];
             array[array.length-1-i] = temp;
+            //调整堆，替换到堆尾的不用参与调整
             BinaryHeap.downAdjustBig(array,0,array.length-1-i);
         }
     }
