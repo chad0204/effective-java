@@ -6,7 +6,6 @@ import java.util.*;
  * 快速排序
  *
  *  时间复杂度：
- *      长度为N
  *      递归的层数为logN（最差为N）
  *      每一层的运算量为N
  *      N*logN
@@ -16,10 +15,7 @@ import java.util.*;
  *      logN ～ N
  *
  *
- *
- *
- *
- * @author dongxie
+ * @author pengchao
  * @date 17:49 2020-04-28
  */
 public class QuickSort {

@@ -7,6 +7,10 @@ import java.util.Arrays;
  *
  * 堆排序
  *
+ *
+ *  时间复杂度：(N/2 + N )* logN = O(N*logN)
+ *  空间复杂度：O(1)
+ *
  */
 public class HeapSort {
 
