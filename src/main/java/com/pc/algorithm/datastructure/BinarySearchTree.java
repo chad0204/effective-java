@@ -1,16 +1,34 @@
-package com.pc.datastructure;
+package com.pc.algorithm.datastructure;
 
 
 /**
- * 二叉树
+ * 二叉搜索树
  *
- *     二叉树的性能取决与插入顺序。
+ *     二叉搜索树的性能取决与插入顺序。
  *
  *     最好的情况是完全平衡，logN
  *     最坏的情况是按照顺序插入，会变成链表结构。
  *
- *     二叉树和快速排序是双胞胎，二叉树的根节点就是快排的切分点，左侧的键都比它小，右侧的键都比它大
+ *     二叉搜索树和快速排序是双胞胎，二叉树的根节点就是快排的切分点，左侧的"键"都比它小，右侧的"键"都比它大（键指的是序号，0123456。。）
  *
+ * 二叉树
+ *
+ *     在二叉树的第i层上最多有2^(i-1) 个节点
+ *     若二叉树按照从上到下从左到右依次编号，则若某节点编号为k，则其左右子树根节点编号分别为2k和2k+1
+ *
+ *     二叉树分类：满二叉树，完全二叉树
+ *        高度为h，由2^h-1个节点构成的二叉树称为满二叉树。
+ *        高度为h，1～h-1层都达到最大节点数，h层可以不满，但是节点必须都在该层最左侧。完全二叉树
+ *
+ *     在完全二叉树中，具有n个节点的完全二叉树的深度为[log2n]+1，其中[log2n]+1是向下取整。满二叉树的深度为k=log2(n+1)
+ *
+ *
+ *     满二叉树是一种节点数最多的完全二叉树，二叉堆是一种节点的父节点值比左右节点的值都大或小的完全二叉树
+ *
+ *     1+2+4+8+...+n = 2^n - 1
+ *
+ *
+ * 二叉查找树实现
  *
  * @author dongxie
  * @date 14:07 2020-04-30
@@ -32,6 +50,11 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
             this.left = left;
             this.right = right;
             N = n;
+        }
+
+        @Override
+        public String toString() {
+            return key+""+value;
         }
     }
 
@@ -75,29 +98,29 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
 
     /**
      * 插入元素，存在即更新
-     * @param node
+     * @param parent
      * @param key
      * @param value
      */
-    private Node put(Node node, K key, V value) {
-        //如果key存在与以node为根节点的子树中则更新节点值为value，
+    private Node put(Node parent, K key, V value) {
+        //如果key存在与以parent为根节点的子树中则更新节点值为value，
         //否则将key和value封装成新的节点插入子树中
-        if(node ==null) {
+        if(parent ==null) {
             return new Node(key,value,null,null,1);
         }
 
-        int cmp = key.compareTo(node.key);
+        int cmp = key.compareTo(parent.key);
         if(cmp<0) {
-            node.left = put(node.left,key,value);
+            parent.left = put(parent.left,key,value);
         } else if(cmp>0) {
-            node.right = put(node.right,key,value);
+            parent.right = put(parent.right,key,value);
         } else {
             //存在更新
-            node.value = value;
+            parent.value = value;
         }
 
-        node.N = size(node.left)+size(node.right)+1;
-        return node;
+        parent.N = size(parent.left)+size(parent.right)+1;
+        return parent;
 
     }
 
@@ -207,5 +230,90 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
      *   1.找到节点x的右子树的最小节点，用这个节点替换x
      *
      */
+    private int delete(Node node) {
+        return 0;
+    }
+
+
+
+
+    public void traversal() {
+        System.out.println("前序");
+        preTraversal(root);
+        System.out.println("\n中序");
+        inTraversal(root);
+        System.out.println("\n后序");
+        postTraversal(root);
+        System.out.println();
+    }
+
+    /**
+     *  前序遍历
+     */
+    private void preTraversal(Node node) {
+        if(node == null){
+            return;
+        }
+        System.out.print(node.key+""+node.value+"  ");
+        preTraversal(node.left);
+        preTraversal(node.right);
+    }
+
+
+    /**
+     * 中序遍历
+     */
+    private void inTraversal(Node node){
+        if(node == null){
+            return;
+        }
+        inTraversal(node.left);
+        System.out.print(node.key+""+node.value+"  ");
+        inTraversal(node.right);
+    }
+
+    /**
+     * 后序遍历
+     */
+    public void postTraversal(Node node){
+        if(node == null){
+            return;
+        }
+        postTraversal(node.left);
+        postTraversal(node.right);
+        System.out.print(node.key+""+node.value+"  ");
+    }
+
+
+    @Override
+    public String toString() {
+        return "BinarySearchTree{" +
+                "root=" + root +
+                '}';
+    }
+
+
+    public static void main(String[] args) {
+        BinarySearchTree<Integer,String> bst = new BinarySearchTree<>();
+
+        bst.put(4,"D");
+        bst.put(2,"B");
+        bst.put(6,"F");
+        bst.put(7,"G");
+        bst.put(1,"A");
+        bst.put(3,"C");
+        bst.put(5,"E");
+        bst.put(10,"I");
+        bst.put(9,"H");
+
+        bst.put(8,"V");
+
+
+        bst.traversal();
+
+
+
+    }
+
 
 }
