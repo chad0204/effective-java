@@ -27,9 +27,9 @@ public class Climb {
 
     public static void main(String[] args) {
 
-        System.out.println("最大走法："+getClimbingWays(10));
-        System.out.println("最大走法："+getClimbingWaysUseMemento(10,new HashMap<>()));
-        System.out.println("最大走法："+getClimbingWaysNoRecur(10));
+        System.out.println("走法数："+getClimbingWays(44));
+        System.out.println("走法数："+getClimbingWaysUseMemento(44,new HashMap<>()));
+        System.out.println("走法数："+getClimbingWaysNoRecur(44));
     }
 
 

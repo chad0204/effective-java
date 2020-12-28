@@ -5,7 +5,7 @@ import java.util.HashMap;
 /**
  * 斐波那契数列
  *
- * 0 1 1 2 3 5 8 13 21。。。
+ * 1 1 2 3 5 8 13 21。。。
  *
  * f(1) = 1
  * f(2) = 1
@@ -23,7 +23,12 @@ public class Fib {
 
     public static void main(String[] args) {
 
-        System.out.println(dp(8,new HashMap<>()));
+        int n = 8;
+
+        //八种结果
+        int[] member = new int[n];
+
+        System.out.println(dp(n,member));
 
 
     }
@@ -51,21 +56,21 @@ public class Fib {
     /**
      * 自下而上 dp table
      * @param n
-     * @param map
+     * @param member
      * @return
      */
-    public static int dp(int n,HashMap<Integer,Integer> map) {
+    public static int dp(int n,int[] member) {
         if(n==1 || n==2) {
             return 1;
         }
         int fib = 0;
 
-        map.put(1,1);
-        map.put(2,1);
+        member[0] = 1;
+        member[1] = 1;
 
-        for(int i=3;i<=n;i++) {
-            fib = map.get(i-1)+map.get(i-2);
-            map.put(i,fib);
+        for(int i=2;i<n;i++) {
+            fib = member[i-1] + member[i-2];
+            member[i] = fib;
         }
 
         return fib;
@@ -97,6 +102,8 @@ public class Fib {
         return temp;
 
     }
+
+
 
 
 
