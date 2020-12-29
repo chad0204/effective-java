@@ -88,19 +88,20 @@ public class Coin {
 
         //dp 数组的定义：当目标金额为 i 时，至少需要 dp[i] 枚硬币凑出(都是1元面值)。（初始化为amount + 1 就相当于初始化为正无穷，便于后续取最小值）
         int max = amount + 1;
+        //从0到amount,总共需要amount + 1个位置
         int[] dp = new int[amount + 1];
         Arrays.fill(dp, max);
 
         dp[0] = 0;
-        // 外层 for 循环在遍历所有状态f(1) f(2) f(3)...的所有取值
+        // 外层 for 循环在遍历所有状态f(1) f(2) f(3)...的所有取值，⚠️f(0)已知
         for (int i = 1; i <= amount; i++) {
             // 内层 for 循环在求所有选择的最小值
             for (int coin : coins) {
-                if (coin -i <= 0) {
-                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
-                } else {
-                    //表示硬币面值比余额大，可以直接跳过
+                //面值比余额还大，跳过
+                if(coin > i) {
+                    continue;
                 }
+                dp[i] = Math.min(dp[i],dp[i-coin]+1);
             }
         }
         return dp[amount] > amount ? -1 : dp[amount];
