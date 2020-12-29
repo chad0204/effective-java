@@ -171,7 +171,7 @@ class BinaryHeap {
                 childIndex++;
             }
 
-            //如果父节点的值大于等于任何一个孩子的值，直接跳出，说明不是二叉堆
+            //如果父节点的值大于等于任何一个孩子的值，直接跳出，说明下沉结束，不是每次都下沉到最底
             if(temp>=array[childIndex]) {
                 break;
             }
@@ -212,7 +212,7 @@ class BinaryHeap {
             int temp = array[0];
             array[0] = array[array.length-1-i];
             array[array.length-1-i] = temp;
-            //调整堆，替换到堆尾的不用参与调整
+            //调整堆，替换到堆尾的不用参与调整,每次parentIndex都是0,变的只有长度
             BinaryHeap.downAdjustBig(array,0,array.length-1-i);
         }
     }
