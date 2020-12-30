@@ -1,5 +1,8 @@
-package com.pc.algorithm.datastructure;
+package com.pc.algorithm.datastructure.tree;
 
+
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * 二叉搜索树
@@ -50,6 +53,11 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
             this.left = left;
             this.right = right;
             N = n;
+        }
+
+        public Node(K key, V value) {
+            this.key = key;
+            this.value = value;
         }
 
         @Override
@@ -244,6 +252,8 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
         inTraversal(root);
         System.out.println("\n后序");
         postTraversal(root);
+        System.out.println("\n层序");
+        levelTraversal(root);
         System.out.println();
     }
 
@@ -283,6 +293,26 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
         postTraversal(node.right);
         System.out.print(node.key+""+node.value+"  ");
     }
+
+    /**
+     * 层序遍历
+     */
+    public void levelTraversal(Node node){
+        if (node == null)
+            return;
+        Queue<Node> queue = new LinkedBlockingQueue<>();
+        Node curr;
+        queue.add(node);
+        while (!queue.isEmpty()) {
+            curr = queue.remove();
+            System.out.println(curr.value);
+            if (curr.left != null)
+                queue.add(curr.left);
+            if (curr.right != null)
+                queue.add(curr.right);
+        }
+    }
+
 
 
     @Override
