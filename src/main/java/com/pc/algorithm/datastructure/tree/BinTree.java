@@ -1,9 +1,6 @@
 package com.pc.algorithm.datastructure.tree;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -100,14 +97,15 @@ public class BinTree {
 
     /**
      * 层序遍历
-     * @param t
+     * @param root
      */
-    public static void levelTraversal(TreeNode t) {
-        if (t == null)
+    public static void levelTraversal(TreeNode root) {
+
+        if (root == null)
             return;
-        Queue<TreeNode> queue = new LinkedBlockingQueue<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         TreeNode curr;
-        queue.add(t);
+        queue.add(root);
         while (!queue.isEmpty()) {
             curr = queue.remove();
             System.out.println(curr.val);
@@ -117,4 +115,10 @@ public class BinTree {
                 queue.add(curr.right);
         }
     }
+
+
+
+
+
+
 }

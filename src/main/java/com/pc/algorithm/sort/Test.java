@@ -4,7 +4,6 @@ package com.pc.algorithm.sort;
 import java.util.Arrays;
 import java.util.Random;
 
-
 /**
  *
  * @author dongxie
@@ -13,37 +12,37 @@ import java.util.Random;
 public class Test {
 
     public static void main(String[] args) {
+//        int[] arr = {4,1,6,5,3,2,8,7};
 
-        int[] arr;
-
-        arr = new int[]{7,3,6,9,2,1,4};
-
-//        arr = new int[1000];
-//        Random random = new Random(47);
-//        for(int i =0;i<1000;i++) {
-//            arr[i] = random.nextInt(1000);
-//        }
-
-
-
+//
+        Random random = new Random(47);
+        int[] arr = new int[1000];
+        for(int i =0;i<1000;i++) {
+            arr[i] = random.nextInt(1000);
+        }
         heapSort(arr);
-        System.out.println(Arrays.toString(arr));
-
-
-
+        System.out.println("merge_sort:"+Arrays.toString(arr));
 
     }
 
-
-    /*
-     * O(n^2)  O(1)
+    /**
+     *
+     * 冒泡
+     *   n-1趟冒泡
+     *   每次冒泡比较n-1-i次
+     *   冒泡标志
+     *
+     *   O(n^2)
+     *   O(1)
+     * @param array
      */
     public static void bubbleSort(int[] array) {
+
         boolean needSwap;
-        //n-1次冒泡
-        for(int i=0; i<array.length-1; i++) {
+
+        for(int i=0;i<array.length-1;i++) {
             needSwap = false;
-            for(int j=0;j<array.length-1-i;j++) {
+            for(int j = 0; j< array.length-1-i;j++) {
                 if(array[j]>array[j+1]) {
                     int temp = array[j+1];
                     array[j+1] = array[j];
@@ -51,189 +50,189 @@ public class Test {
                     needSwap = true;
                 }
             }
-            //如果一次冒泡都没发生交换，说明已经顺序了
             if(!needSwap) {
                 break;
             }
         }
     }
 
-    /*
+    /**
+     * 快速排序
+     *     分区：
+     *     选中左基准值
+     *     右边找到比基准值小的，左边找到比基准值大的
+     *     交换左右
+     *     左右重合，基准值和重合点交换
      *
-     *  分区，选基准值，右边找出第一个比基准值小的元素，左边找出第一个比基准值小的元素，交换，最终重合点和基准值交换。
-     *  递归
+     *     O(nlogn)
+     *     O(logn)
      *
-     *  O(n*logN) O(logN)
+     * @param array
      */
     public static void quickSort(int[] array,int startIndex,int endIndex) {
-
         if(startIndex>=endIndex) {
             return;
         }
-        int pivotIndex  = partition(array,startIndex,endIndex);
+
+        int pivotIndex = partition(array,startIndex,endIndex);
+
         quickSort(array,startIndex,pivotIndex-1);
         quickSort(array,pivotIndex+1,endIndex);
-
-
-        //栈
-
-
-
 
     }
 
     private static int partition(int[] array, int startIndex, int endIndex) {
-
         int left = startIndex;
         int right = endIndex;
         int pivot = array[startIndex];
 
+        //循环结束条件是重合
         while (left<right) {
-            //从右边开始
-            while (left<right && array[right] >= pivot) {
-                right--;
+            //找到比基准值大小的
+            while (left<right) {
+                if(array[right]>=pivot) {
+                    right--;
+                } else {
+                    break;
+                }
             }
-            while (left<right && array[left] <= pivot) {
-                left++;
+            while (left<right) {
+                if(array[left]<=pivot) {
+                    left++;
+                } else {
+                    break;
+                }
             }
 
-            //交换左右
+            //左右交换
             if(left<right) {
-                int temp = array[right];
-                array[right] = array[left];
-                array[left] = temp;
+                int temp = array[left];
+                array[left] = array[right];
+                array[right] = temp;
             }
         }
 
-        //将重合点和基准值交换
+        //基准值和重合点交换
         array[startIndex] = array[left];
         array[left] = pivot;
-
         return left;
     }
 
 
-    /*
+    /**
      *
-     * 分
+     * 归并排序
+     *      头尾相加/2找到mid
      *
-     * 合
+     *      合：
+     *      构造一个临时数组
+     *      左边第一个和右边第一个比较，较大的放入临时数组
+     *      检查左右数组剩余，将剩余逐个放入临时数组
      *
-     * n*logN  n+logN =  n
      *
+     *   O(nlogn)
+     *   O(n)
+     *
+     *
+     * @param array
+     * @param start
+     * @param end
      */
-    public static void mergeSort(int[] array,int startIndex, int endIndex) {
-        if(startIndex<endIndex) {
-            int mid = (startIndex+endIndex)/2;
-            mergeSort(array,startIndex,mid);
-            mergeSort(array,mid+1,endIndex);
-
-            merge(array,startIndex,mid,endIndex);
+    public static void mergeSort(int[] array,int start,int end) {
+        if(end<=start) {
+            return;
         }
+        int mid = (end + start)/2;//获取中间值
+        mergeSort(array,start,mid);
+        mergeSort(array,mid+1,end);
+
+        merge(array,start,mid,end);
+
     }
 
-    private static void merge(int[] array, int startIndex, int mid, int endIndex) {
+    private static void merge(int[] array, int start, int mid, int end) {
+        int[] tempArray = new int[end-start+1];
+        int p = 0;//临时数组下标
 
-        int[] tempArray = new int[endIndex-startIndex+1];
-        int p = 0;
-        int p1 = startIndex;
-        int p2 = mid+1;
+        int left = start;
+        int right = mid+1;
 
-
-        while (p1<= mid && p2<=endIndex) {
-            if(array[p1] < array[p2]) {
-                tempArray[p] = array[p1];
-                p1++;
+        while (left<=mid && right<=end) {//条件判断
+            if(array[left]<array[right]) {
+                tempArray[p++] = array[left++];
             } else {
-                tempArray[p] = array[p2];
-                p2++;
+                tempArray[p++] = array[right++];
             }
-            p++;
-
-//            if(p1>mid || p2>endIndex) {
-//                break;
-//            }
         }
 
-        while (p1<=mid) {
-            tempArray[p] = array[p1];
-            p++;
-            p1++;
+        while (left<=mid) {
+            tempArray[p++] = array[left++];
+        }
+        while (right<=end) {
+            tempArray[p++] = array[right++];
         }
 
-        while (p2<=endIndex) {
-            tempArray[p] = array[p2];
-            p++;
-            p2++;
+        for(int i=0;i<tempArray.length;i++) {
+            array[start+i] = tempArray[i];
         }
-
-        for(int i=0; i< tempArray.length;i++) {
-            array[startIndex+i] = tempArray[i];
-        }
-
     }
 
 
-    /*
+    /**
+     * 构建最大堆
+     * 从最后一个非叶子节点开始下沉。
+     * 最后一个节点
+     * last_p_index = (length-2)/2
      *
-     * 最大堆
      *
-     * 下沉
      *
-     * O(N*logN)  = (N/2 + N )* logN
+     * O((n+n/2)logn)
+     * O(1)
+     *
+     * @param array
      */
     public static void heapSort(int[] array) {
 
-        //构建最大堆，循环下沉所有非叶子节点
-        for(int i=(array.length-2)/2; i>=0 ;i--) {
+        //构建最大堆
+        int lastParent = (array.length-2)/2;
+        for(int i= lastParent;i>=0;i--) {
             downAdjust(array,i,array.length);
         }
 
-        //循环删除堆顶
-        for(int i=0; i<array.length;i++ ) {
-            int temp = array[array.length-1-i];
-            array[array.length-1-i] = array[0];
-            array[0] = temp;
+        //堆顶依次转移到堆尾，移动，调整（调整时不需要考虑已经移动的，办法是设置长度）
+        for(int i=0;i<array.length;i++) {
+            int temp = array[0];
+            array[0] = array[array.length-1-i];
+            array[array.length-1-i] = temp;
             downAdjust(array,0,array.length-1-i);
         }
 
     }
 
-    /**
-     *
-     *
-     *
-     * @param array
-     * @param parentIndex 待下沉的的顶点
-     * @param length
-     */
-    public static void downAdjust(int[] array, int parentIndex,int length) {
+    public static void downAdjust(int[] array,int parentIndex,int length) {
 
-        int childIndex = parentIndex*2+1;
         int temp = array[parentIndex];
+        int childIndex = parentIndex*2+1;
 
         while (childIndex<length) {
-            if(childIndex+1<length && array[childIndex] < array[childIndex+1]) {
+            if(childIndex+1 < length && array[childIndex+1] > array[childIndex]) {
                 childIndex++;
             }
 
-            if(array[childIndex] > temp) {
-                //覆盖
-                array[parentIndex] = array[childIndex];
-                parentIndex  = childIndex;
-                childIndex = parentIndex*2+1;
-            } else {
+            if(temp>array[childIndex]) {
                 break;
             }
+
+            //子覆盖父
+            array[parentIndex] = array[childIndex];
+            //新的父节点
+            parentIndex = childIndex;
+            //新的子节点
+            childIndex = parentIndex*2+1;
         }
-        //最小叶子赋值
-        if(array[parentIndex] > temp) {
-            array[parentIndex] = temp;
-        }
+        array[parentIndex] = temp;
 
     }
-
-
 
 
 }

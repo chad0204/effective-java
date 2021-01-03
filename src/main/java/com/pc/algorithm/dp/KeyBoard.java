@@ -4,13 +4,15 @@ import java.util.HashMap;
 
 /**
  *
+ * 四种按键 输入A 选中全部 复制全部 粘贴，如果现在可以按键盘n次，最多返回几个A
+ *
  * # A
  * dp(n-1,a_num+1,copy)
  *
- * #C_A、C_C 选中和复制必然是联合使用
+ * # C_A、C_C 选中和复制必然是联合使用
  * dp(n-2,a_num,a_num)
  *
- * #C_V
+ * # C_V
  * dp(n-1,a_num+copy,copy)
  *
  * 状态转移方程
