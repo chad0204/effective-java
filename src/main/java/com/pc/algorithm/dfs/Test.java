@@ -1,12 +1,10 @@
 package com.pc.algorithm.dfs;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 /**
- * TODO
+ *
+ * [a,b,c]三种无限多
  *
  * @author pengchao
  * @date 16:01 2021-01-03
@@ -14,46 +12,47 @@ import java.util.List;
 public class Test {
 
     public static void main(String[] args) {
+        String[] nums = new String[]{"a","b","b"};
 
-
-
+        System.out.println(permute(nums));
 
     }
 
 
-    public List<List<Integer>> permuteUnique(int[] nums) {
+    public static List<List<String>> permute(String[] nums) {
 
-        List<List<Integer>> res = new ArrayList<>();
+        List<List<String>> res = new ArrayList<>();
         int len = nums.length;
         if(len==0) {
             return res;
         }
 
-        Deque<Integer> path = new ArrayDeque<>(len);
+        Deque<String> path = new ArrayDeque<>(len);
 
         boolean[] used = new boolean[len];
 
-        dfs(nums,path,used,res);
+        dfs(nums,path,used,res,0);
 
         return res;
     }
 
-    public void dfs(int[] nums,Deque<Integer> path,boolean[] used,List<List<Integer>> res) {
-        if(nums.length == path.size()) {
+    private static void dfs(String[] nums, Deque<String> path,boolean[] used ,List<List<String>> res,int depth) {
+
+        if(nums.length==path.size()) {
             res.add(new ArrayList<>(path));
             return;
         }
 
         for(int i=0;i<nums.length;i++) {
-            if(used[i] || (i>0 && nums[i]==nums[i-1] && !used[i-1])) {
+            if(used[i] || (i>0 && nums[i].equals(nums[i-1]) && !used[i-1])) {
                 continue;
             }
-            path.add(nums[i]);
+            path.addLast(nums[i]);
             used[i] = true;
-            dfs(nums,path,used,res);
+            dfs(nums,path,used,res,depth);
             used[i] = false;
             path.removeLast();
-        }
 
+        }
     }
 }
