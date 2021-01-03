@@ -13,18 +13,11 @@ import java.util.*;
  *
  * [1,2,5]  7
  *
- *                        7
- *             /             |   \
- *            6              5    2
- *        /   ｜    \        / \    \
- *       6    5     1       0  0    0
- *     /｜\  / \  / ｜\     /\ /\     \
- *    5 4 1 3  0 0 -1 -4   0 0 0 0     0
+
  *
- *    同一层的分支数从左到右逐渐减少
+ *    递归到子节点开始遍历时，子节点遍历的起点是父节点所在的遍历下标
  *    树衍生到负值或者0结束
  *
- *    每棵子树也符合
  *
  *
  *
@@ -36,7 +29,7 @@ import java.util.*;
 public class CombinationSum {
 
     public static void main(String[] args) {
-        System.out.println(permute(new int[]{1,2,3},7));
+        System.out.println(permute(new int[]{10,1,2,7,6,1,5},8));
     }
 
     public static List<List<Integer>> permute(int[] nums,int target) {
@@ -51,12 +44,14 @@ public class CombinationSum {
 
         Arrays.sort(nums);//剔除
 
-        dfs(nums,0,path,res,target);
+        boolean[] used = new boolean[len];
+
+        dfs(nums,0,path,res,target,used);
 
         return res;
     }
 
-    private static void dfs(int[] nums,int begin, Deque<Integer> path, List<List<Integer>> res,int target) {
+    private static void dfs(int[] nums,int begin, Deque<Integer> path, List<List<Integer>> res,int target,boolean[] used) {
         if(target<0) {
             //结果不成立，不需要递归了
             return;
@@ -71,9 +66,16 @@ public class CombinationSum {
             if(target-nums[i]<0) {//排序后的数组，当计算出现负值，后面的都可以丢弃了
                 break;
             }
+
+            if(used[i] || (i>0 && nums[i] == nums[i-1] && !used[i-1])) {
+                continue;
+            }
+
             path.addLast(nums[i]);
-            dfs(nums,i,path,res,target-nums[i]);
+            used[i]=true;
+            dfs(nums,i,path,res,target-nums[i],used);
             //backtrack
+            used[i]=false;
             path.removeLast();
         }
     }

@@ -13,7 +13,7 @@ public class Subset {
 
     public static void main(String[] args) {
 
-        System.out.println(subsets(new int[]{1,2,3}));
+        System.out.println(subsets(new int[]{1,2,2}));
         //[[], [1], [1, 2], [1, 2, 3], [1, 3], [2], [2, 3], [3]]
         //[[], [1], [1, 2], [1, 2, 2], [1, 2], [2], [2, 2], [2]]
 
@@ -22,7 +22,6 @@ public class Subset {
     public static List<List<Integer>> subsets(int[] nums) {
 
         int len = nums.length;
-
         List<List<Integer>> res = new ArrayList<>();
 
         if(len==0) {
@@ -30,14 +29,9 @@ public class Subset {
         }
 
         Deque<Integer> path = new ArrayDeque<>(len);
-
-
         boolean[] used = new boolean[len];
-
         Arrays.sort(nums);
-
         dfs(nums,0,path,used,res);
-
         return res;
     }
 
@@ -58,10 +52,9 @@ public class Subset {
             return;
         }
         res.add(new ArrayList<>(path));
-
         //每次从depath开始，每次分支之后遍历的数不包含之前遍历过的
         for(int i=depath;i<nums.length;i++) {
-            if(used[i] || (i>0 && nums[i]==nums[i-1] && used[i])) {
+            if(used[i] || (i>0 && nums[i]==nums[i-1] && !used[i-1] )) {//!used[i-1] 表示回溯到父节点后，走的是另一个分支
                 continue;
             }
             path.addLast(nums[i]);
@@ -69,8 +62,6 @@ public class Subset {
             dfs(nums,i,path,used,res);
             used[i] = false;
             path.removeLast();
-
-
         }
     }
 
