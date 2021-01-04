@@ -105,9 +105,9 @@ public class BinTree {
             return;
         Queue<TreeNode> queue = new LinkedList<>();
         TreeNode curr;
-        queue.add(root);
+        queue.add(root);//addLast
         while (!queue.isEmpty()) {
-            curr = queue.remove();
+            curr = queue.remove();//removeFast
             System.out.println(curr.val);
             if (curr.left != null)
                 queue.add(curr.left);
