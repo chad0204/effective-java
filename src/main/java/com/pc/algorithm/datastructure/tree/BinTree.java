@@ -5,9 +5,6 @@ import java.util.*;
 /**
  * 二叉树
  *
- *      二叉树是无序的
- *      给出一个数组，是无法知道构建的二叉树是啥样的，但是给出一个前序(后序、中序)遍历，可以推导原结构
- *
  * @author pengchao
  * @date 14:27 2020-12-23
  */
@@ -18,16 +15,16 @@ public class BinTree {
 
     private TreeNode root;
 
-    public class TreeNode {
+    public class TreeNode<T> {
 
-        String val;
+        T val;
         TreeNode left;
         TreeNode right;
-        TreeNode(String x){
+        TreeNode(T x){
             val = x;
         }
 
-        public TreeNode(String val, TreeNode left, TreeNode right) {
+        public TreeNode(T val, TreeNode left, TreeNode right) {
             this.val = val;
             this.left = left;
             this.right = right;
@@ -45,7 +42,7 @@ public class BinTree {
      * @param nodeList
      * @return
      */
-    public TreeNode build(LinkedList<String> nodeList) {
+    public TreeNode<String> build(LinkedList<String> nodeList) {
         TreeNode node = null;
         if(nodeList == null || nodeList.isEmpty()){
             return null;
@@ -53,7 +50,7 @@ public class BinTree {
         String v = nodeList.removeFirst();
 
         if(v!=null){
-            node = new TreeNode(v);
+            node = new TreeNode<>(v);
             if(root==null) {
                 root = node;
             }
@@ -64,16 +61,16 @@ public class BinTree {
     }
 
 
-    public TreeNode build() {
+    public TreeNode buildString() {
         //创建二叉树
-        TreeNode root = new TreeNode("A");	//根节点A
-        root.left = new TreeNode("B");	//A的左子树
-        root.right = new TreeNode("C");	//A的右子树
-        root.left.left = new TreeNode("D");	//B的左子树
-        root.left.left.right = new TreeNode("G");	//D的右子树
-        root.right.left = new TreeNode("E");	//C的左子树
-        root.right.right = new TreeNode("F");	//C的右子树
-        root.right.right.right = new TreeNode("H");
+        TreeNode root = new TreeNode<>("A");	//根节点A
+        root.left = new TreeNode<>("B");	//A的左子树
+        root.right = new TreeNode<>("C");	//A的右子树
+        root.left.left = new TreeNode<>("D");	//B的左子树
+        root.left.left.right = new TreeNode<>("G");	//D的右子树
+        root.right.left = new TreeNode<>("E");	//C的左子树
+        root.right.right = new TreeNode<>("F");	//C的右子树
+        root.right.right.right = new TreeNode<>("H");
         return root;
     }
 
@@ -86,7 +83,7 @@ public class BinTree {
 
         BinTree tree = new BinTree();
 
-        TreeNode root = tree.build();
+        TreeNode root = tree.buildString();
 
         levelTraversal1(root);
 
