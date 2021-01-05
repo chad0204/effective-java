@@ -1,7 +1,6 @@
 package com.pc.algorithm.datastructure.tree;
 
 import java.util.*;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * 二叉树
@@ -74,6 +73,7 @@ public class BinTree {
         root.left.left.right = new TreeNode("G");	//D的右子树
         root.right.left = new TreeNode("E");	//C的左子树
         root.right.right = new TreeNode("F");	//C的右子树
+        root.right.right.right = new TreeNode("H");
         return root;
     }
 
@@ -88,7 +88,8 @@ public class BinTree {
 
         TreeNode root = tree.build();
 
-        levelTraversal(root);
+        levelTraversal1(root);
+
 
         System.out.println();
 
@@ -115,6 +116,77 @@ public class BinTree {
                 queue.add(curr.right);
         }
     }
+
+
+    /**
+     * 分层打印
+     * @param root
+     */
+    public static void levelTraversal1(TreeNode root) {
+
+        if (root == null)
+            return;
+        Queue<TreeNode> queue = new LinkedList<>();
+        TreeNode curr;
+        queue.add(root);//addLast
+
+
+        while (!queue.isEmpty()) {
+            //记录每一层
+            List<TreeNode> temp = new ArrayList<>();
+            for(int i=queue.size();i>0;i--) {
+//            for(int i=0;i<queue.size();i++) {//不行，这样造成条件是变化的
+                curr = queue.remove();//removeFast
+                temp.add(curr);
+                if (curr.left != null)
+                    queue.add(curr.left);
+
+                if (curr.right != null)
+                    queue.add(curr.right);
+            }
+            System.out.println(temp);
+        }
+    }
+
+
+    /**
+     * 之字形分层打印
+     * @param root
+     */
+    public static void levelTraversal2(TreeNode root) {
+
+        if (root == null)
+            return;
+        Queue<TreeNode> queue = new LinkedList<>();
+        TreeNode curr;
+        queue.add(root);//addLast
+
+        int level = 0;
+        while (!queue.isEmpty()) {
+            //记录每一层
+            LinkedList<TreeNode> temp = new LinkedList<>();
+            for(int i=queue.size();i>0;i--) {
+                curr = queue.remove();//removeFast
+                if(level%2==0) {
+                    temp.addLast(curr);
+                } else {
+                    temp.addFirst(curr);
+                }
+                if (curr.left != null)
+                    queue.add(curr.left);
+
+                if (curr.right != null)
+                    queue.add(curr.right);
+            }
+            level++;
+            System.out.println(temp);
+        }
+    }
+
+
+
+
+
 
 
 
