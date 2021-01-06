@@ -112,7 +112,7 @@ public class BinarySearch {
         //所有元素都比target小 right < 0
         if (right < 0 || nums[right] != target)
             return -1;
-        return left;
+        return right;
     }
 
 
