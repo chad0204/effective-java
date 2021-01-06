@@ -14,6 +14,10 @@ import java.util.*;
  *      如果某个分支遇到target，则完成，层数就是最小转动次数。
  *
  *
+ *
+ *      双向bfs优化,就是起点0000和target一起开始层序遍历，交替执行queue最短的，如果出现重合表示解锁。
+ *
+ *
  * @author pengchao
  * @date 11:12 2021-01-06
  */
