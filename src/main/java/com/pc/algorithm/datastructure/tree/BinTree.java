@@ -76,20 +76,33 @@ public class BinTree {
 
 
 
+    public static void preTraversal(TreeNode root) {
+        if(root==null) {
+            return;
+        }
+        System.out.print(root.val);
+        preTraversal(root.left);
+        preTraversal(root.right);
 
+    }
 
+    public static void inTraversal(TreeNode root) {
+        if(root==null) {
+            return;
+        }
+        inTraversal(root.left);
+        System.out.print(root.val);
+        inTraversal(root.right);
 
-    public static void main(String[] args) {
+    }
 
-        BinTree tree = new BinTree();
-
-        TreeNode root = tree.buildString();
-
-        levelTraversal1(root);
-
-
-        System.out.println();
-
+    public static void postTraversal(TreeNode root) {
+        if(root==null) {
+            return;
+        }
+        postTraversal(root.left);
+        postTraversal(root.right);
+        System.out.print(root.val);
 
     }
 
@@ -182,7 +195,24 @@ public class BinTree {
 
 
 
+    public static void main(String[] args) {
 
+        BinTree tree = new BinTree();
+        TreeNode root = tree.buildString();
+
+        preTraversal(root);
+        System.out.println();
+        inTraversal(root);
+        System.out.println();
+        postTraversal(root);
+
+        System.out.println();
+
+        levelTraversal1(root);
+
+        System.out.println();
+
+    }
 
 
 }

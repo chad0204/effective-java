@@ -1,8 +1,6 @@
 package com.pc.algorithm.datastructure.tree;
 
 
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * 二叉搜索树
@@ -244,77 +242,6 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
 
 
 
-
-    public void traversal() {
-        System.out.println("前序");
-        preTraversal(root);
-        System.out.println("\n中序");
-        inTraversal(root);
-        System.out.println("\n后序");
-        postTraversal(root);
-        System.out.println("\n层序");
-        levelTraversal(root);
-        System.out.println();
-    }
-
-    /**
-     *  前序遍历
-     */
-    private void preTraversal(Node node) {
-        if(node == null){
-            return;
-        }
-        System.out.print(node.key+""+node.value+"  ");
-        preTraversal(node.left);
-        preTraversal(node.right);
-    }
-
-
-    /**
-     * 中序遍历
-     */
-    private void inTraversal(Node node){
-        if(node == null){
-            return;
-        }
-        inTraversal(node.left);
-        System.out.print(node.key+""+node.value+"  ");
-        inTraversal(node.right);
-    }
-
-    /**
-     * 后序遍历
-     */
-    public void postTraversal(Node node){
-        if(node == null){
-            return;
-        }
-        postTraversal(node.left);
-        postTraversal(node.right);
-        System.out.print(node.key+""+node.value+"  ");
-    }
-
-    /**
-     * 层序遍历
-     */
-    public void levelTraversal(Node node){
-        if (node == null)
-            return;
-        Queue<Node> queue = new LinkedBlockingQueue<>();
-        Node curr;
-        queue.add(node);
-        while (!queue.isEmpty()) {
-            curr = queue.remove();
-            System.out.println(curr.value);
-            if (curr.left != null)
-                queue.add(curr.left);
-            if (curr.right != null)
-                queue.add(curr.right);
-        }
-    }
-
-
-
     @Override
     public String toString() {
         return "BinarySearchTree{" +
@@ -339,7 +266,6 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
         bst.put(8,"V");
 
 
-        bst.traversal();
 
 
 
