@@ -15,10 +15,10 @@ import java.util.Arrays;
 public class BinarySearch {
 
     public static void main(String[] args) {
-        System.out.println(search(new int[]{-1,0,3,4,9,12},4));
-        System.out.println(left_bound_search(new int[]{3,3,3,3,3,3},1));//left!=target
-        System.out.println(left_bound_search(new int[]{3,3,3,3,3,3},4));//left >= nums.length
-        System.out.println(right_bound_search(new int[]{3,3,3,3,3,3},3));
+//        System.out.println(search(new int[]{-1,0,3,4,9,12},4));
+//        System.out.println(left_bound_search(new int[]{3,3,3,3,3,3},1));//left!=target
+        System.out.println(left_bound_search(new int[]{3,3,3,3,3,3},3));//left >= nums.length
+//        System.out.println(right_bound_search(new int[]{3,3,3,3,3,3},3));
     }
 
 
@@ -68,7 +68,7 @@ public class BinarySearch {
             int mid = left+ (right-left) /2;//⚠️
 
             if(nums[mid] == target) {
-                right = mid-1;//等于找左边
+                right = mid-1;//相等找左边
             } else if(nums[mid] > target) {
                 right = mid-1;////找左边
             } else if(nums[mid] < target) {
@@ -101,7 +101,7 @@ public class BinarySearch {
             int mid = left+ (right-left) /2;//⚠️
 
             if(nums[mid] == target) {
-                left = mid+1;//等于向右
+                left = mid+1;//相等向右
             } else if(nums[mid] < target) {
                 left = mid+1;//向右
             } else if(nums[mid] > target) {
@@ -163,4 +163,7 @@ public class BinarySearch {
         }
         return res;
     }
+
+
+
 }
