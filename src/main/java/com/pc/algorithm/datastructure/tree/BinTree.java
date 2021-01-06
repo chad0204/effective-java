@@ -67,9 +67,9 @@ public class BinTree {
         root.left = new TreeNode<>("B");	//A的左子树
         root.right = new TreeNode<>("C");	//A的右子树
         root.left.left = new TreeNode<>("D");	//B的左子树
-        root.left.left.right = new TreeNode<>("G");	//D的右子树
         root.right.left = new TreeNode<>("E");	//C的左子树
         root.right.right = new TreeNode<>("F");	//C的右子树
+        root.left.left.right = new TreeNode<>("G");	//D的右子树
         root.right.right.right = new TreeNode<>("H");
         return root;
     }
@@ -179,11 +179,6 @@ public class BinTree {
             System.out.println(temp);
         }
     }
-
-
-
-
-
 
 
 
