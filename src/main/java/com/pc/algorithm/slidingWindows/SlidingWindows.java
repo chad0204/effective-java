@@ -1,6 +1,5 @@
 package com.pc.algorithm.slidingWindows;
 
-import com.pc.enumpackage.Food;
 import java.util.HashMap;
 
 /**
