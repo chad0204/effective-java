@@ -1,5 +1,6 @@
 package com.pc.algorithm.slidingWindows;
 
+import com.pc.enumpackage.Food;
 import java.util.HashMap;
 
 /**
@@ -32,63 +33,65 @@ public class SlidingWindows {
      * @param t
      */
     public static String minWindow(String s, String t) {
+        //两个map，windows用于保存在窗口内的字母，needs用来保存需要匹配的字母的频数
+        HashMap<Character, Integer> needs = new HashMap<>();
+        HashMap<Character, Integer> windows = new HashMap<>();
 
-        HashMap<Character,Integer> needs = new HashMap<>();
-        HashMap<Character,Integer> windows = new HashMap<>();
-        for(Character c : t.toCharArray()) {
+        for(char c : t.toCharArray()) {
             needs.put(c,needs.getOrDefault(c,0)+1);
         }
 
-        char[] source = s.toCharArray();
 
-        int left = 0;
-        int right = 0;
+        //left指针，right指针，合法字母个数valid
+        int left =0;
+        int right=0;
+        int valid =0;
 
-        int valid = 0;//满足条件的字符个数
 
-        // 记录最小覆盖子串的起始索引及长度
-        int start = 0, len = Integer.MAX_VALUE;
+        //start,len，记录最小子串的起始位置和长度
+        int start = 0;
+        int len = Integer.MAX_VALUE;
 
+        //right向前
         while (right<s.length()) {
-            char c = source[right];
+
+            char add = s.charAt(right);
+
             right++;
 
-            //记录窗口
-            if(needs.containsKey(c)) {
-                windows.put(c, windows.getOrDefault(c, 0) + 1);
-                if(windows.get(c).equals(needs.get(c))) {//windows中的数已经满足needs，valid不需要在增
+            //更新windows
+            if(needs.containsKey(add)) {
+                windows.put(add,windows.getOrDefault(add,0)+1);
+                if(needs.get(add).equals(windows.get(add))) {
                     valid++;
                 }
             }
 
-            //收缩左边,只有相等时才收缩
-            while (valid == needs.size()) {
-                // 在这里更新最小覆盖子串
-                if (right - left < len) {
+            //left向前
+            while(valid==needs.size()) {
+                //记录当前子串或者更新最小子串
+                if(right-left < len) {
                     start = left;
-                    len = right - left;
+                    len = right-left;
                 }
 
+                //移除的字符
+                char rmv = s.charAt(left);
 
-                // d 是将移出窗口的字符,用来更新windows
-                char d = source[left];
-
-                // 左移窗口
                 left++;
 
-
-                // 进行窗口内数据的一系列更新
-                if (needs.containsKey(d)) {
-                    if (windows.get(d).equals(needs.get(d)))//这里可能会存在windows>needs的情况，这里还是满足条件的，valid不需要减
+                //更新windows
+                if(needs.containsKey(rmv)) {
+                    if(needs.get(rmv).equals(windows.get(rmv))) {
                         valid--;
-                    windows.put(d,windows.getOrDefault(d,0)-1);
+                    }
+                    windows.put(rmv,windows.getOrDefault(rmv,0)-1);
                 }
             }
         }
 
-        // 返回最小覆盖子串
-        return len == Integer.MAX_VALUE ?
-                "" : s.substring(start, start+len);
+
+        return len==Integer.MAX_VALUE ? "" : s.substring(start,start+len);
     }
 
 
