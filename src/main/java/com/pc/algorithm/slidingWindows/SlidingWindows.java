@@ -20,12 +20,10 @@ public class SlidingWindows {
 
 
 
-
-
     /**
      * s 包含所有t的最小子串
      *
-     * 输入：s = "ADOBECODEBANC", t = "ABCA"
+     * 输入：s = "ADOBECODEBANC", t = "ABC"
      * 输出："BANC"
      *
      * @param s
@@ -66,7 +64,7 @@ public class SlidingWindows {
                 }
             }
 
-            //left向前
+            //left向前，while体中都是满足条件的
             while(valid==needs.size()) {
                 //记录当前子串或者更新最小子串
                 if(right-left < len) {
