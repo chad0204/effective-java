@@ -5,13 +5,20 @@ import java.util.HashMap;
 /**
  * 斐波那契数列
  *
- * 1 1 2 3 5 8 13 21。。。
- *
+ * 0 1 1 2 3 5 8 13 21。。。
+ * f(0) - 0
  * f(1) = 1
  * f(2) = 1
  * f(3) = f(1)+f(2)
  *
  * f(n) = f(n-1)+f(f-2)
+ *
+ *
+ * 动态转移方程
+ * f(n) = f(n-1)+f(f-2)
+ * base case
+ * f(0) = 0
+ * f(1) = 1
  *
  *
  * 找出第n个斐波那契数列
@@ -21,6 +28,7 @@ import java.util.HashMap;
  */
 public class Fib {
 
+
     public static void main(String[] args) {
 
         int n = 8;
@@ -28,7 +36,7 @@ public class Fib {
         //八种结果
         int[] member = new int[n];
 
-        System.out.println(dp(n,member));
+        System.out.println(fib(n));
 
 
     }
@@ -56,26 +64,25 @@ public class Fib {
     /**
      * 自下而上 dp table
      * @param n
-     * @param member
      * @return
      */
-    public static int dp(int n,int[] member) {
-        if(n==1 || n==2) {
-            return 1;
+    public static int fib(int n) {
+
+        int[] dp = new int[n+1];
+
+        for(int i=0;i<=n;i++) {
+            if(i==0) {
+                dp[i] = 0;
+                continue;
+            }
+            if(i==1) {
+                dp[i] = 1;
+                continue;
+            }
+            dp[i] = dp[i-1] + dp[i-2];
         }
-        int fib = 0;
-
-        member[0] = 1;
-        member[1] = 1;
-
-        for(int i=2;i<n;i++) {
-            fib = member[i-1] + member[i-2];
-            member[i] = fib;
-        }
-
-        return fib;
+        return dp[n];
     }
-
 
 
 

@@ -7,22 +7,65 @@ import java.util.Arrays;
  *
  *
  *  amount = 0, n = 0
- *  amount < 0, n = -1
+ *  amount < 0（金额为负）, n = -1 凑不出
  *
+ *  动态转移方程
  *  f(amount) = min{f(amount-c1) + 1,f(amount-c2) + 1,f(amount-c3) + 1,...}
+ *
+ *  base case
+ *  f(0) = 0
+ *  f(-1) = -1
+ *
+ *
  *
  * @author pengchao
  * @date 10:24 2020-12-24
  */
 public class Coin {
 
+    public static int coinChange_new(int[] coins, int amount) {
+        //金额amount最多只能被分成amount份
+        int[] dp = new int[amount+1];
+
+        for(int i=0;i<=amount;i++) {
+            //base case
+            if(i==0) {
+                dp[i] = 0;
+                continue;
+            }
+
+            int min = Integer.MAX_VALUE;
+            for(int coin :coins) {
+                //面值比金额大，过滤
+                if(coin>i) {
+                    continue;
+                }
+                //上一个结果凑不了，在加一个硬币肯定也凑不了，过滤
+                if(dp[i-coin] ==-1) {
+                    continue;
+                }
+                min = min > dp[i-coin]+1 ? dp[i-coin]+1 : min;
+            }
+            dp[i] = min==Integer.MAX_VALUE ? -1 : min;
+        }
+
+        return dp[amount];
+    }
+
+
+
+
+
+
+
 
     public static void main(String[] args) {
 
-        int[] coins = {1,2,5};
+        int[] coins = {2};
 
         System.out.println(coinChange(coins, 6));
         System.out.println(dp2(coins, 6));
+        System.out.println(coinChange_new(coins, 3));
 
 
     }
