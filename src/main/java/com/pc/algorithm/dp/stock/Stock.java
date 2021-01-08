@@ -3,6 +3,8 @@ package com.pc.algorithm.dp.stock;
 /**
  * 给定一个整数数组 prices ，它的第 i 个元素 prices[i] 是一支给定的股票在第 i 天的价格。
  *
+ * 买卖是交替执行的，先买后卖
+ *
  * 设计一个算法来计算你所能获取的最大利润。你最多可以完成 k 笔交易。
  *
  * 注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
@@ -75,10 +77,22 @@ public class Stock {
 
     public static void main(String[] args) {
 //        System.out.println(maxProfit_1(new int[]{7,1,5,3,6,4}));
+
 //        System.out.println(maxProfit_infinity(new int[]{7,1,5,3,6,4}));
-        System.out.println(maxProfit_2(new int[]{3,3,5,0,0,3,1,4}));
-        System.out.println(maxProfit_2(new int[]{1,2,3,4,5}));
-        System.out.println(maxProfit_2(new int[]{7,6,4,3,1}));
+
+//        System.out.println(maxProfit_2(new int[]{3,3,5,0,0,3,1,4}));
+//        System.out.println(maxProfit_2(new int[]{1,2,3,4,5}));
+//        System.out.println(maxProfit_2(new int[]{7,6,4,3,1}));
+
+//        System.out.println(maxProfit_k(2,new int[]{2,4,1}));
+//        System.out.println(maxProfit_k(2,new int[]{3,2,6,5,0,3}));
+
+
+        System.out.println(maxProfit_cool(new int[]{1,2,3,0,2}));
+
+
+
+
     }
 
 
@@ -282,6 +296,113 @@ public class Stock {
         }
 
         return dp[n-1][K][0];
+    }
+
+
+    /**
+     *
+     * 状态转移方程
+     * dp[i][k][0] = max(dp[i-1][k][0],dp[i-1][k][1]+prices[i])
+     * dp[i][k][1] = max(dp[i-1][k][0],dp[i-1][k-1][1]-prices[i])
+     *
+     * base case
+     * dp[-1][k][0] = 0
+     * dp[-1][k][1] = -infinity
+     * dp[i][0][0] = 0
+     * dp[i][0][1] = -infinity
+     *
+     *
+     * dp[0][j][0] = max(dp[-1][j][0],dp[-1][j][1]+prices[i]) = max(0,-) = 0
+     * dp[0][j][1] = max(dp[-1][j][1],dp[-1][j-1][0]-prices[i]) = max() = -prices[i]
+     *
+     *
+     * @param k
+     * @param prices
+     * @return
+     */
+    public static int maxProfit_k(int k, int[] prices) {
+
+        if(prices.length==0) {
+            return 0;
+        }
+
+        int n = prices.length;
+
+        int[][][] dp = new int[n][k+1][2];
+
+        for(int i=0;i<n;i++) {
+            for(int j=1;j<=k;j++) {
+                if(i==0) {
+                    dp[i][j][0] = 0;
+                    dp[i][j][1] = -prices[i];
+                    continue;
+                }
+                dp[i][j][0] = Math.max(dp[i-1][j][0],dp[i-1][j][1]+prices[i]);
+                dp[i][j][1] = Math.max(dp[i-1][j][1],dp[i-1][j-1][0]-prices[i]);
+            }
+
+        }
+
+        return dp[n-1][k][0];
+    }
+
+
+    /**
+     *
+     * 状态转移方程
+     *  卖完冻结一天才能买
+     *  k无限
+     *
+     *  dp[i][k][0] = max(dp[i-1][k][0],dp[i-1][k][1]+prices[i])  i天未持有 =  前一天未持有，前一天持有，第i天卖了
+     *  dp[i][k][1] = max(dp[i-1][k][1],dp[i-2][k-1][0]-prices[i]) i天持有 =  前一天持有 ，前一天没持有，第i天买的
+     *  注意：第i天买，由于不能只能买卖交替，那么卖之后肯定一直没持有，如果i-1天卖的，那么今天不能买，只能是i-2天卖的
+     *
+     *  k= +infinity,简化
+     *  dp[i][0] = max(dp[i-1][0],dp[i-1][1]+prices[i])
+     *  dp[i][1] = max(dp[i-1][1],dp[i-2][0]-prices[i])
+     *
+     *  base case
+     *  dp[-1][0] = 0
+     *  dp[-1][1] = -infinity
+     *  dp[-2][0] = 0
+     *
+     *  if i==0
+     *   dp[i][0] =dp[0][0] = max(dp[-1][0],dp[-1][1]+prices[0]) = 0
+     *   dp[i][1] =dp[0][1] = max(dp[-1][1],dp[-2][0]-prices[0]) = -prices[0]
+     *
+     *  if i==1
+     *   dp[i][0] = max(dp[0][0],dp[0][1]+prices[1]) = max(0,-prices[0]+prices[1])
+     *   dp[i][1] = max(dp[0][1],dp[-1][0]-prices[1]) = max(-prices[0],-prices[1])
+     *
+     *
+     *
+     * @param prices
+     * @return
+     */
+    public static int maxProfit_cool(int[] prices) {
+        if(prices.length==0) {
+            return 0;
+        }
+        int n = prices.length;
+
+        int[][] dp = new int[n][2];
+
+        for(int i=0;i<n;i++) {
+            if(i==0) {
+                dp[i][0] = 0;
+                dp[i][1] = -prices[i];
+                continue;
+            }
+            if(i==1) {
+                dp[i][0] = Math.max(0,prices[i]-prices[i-1]);
+                dp[i][1] = Math.max(-prices[i-1],-prices[i]);
+                continue;
+            }
+
+            dp[i][0] = Math.max(dp[i-1][0],dp[i-1][1]+prices[i]);
+            dp[i][1] = Math.max(dp[i-1][1],dp[i-2][0]-prices[i]);
+        }
+        return dp[n-1][0];
     }
 
 }
