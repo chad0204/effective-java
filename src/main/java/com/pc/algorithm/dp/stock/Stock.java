@@ -261,18 +261,26 @@ public class Stock {
         int K = 2;
         int[][][] dp = new int[n][K+1][2];
 
-        for(int i=0;i<n;i++) {
-            for(int k=K;k>=1;k--) {
+        //先遍历天数还是先遍历交易数都一样
+        for(int k=1;k<=K;k++) {
+
+            for(int i=0;i<n;i++) {
 
                 if(i==0) {
                     dp[i][k][0] = 0;
+                    System.out.println("dp["+i+"]["+k+"][0]:"+dp[i][k][0]);
                     dp[i][k][1] = -prices[i];
+                    System.out.println("dp["+i+"]["+k+"][0]:"+dp[i][k][0]);
                     continue;
                 }
                 dp[i][k][0] = Math.max(dp[i-1][k][0],dp[i-1][k][1]+prices[i]);
+                System.out.println("dp["+i+"]["+k+"][0]:"+dp[i][k][0]);
                 dp[i][k][1] = Math.max(dp[i-1][k][1],dp[i-1][k-1][0]-prices[i]);
+                System.out.println("dp["+i+"]["+k+"][0]:"+dp[i][k][0]);
+
             }
         }
+
         return dp[n-1][K][0];
     }
 
