@@ -74,8 +74,11 @@ public class Stock {
 
 
     public static void main(String[] args) {
-//        System.out.println(maxProfit(new int[]{7,1,5,3,6,4}));
-        System.out.println(maxProfit1(new int[]{7,1,5,3,6,4}));
+//        System.out.println(maxProfit_1(new int[]{7,1,5,3,6,4}));
+//        System.out.println(maxProfit_infinity(new int[]{7,1,5,3,6,4}));
+        System.out.println(maxProfit_2(new int[]{3,3,5,0,0,3,1,4}));
+        System.out.println(maxProfit_2(new int[]{1,2,3,4,5}));
+        System.out.println(maxProfit_2(new int[]{7,6,4,3,1}));
     }
 
 
@@ -83,6 +86,8 @@ public class Stock {
      *  只能交易一次
      *
      *  最终结果是dp[n-1][k][0]
+     *  dp[-1][k][0] = dp[i][0][0] = 0
+     *  dp[-1][k][1] = dp[i][0][1] = -infinity
      *
      *  只能交易一次，k=1,简化发现与k无关，可以剔除k
      *  dp[i][1][0] = max(dp[i-1][1][0], dp[i-1][1][1] + prices[i])
@@ -106,7 +111,7 @@ public class Stock {
      * @author pengchao
      * @date 17:30 2021-01-07
      */
-    public static int maxProfit(int[] prices) {
+    public static int maxProfit_1(int[] prices) {
 
         if(prices.length==0) {
             return 0;
@@ -147,7 +152,7 @@ public class Stock {
      *
      *  最终结果是dp[n-1][k][0]
      *
-     *  可以无限交易，k = k+1 = k-1 ，剔除k
+     *  可以无限交易，k = k+1 = k-1 = +infinity ，剔除k
      *  dp[i][k][0] = max(dp[i-1][k][0],dp[i-1][k][1]+price[i])
      *  dp[i][k][1] = max(dp[i-1][k][1],dp[i-1][k-1][0]-price[i])
      *
@@ -174,7 +179,7 @@ public class Stock {
      * @author pengchao
      * @date 17:30 2021-01-07
      */
-    public static int maxProfit1(int[] prices) {
+    public static int maxProfit_infinity(int[] prices) {
         if(prices.length==0) {
             return 0;
         }
@@ -195,5 +200,80 @@ public class Stock {
         return dp[n-1][0];
     }
 
+    //不用数组的解法
+    public static int maxProfit_infinity_1(int[] prices) {
+        if(prices.length==0) {
+            return 0;
+        }
+        int n = prices.length;
+
+        int dp_i_0 = 0;
+        int dp_i_1 = Integer.MIN_VALUE;
+
+
+        for(int i=1;i<=n;i++) {
+            int temp = dp_i_0;
+            dp_i_0 = Math.max(dp_i_0, dp_i_1 + prices[i]);
+            dp_i_1 = Math.max(dp_i_1,temp -prices[i]);
+        }
+
+        return dp_i_0;
+    }
+
+    /**
+     *  两次交易
+     *
+     *  结果dp[n-1][K][0]
+     *  dp[-1][k][0] = 0          天数还没开始，未持有，没买
+     *  dp[-1][k][1] = -infinity  天数还没开始，持有，不可能
+     *  dp[i][0][0] = 0           交易0笔，未持有
+     *  dp[i][0][] =  -infinity   交易0笔，持有 不可能
+     *
+     *
+     *
+     *  dp[i][k][0] = max(dp[i-1][k][0],dp[i-1][k][1]+prices[i])
+     *  dp[i][k][1] = max(dp[i-1][k][1],dp[i-1][k-1][0]-prices[i])
+     *
+     *  base case
+     *  dp[-1][k][0] = 0;
+     *  dp[-1][k][1] = -infinity;
+     *
+     *  dp[i][0][0] = 0;
+     *  dp[i][0][1] = -infinity;
+     *
+     *
+     *  当k=0
+     *  dp[i][k][0] = 0;
+     *  dp[i][k][1] = Integer.MIN_VALUE;
+     *
+     *  当i=0
+     *  dp[0][k][0] = max(dp[-1][k][0],dp[-1][k][1]+prices[0]) = max(0,-infinity) = 0
+     *  dp[0][k][1] = max(dp[-1][k][1],dp[-1][k-1][0]-prices[0])
+     *              = max(-infinity,dp[-1][k-1][0]-prices[0])
+     *              = dp[-1][k-1][0]-prices[0] = -prices[0];
+     *
+     *
+     * @author pengchao
+     * @date 17:30 2021-01-07
+     */
+    public static int maxProfit_2(int[] prices) {
+        int n = prices.length;
+        int K = 2;
+        int[][][] dp = new int[n][K+1][2];
+
+        for(int i=0;i<n;i++) {
+            for(int k=K;k>=1;k--) {
+
+                if(i==0) {
+                    dp[i][k][0] = 0;
+                    dp[i][k][1] = -prices[i];
+                    continue;
+                }
+                dp[i][k][0] = Math.max(dp[i-1][k][0],dp[i-1][k][1]+prices[i]);
+                dp[i][k][1] = Math.max(dp[i-1][k][1],dp[i-1][k-1][0]-prices[i]);
+            }
+        }
+        return dp[n-1][K][0];
+    }
 
 }
