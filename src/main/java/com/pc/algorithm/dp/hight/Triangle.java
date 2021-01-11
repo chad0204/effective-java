@@ -44,7 +44,14 @@ public class Triangle {
 
         }
 
-
+    /**
+     * 深度优先 后序遍历
+     * @param x
+     * @param y
+     * @param triangle
+     * @param member
+     * @return
+     */
         private static int dfs(int x, int y,List<List<Integer>> triangle,int[][] member) {
             if(x==triangle.size()) {
                 System.out.println(" member["+x+"]["+y+"]"+0);
@@ -65,10 +72,16 @@ public class Triangle {
 
 
     /**
+     *  设三角形的深度为n
+     *  dp[n+1][y] = 0
      *
      *
+     *  动态转移方程
+     *  dp[x][y] = Math.min(dp[x+1][y],dp[x+1][y+1]) + triangle.xy
      *
-     *  dp[x][y] = Math.min(dp[x+1][y],dp[x+1][y+1]) + xy
+     *  base case
+     *  dp[n+1][y] = 0 (设三角形的深度为n,当层数超过深度，节点不存在值为0)
+     *
      *
      *
      */
@@ -79,7 +92,7 @@ public class Triangle {
         for(int i=triangle.size()-1;i>=0;i--) {//行
 
             for(int j=0;j<=triangle.get(i).size()-1;j++) {
-
+                //dp[4][0]、dp[4][1]、dp[4][2]、dp[4][3]、dp[4][4] == 0
                 dp[i][j] = Math.min(dp[i + 1][j], dp[i + 1][j + 1]) + triangle.get(i).get(j);
                 System.out.println("dp["+i+"]["+j+"]:"+dp[i][j]);
             }

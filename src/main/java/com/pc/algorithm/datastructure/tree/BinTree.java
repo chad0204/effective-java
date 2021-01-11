@@ -1,5 +1,6 @@
 package com.pc.algorithm.datastructure.tree;
 
+import com.pc.algorithm.datastructure.TreeNode;
 import java.util.*;
 
 /**
@@ -14,27 +15,6 @@ public class BinTree {
     Random random = new Random(47);
 
     private TreeNode root;
-
-    public class TreeNode<T> {
-
-        T val;
-        TreeNode left;
-        TreeNode right;
-        TreeNode(T x){
-            val = x;
-        }
-
-        public TreeNode(T val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
-
-        @Override
-        public String toString() {
-            return ""+val;
-        }
-    }
 
 
     /**
