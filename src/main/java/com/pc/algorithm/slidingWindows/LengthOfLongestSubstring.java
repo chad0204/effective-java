@@ -1,7 +1,6 @@
 package com.pc.algorithm.slidingWindows;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 3. 无重复字符的最长子串
@@ -21,6 +20,7 @@ public class LengthOfLongestSubstring {
 
 
         System.out.println(lengthOfLongestSubstring("abcabcbbefghi"));
+        System.out.println(lengthOfLongestSubstring("abcabcbbe"));
     }
 
 
@@ -51,7 +51,7 @@ public class LengthOfLongestSubstring {
 
             //左右都走完之后产生结果
             if(right-left>len) {
-                len = right-left-1;
+                len = right-left;
             }
 
         }

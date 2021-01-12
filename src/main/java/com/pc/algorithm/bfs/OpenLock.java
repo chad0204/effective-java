@@ -61,7 +61,7 @@ public class OpenLock {
                     continue;//表示这个分支走不通了，下一层不会有这个可能的延伸
                 }
 
-                if(curr.equals(target)) {
+                if(target.equals(curr)) {
                     return step;
                 }
 

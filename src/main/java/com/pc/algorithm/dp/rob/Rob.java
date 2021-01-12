@@ -17,7 +17,8 @@ public class Rob {
     public static void main(String[] args) {
 
 
-        System.out.println(dp(new int[]{2,3,2}));
+//        System.out.println(dp(new int[]{2,3,2}));
+        System.out.println(dp(new int[]{1,2,3,1}));
     }
 
 
@@ -75,12 +76,8 @@ public class Rob {
      * base case
      *
      * n 为最后一个房子的位置
-     *  i+1 = n
-     *  i+2 = n
      *  dp[n] = 0
-     *
-     *  dp[i + 1] = 0
-     *  dp[i + 2] = 0
+     *  dp[n+1] = 0
      *
      *
      * @param nums
@@ -106,7 +103,7 @@ public class Rob {
      * @param nums
      * @return
      */
-    private static int dp_1(int[] nums) {
+    private static int _dp(int[] nums) {
         int n = nums.length;
         // 记录 dp[i+1] 和 dp[i+2]
         int dp_i_1 = 0, dp_i_2 = 0;
