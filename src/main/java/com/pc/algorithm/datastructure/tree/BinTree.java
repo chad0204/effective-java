@@ -11,9 +11,6 @@ import java.util.*;
  */
 public class BinTree {
 
-
-    Random random = new Random(47);
-
     private TreeNode root;
 
 
@@ -38,20 +35,6 @@ public class BinTree {
             node.right = build(nodeList);
         }
         return node;
-    }
-
-
-    public TreeNode buildString() {
-        //创建二叉树
-        TreeNode root = new TreeNode<>("A");	//根节点A
-        root.left = new TreeNode<>("B");	//A的左子树
-        root.right = new TreeNode<>("C");	//A的右子树
-        root.left.left = new TreeNode<>("D");	//B的左子树
-        root.right.left = new TreeNode<>("E");	//C的左子树
-        root.right.right = new TreeNode<>("F");	//C的右子树
-        root.left.left.right = new TreeNode<>("G");	//D的右子树
-        root.right.right.right = new TreeNode<>("H");
-        return root;
     }
 
 
@@ -177,8 +160,8 @@ public class BinTree {
 
     public static void main(String[] args) {
 
-        BinTree tree = new BinTree();
-        TreeNode root = tree.buildString();
+//        BinTree tree = new BinTree();
+        TreeNode root = TreeNode.buildString();
 
         preTraversal(root);
         System.out.println();
