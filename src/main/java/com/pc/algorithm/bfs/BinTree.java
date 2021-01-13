@@ -11,26 +11,13 @@ import java.util.*;
  */
 public class BinTree {
 
-    private TreeNode root;
+
+    public static void main(String[] args) {
+
+        System.out.println(minDepth(TreeNode.buildNum()));
 
 
-
-
-    public TreeNode buildString() {
-        //创建二叉树
-        TreeNode<Integer> root = new TreeNode<>(1);	//根节点A
-        root.left = new TreeNode<>(2);	//A的左子树
-        root.right = new TreeNode<>(3);	//A的右子树
-        root.left.left = new TreeNode<>(4);	//B的左子树
-        root.right.left = new TreeNode<>(5);	//C的左子树
-        root.right.right = new TreeNode<>(6);	//C的右子树
-        root.left.left.right = new TreeNode<>(7);	//D的右子树
-        root.right.right.right = new TreeNode<>(8);
-        return root;
     }
-
-
-
 
     /**
      * 给定一个二叉树，找出其最小深度。
@@ -74,17 +61,69 @@ public class BinTree {
     }
 
 
+    /**
+     * 分层打印
+     * @param root
+     */
+    public static void levelTraversal1(TreeNode root) {
 
-    public static void main(String[] args) {
-
-        BinTree tree = new BinTree();
-        TreeNode root = tree.buildString();
-        System.out.println(minDepth(root));
-
-
+        if (root == null)
+            return;
+        Queue<TreeNode> queue = new LinkedList<>();
+        TreeNode curr;
+        queue.add(root);//addLast
 
 
+        while (!queue.isEmpty()) {
+            //记录每一层
+            List<TreeNode> temp = new ArrayList<>();
+            for(int i=queue.size();i>0;i--) {
+//            for(int i=0;i<queue.size();i++) {//不行，这样造成条件是变化的
+                curr = queue.remove();//removeFast
+                temp.add(curr);
+                if (curr.left != null)
+                    queue.add(curr.left);
 
+                if (curr.right != null)
+                    queue.add(curr.right);
+            }
+            System.out.println(temp);
+        }
+    }
+
+
+    /**
+     * 之字形分层打印
+     * @param root
+     */
+    public static void levelTraversal2(TreeNode root) {
+
+        if (root == null)
+            return;
+        Queue<TreeNode> queue = new LinkedList<>();
+        TreeNode curr;
+        queue.add(root);//addLast
+
+        int level = 0;
+        while (!queue.isEmpty()) {
+            //记录每一层
+            LinkedList<TreeNode> temp = new LinkedList<>();
+            for(int i=queue.size();i>0;i--) {
+                curr = queue.remove();//removeFast
+                if(level%2==0) {
+                    temp.addLast(curr);
+                } else {
+                    temp.addFirst(curr);
+                }
+                if (curr.left != null)
+                    queue.add(curr.left);
+
+                if (curr.right != null)
+                    queue.add(curr.right);
+            }
+            level++;
+            System.out.println(temp);
+        }
     }
 
 }
