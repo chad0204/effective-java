@@ -8,7 +8,7 @@ import com.pc.algorithm.datastructure.ListNode;
  * @author pengchao
  * @date 10:48 2021-01-12
  */
-public class Test {
+public class Reverse {
 
     public static void main(String[] args) {
 
@@ -64,6 +64,7 @@ public class Test {
         }
         //last在递归中是不变的，做为新的头节点
         ListNode newHead = reverse(head.next);
+        //head = 5 4 3 2 1
         head.next.next = head;
         head.next = null;
         return newHead;
