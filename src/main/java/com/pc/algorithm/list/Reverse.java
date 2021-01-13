@@ -22,7 +22,7 @@ public class Reverse {
 
 //        ListNode last = reverse(head);
 //        ListNode last = reverseN(head,4);
-        ListNode last = reverseBetween(head,3,5);
+        ListNode last = reverseBetween(head,4,6);
 
         for(ListNode p = last;p!=null;p = p.next) {
             System.out.print(p);
@@ -157,7 +157,9 @@ public class Reverse {
             return reverseN(head, n);//反转从m到n的元素
         }
         // 前进到反转的起点触发 base case
-        head.next = reverseBetween(head.next, m - 1, n - 1);
+        ListNode successor = reverseBetween(head.next, m - 1, n - 1);
+        System.out.println(successor);
+        head.next = successor;
         return head;
     }
 }

@@ -13,7 +13,7 @@ public class ListNode<T> {
 
 
     public static ListNode buildList() {
-        //创建二叉树
+        //创建链表
         ListNode head = new ListNode<>(1);	//根节点A
 
         head.next = new ListNode<>(2);
@@ -26,8 +26,40 @@ public class ListNode<T> {
         return head;
     }
 
+
+    public static ListNode buildStringPalindrome() {
+        ListNode head = new ListNode<>("A");	//根节点A
+
+        head.next = new ListNode<>("B");
+        head.next.next = new ListNode<>("C");
+        head.next.next.next = new ListNode<>("C");
+        head.next.next.next.next = new ListNode<>("233");
+        head.next.next.next.next.next = new ListNode<>("A");
+
+        return head;
+    }
+
     @Override
     public String toString() {
         return ""+val;
+    }
+
+
+    public static void traverse(ListNode head) {
+        if(head==null) {
+            return;
+        }
+        //前序遍历
+        traverse(head.next);
+        //后序遍历
+        System.out.println(head.val);
+
+    }
+
+    public static void main(String[] args) {
+
+        ListNode head = buildList();
+
+        traverse(head);
     }
 }
