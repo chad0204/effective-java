@@ -35,7 +35,6 @@ public class TreeNode<T> {
      *   \         \
      *    G         H
      *
-     * @return
      */
     public static TreeNode buildString() {
         //创建二叉树
@@ -50,6 +49,17 @@ public class TreeNode<T> {
         return root;
     }
 
+
+    /**
+     *         1
+     *       /  \
+     *      2    3
+     *    /     / \
+     *   4     5   6
+     *   \        / \
+     *    7      8   9
+     *
+     */
     public static TreeNode buildNum() {
         //创建二叉树
         TreeNode<Integer> root = new TreeNode<>(1);	//根节点A
@@ -59,7 +69,8 @@ public class TreeNode<T> {
         root.right.left = new TreeNode<>(5);	//C的左子树
         root.right.right = new TreeNode<>(6);	//C的右子树
         root.left.left.right = new TreeNode<>(7);	//D的右子树
-        root.right.right.right = new TreeNode<>(8);
+        root.right.right.left = new TreeNode<>(8);
+        root.right.right.right = new TreeNode<>(9);
         return root;
     }
 
@@ -124,7 +135,6 @@ public class TreeNode<T> {
             return;
         }
         Queue<TreeNode> queue = new LinkedList<>();
-        int level = 0;
         queue.add(root);
         while(!queue.isEmpty()) {
             int size = queue.size();

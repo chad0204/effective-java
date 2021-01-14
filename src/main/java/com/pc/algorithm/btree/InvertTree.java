@@ -66,7 +66,7 @@ public class InvertTree {
     /**
      * 递归
      */
-    public static void recu(TreeNode root) {
+    public static void preTraverse(TreeNode root) {
         if(root==null) {
             return;
         }
@@ -75,8 +75,8 @@ public class InvertTree {
         root.left = root.right;
         root.right = temp;
 
-        recu(root.left);
-        recu(root.right);
+        preTraverse(root.left);
+        preTraverse(root.right);
 
 
     }
