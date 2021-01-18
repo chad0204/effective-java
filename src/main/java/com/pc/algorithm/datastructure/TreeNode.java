@@ -75,6 +75,59 @@ public class TreeNode<T> {
     }
 
 
+    /**
+     *
+     *         1
+     *        / \
+     *       2   3
+     *      /   / \
+     *     4   2   4
+     *        /
+     *       4
+     *
+     */
+    public static TreeNode buildNumD() {
+        //创建二叉树
+        TreeNode<Integer> root = new TreeNode<>(1);	//根节点A
+        root.left = new TreeNode<>(2);	//A的左子树
+        root.right = new TreeNode<>(3);	//A的右子树
+        root.left.left = new TreeNode<>(4);	//B的左子树
+        root.right.left = new TreeNode<>(2);	//C的左子树
+        root.right.right = new TreeNode<>(4);	//C的右子树
+        root.right.left.left = new TreeNode<>(4);
+        return root;
+    }
+
+
+
+    /**
+     *
+     *
+     *                 6
+     *               /   \
+     *              4     8
+     *            /  \   / \
+     *           2    5 7   9
+     *          /\
+     *         1  3
+     */
+    public static TreeNode buildBinarySearchTree() {
+        //创建二叉树
+        TreeNode<Integer> root = new TreeNode<>(6);
+
+//        root.left = new TreeNode<>(4);
+//        root.left.left = new TreeNode<>(2);
+//        root.left.left.right = new TreeNode<>(3);
+//        root.left.right = new TreeNode<>(5);
+//        root.left.left.left = new TreeNode<>(1);
+
+        root.right = new TreeNode<>(8);
+//        root.right.left = new TreeNode<>(7);
+//        root.right.right = new TreeNode<>(9);
+        return root;
+    }
+
+
     public static void preTraversal(TreeNode root) {
         if(root==null) {
             return;
@@ -85,13 +138,13 @@ public class TreeNode<T> {
 
     }
 
-    public static void midTraversal(TreeNode root) {
+    public static void inTraversal(TreeNode root) {
         if(root==null) {
             return;
         }
-        midTraversal(root.left);
+        inTraversal(root.left);
         System.out.print(root.val);
-        midTraversal(root.right);
+        inTraversal(root.right);
 
     }
 

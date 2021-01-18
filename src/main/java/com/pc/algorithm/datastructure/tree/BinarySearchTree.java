@@ -1,9 +1,14 @@
 package com.pc.algorithm.datastructure.tree;
 
 
+import com.pc.algorithm.datastructure.TreeNode;
 
 /**
  * 二叉搜索树
+ *      1、对于 BST 的每一个节点 node，左子树节点的值都比 node 的值要小，右子树节点的值都比 node 的值大。
+ *      2、对于 BST 的每一个节点 node，它的左侧子树和右侧子树都是 BST。
+ *
+ *
  *
  *     二叉搜索树的性能取决与插入顺序。
  *
@@ -31,7 +36,7 @@ package com.pc.algorithm.datastructure.tree;
  *
  * 二叉查找树实现
  *
- * @author dongxie
+ * @author pengchao
  * @date 14:07 2020-04-30
  */
 public class BinarySearchTree<K extends Comparable<K>,V> {
@@ -58,6 +63,7 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
             this.value = value;
         }
 
+
         @Override
         public String toString() {
             return key+""+value;
@@ -77,7 +83,7 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
     }
 
     /**
-     * 在以x为根结点的子树中查找并返回key所对应的值;
+     * 在以node为根结点的子树中查找并返回key所对应的值;
      * @param node
      * @param key
      * @return
@@ -131,16 +137,15 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
     }
 
 
+    /**
+     * 最小键（最大键max同理）
+     * @return
+     */
     public K min() {
         Node node;
         return (node=min(root)) !=null ? node.key : null;
     }
 
-    /**
-     * 最小键（最大键max同理）
-     * @param node
-     * @return
-     */
     private Node min(Node node) {
         if(node==null) {
             return null;
@@ -151,17 +156,17 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
         return min(node.left);
     }
 
+    /**
+     * 向下取整,小于等于key的最大键 （向上取整ceil同理）
+     * @param key 键
+     * @return Node
+     */
     public K floor(K key) {
         Node x = floor(root, key);
         return x!=null ? x.key : null;
     }
 
-    /**
-     * 向下取整,小于等于key的最大键 （向上取整ceil同理）
-     * @param node 节点
-     * @param key 键
-     * @return Node
-     */
+
     private Node floor(Node node, K key) {
         if(node == null) {
             return null;
@@ -182,17 +187,17 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
     }
 
 
+    /**
+     * 查找排名为index的节点。如果左子树数量为t,t>index,那么就在左边找，否则就在右边找
+     * @param index
+     * @return
+     */
     public K select(int index) {
         Node node = select(root,index);
         return node!=null ? node.key : null;
     }
 
-    /**
-     * 查找排名为index的节点。如果左子树数量为t,t>index,那么就在左边找，否则就在右边找
-     * @param node
-     * @param index
-     * @return
-     */
+
     private Node select(Node node, int index) {
         if(node==null) {
             return null;
@@ -208,16 +213,16 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
     }
 
 
+    /**
+     * key的排名
+     * @param key
+     * @return
+     */
     public int rank(K key) {
         return rank(key,root);
     }
 
-    /**
-     * key的排名
-     * @param key
-     * @param node
-     * @return
-     */
+
     private int rank(K key, Node node) {
         if(node ==null) {
             return 0;
@@ -231,14 +236,91 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
             return size(node.left);//就是左子树大小
     }
 
+
     /**
-     * 删除节点x
-     *   1.找到节点x的右子树的最小节点，用这个节点替换x
+     * 删除最小值
+     */
+    public void deleteMin() {
+        root = deleteMin(root);
+    }
+
+    private Node deleteMin(Node node) {
+        //没有左子树，那么直接删除root,然后root的right做为新root
+        if(node.left==null) {
+            return node.right;
+        }
+        node.left = deleteMin(node.left);
+
+        node.N = size(node.left) + size(node.right) + 1;
+        return node;
+    }
+
+
+    /**
+     * 删除任意节点 key
+     *
+     * 采用右边最小值替换删除节点的方式
+     *
+     * 找到删除点
+     * 找到删除点的右子树最小值x
+     *
+     * x的左子树就是删除点的左子树
+     * x的右子树就是删除点的右子树（已删除最小值）
      *
      */
-    private int delete(Node node) {
-        return 0;
+    private void delete(K key) {
+        root = delete(root,key);
     }
+
+    private Node delete(Node x, K key) {
+        if (x == null) {
+            return null;
+        }
+        int cmp = key.compareTo(x.key);
+        if (cmp < 0)
+            x.left = delete(x.left, key);
+        else if (cmp > 0)
+            x.right = delete(x.right, key);
+        else {
+            //只有一个子节点或者没有节点的情况，直接让子节点接替自己或者当前去世
+            if (x.right == null)
+                return x.left;//没有右子树，直接连接到x的左子树的第一个节点，也就是左子树上移，x也就没删除了
+            if (x.left == null)
+                return x.right;//同上理
+
+            //左右子树都存在,用右子树中最小的点接替自己（也可以用左子树最大的点来接替自己）
+            Node t = x;
+            x = min(t.right);//找到右子树的最小点x为新的root
+            x.right = deleteMin(t.right);//新的root的right为被删除节点的右子树删除最小点后的节点
+            x.left = t.left;//新的root的left是被删除点的left
+        }
+        x.N = size(x.left) + size(x.right) + 1;
+        return x;
+    }
+
+
+    /**
+     * 判断是否是一颗二叉搜索树
+     * @return
+     */
+    public boolean isValidBST() {
+        return isValidBST(root, null, null);
+    }
+
+    /* 限定以 root 为根的子树节点必须满足 max.val > root.val > min.val */
+    boolean isValidBST(Node x, K min, K max) {
+        // base case
+        if (x == null) return true;
+
+        // 若 root.val 不符合 max 和 min 的限制，说明不是合法 BST
+        if (min != null && x.key.compareTo(min)<=0) return false;
+        if (max != null && x.key.compareTo(max)>=0) return false;
+        // 限定左子树的最大值是 root.key，右子树的最小值是 root.val
+        return isValidBST(root.left, min, x.key)
+                && isValidBST(root.right, x.key, max);
+    }
+
+
 
 
 
@@ -253,23 +335,39 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
     public static void main(String[] args) {
         BinarySearchTree<Integer,String> bst = new BinarySearchTree<>();
 
-        bst.put(4,"D");
-        bst.put(2,"B");
-        bst.put(6,"F");
-        bst.put(7,"G");
-        bst.put(1,"A");
-        bst.put(3,"C");
-        bst.put(5,"E");
+//        bst.put(4,"D");
+//        bst.put(2,"B");
+//        bst.put(6,"F");
+//        bst.put(7,"G");
+//        bst.put(1,"A");
+//        bst.put(3,"C");
+//        bst.put(5,"E");
+//        bst.put(10,"I");
+//        bst.put(9,"H");
+//        bst.put(8,"V");
+
+
         bst.put(10,"I");
-        bst.put(9,"H");
+        bst.put(5,"E");
 
-        bst.put(8,"V");
+        bst.put(15,"H");
+        bst.put(6,"V");
+        bst.put(20,"V");
 
 
+
+
+
+        bst.deleteMin();
+
+
+        System.out.println();
 
 
 
     }
+
+
 
 
 }
