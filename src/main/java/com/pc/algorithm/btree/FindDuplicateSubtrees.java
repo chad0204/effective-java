@@ -19,7 +19,7 @@ public class FindDuplicateSubtrees {
 
     public static void main(String[] args) {
 
-        List<TreeNode> list = findDuplicateSubtrees(TreeNode.buildNumD());
+        List<TreeNode> list = findDuplicateSubtrees(TreeNode.buildNumDuplicate());
 
         System.out.println();
     }

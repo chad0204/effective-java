@@ -74,6 +74,45 @@ public class TreeNode<T> {
         return root;
     }
 
+    /**
+     *
+     *  满二叉树
+     *            1
+     *       /        \
+     *      2          3
+     *    /   \       / \
+     *   4    5     6    7
+     *  / \  / \   / \   / \
+     * 8  9 10 11 12 13 14 15
+     *
+     *
+     *  n = 2^h-1
+     *
+     */
+    public static TreeNode buildPerfectBtree() {
+        //创建二叉树
+        TreeNode<Integer> root = new TreeNode<>(1);
+
+        root.left = new TreeNode<>(2);
+        root.right = new TreeNode<>(3);
+
+        root.left.left = new TreeNode<>(4);
+        root.left.right = new TreeNode<>(5);
+        root.right.left = new TreeNode<>(6);
+        root.right.right = new TreeNode<>(7);
+
+        root.left.left.left = new TreeNode<>(8);
+        root.left.left.right = new TreeNode<>(9);
+        root.left.right.left = new TreeNode<>(10);
+        root.left.right.right = new TreeNode<>(11);
+        root.right.left.left = new TreeNode<>(12);
+        root.right.left.right = new TreeNode<>(13);
+        root.right.right.left = new TreeNode<>(14);
+        root.right.right.right = new TreeNode<>(15);
+
+        return root;
+    }
+
 
     /**
      *
@@ -86,7 +125,7 @@ public class TreeNode<T> {
      *       4
      *
      */
-    public static TreeNode buildNumD() {
+    public static TreeNode buildNumDuplicate() {
         //创建二叉树
         TreeNode<Integer> root = new TreeNode<>(1);	//根节点A
         root.left = new TreeNode<>(2);	//A的左子树
@@ -115,17 +154,20 @@ public class TreeNode<T> {
         //创建二叉树
         TreeNode<Integer> root = new TreeNode<>(6);
 
-//        root.left = new TreeNode<>(4);
-//        root.left.left = new TreeNode<>(2);
-//        root.left.left.right = new TreeNode<>(3);
-//        root.left.right = new TreeNode<>(5);
-//        root.left.left.left = new TreeNode<>(1);
+        root.left = new TreeNode<>(4);
+        root.left.left = new TreeNode<>(2);
+        root.left.left.right = new TreeNode<>(3);
+        root.left.right = new TreeNode<>(5);
+        root.left.left.left = new TreeNode<>(1);
 
         root.right = new TreeNode<>(8);
-//        root.right.left = new TreeNode<>(7);
-//        root.right.right = new TreeNode<>(9);
+        root.right.left = new TreeNode<>(7);
+        root.right.right = new TreeNode<>(9);
         return root;
     }
+
+
+
 
 
     public static void preTraversal(TreeNode root) {
