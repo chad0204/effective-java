@@ -14,6 +14,8 @@ public class CountNodes {
 
     public static void main(String[] args) {
 
+
+
         System.out.println(countNodesForBtree(TreeNode.buildNum()));
 
         System.out.println(countNodesForBtree(TreeNode.buildPerfectBtree()));
