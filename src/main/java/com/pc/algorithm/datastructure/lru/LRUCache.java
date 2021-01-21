@@ -19,7 +19,6 @@ public class LRUCache {
         System.out.println(lru.get(2));
 
 
-
     }
 
     int capacity;

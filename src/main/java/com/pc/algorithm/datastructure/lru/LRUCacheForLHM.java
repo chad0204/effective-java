@@ -11,9 +11,27 @@ import java.util.Map;
  */
 public class LRUCacheForLHM extends LinkedHashMap<Integer,Integer>{
 
-    public long capacity;
+    public static void main(String[] args) {
+
+        LRUCacheForLHM cache = new LRUCacheForLHM(10);
+        cache.put(1,1);
+        cache.put(2,2);
+        cache.put(3,3);
+        cache.put(4,4);
+
+        //改变顺序
+        cache.get(1);
+        cache.get(3);
+
+
+    }
+
+
+
+    public int capacity;
 
     public LRUCacheForLHM(int capacity) {
+        super(capacity, 0.75F, true);
         this.capacity = capacity;
     }
 
@@ -24,7 +42,7 @@ public class LRUCacheForLHM extends LinkedHashMap<Integer,Integer>{
      */
     @Override
     protected boolean removeEldestEntry(Map.Entry<Integer, Integer> eldest) {
-        return capacity>this.size();
+        return this.size()>capacity;
     }
 
 
