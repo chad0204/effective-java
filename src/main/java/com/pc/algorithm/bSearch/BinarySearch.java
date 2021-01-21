@@ -57,6 +57,12 @@ public class BinarySearch {
         return -1;
     }
 
+    /**
+     * 多次出现，最左边
+     * @param nums
+     * @param target
+     * @return
+     */
     public static int left_bound_search(int[] nums, int target) {
         int left = 0;
 
@@ -90,6 +96,12 @@ public class BinarySearch {
         return left;
     }
 
+    /**
+     * 多次出现，最右边X
+     * @param nums
+     * @param target
+     * @return
+     */
     public static int right_bound_search(int[] nums, int target) {
         int left = 0;
 
