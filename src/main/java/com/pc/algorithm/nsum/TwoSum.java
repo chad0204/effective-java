@@ -28,7 +28,8 @@ public class TwoSum {
 
     public static void main(String[] args) {
 
-        System.out.println(Arrays.toString(twoSum(new int[]{2, 7, 11, 15}, 9)));
+        System.out.println(Arrays.toString(twoSumWithIndex(new int[]{3,2,4}, 6)));
+        System.out.println(twoSumNoDup(new int[]{1,1,1,2,2,2,3,3,3,}, 4));
     }
 
 
@@ -58,10 +59,10 @@ public class TwoSum {
     }
 
     /**
-     * 双指针解法
+     * 有序数组，返回两数的值，可以用双指针解法
      */
     public static int[] twoSumWithIndex(int[] nums, int target) {
-
+        //先排序,但是结果的顺序已经不是原来数组的顺序了
         Arrays.sort(nums);
         int left = 0;
         int right = nums.length-1;
@@ -69,7 +70,7 @@ public class TwoSum {
         while (left<right) {
             int sum = nums[left] + nums[right];
             if(sum==target) {
-                return new int[]{left,right};
+                return new int[]{nums[left],nums[right]};
             }
             if(sum<target) {
                 left++;
@@ -80,6 +81,54 @@ public class TwoSum {
 
         return new int[]{};
     }
+
+    /**
+     * 如果结果包含重复值，如何剔除
+     * @param nums
+     * @param target
+     * @return
+     */
+    public static List<List<Integer>> twoSumNoDup(int[] nums, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        //先排序
+        Arrays.sort(nums);
+        int left = 0;
+        int right = nums.length-1;
+
+        while (left<right) {
+            int l = nums[left];
+            int r = nums[right];
+            int sum = l + r;
+
+            if(sum==target) {
+                res.add(Arrays.asList(nums[left],nums[right]));
+
+                while (left<right && l==nums[left]) {
+                    left++;
+                }
+                while (left<right && r==nums[right]) {
+                    right--;
+                }
+
+                left++;right--;
+            }
+            if(sum<target) {
+                while (left<right && l==nums[left]) {
+                    left++;
+                }
+            } else {
+
+                while (left<right && r==nums[right]) {
+                    right--;
+                }
+
+            }
+        }
+
+        return res;
+    }
+
+
 
 
 
