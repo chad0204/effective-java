@@ -3,7 +3,7 @@ package com.pc.algorithm.list;
 import com.pc.algorithm.datastructure.ListNode;
 
 /**
- * 回文链
+ * 234.回文链表（简单）
  *
  * @author pengchao
  * @date 18:04 2021-01-12

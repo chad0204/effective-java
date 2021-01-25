@@ -1,7 +1,10 @@
 package com.pc;
 
-import java.time.LocalDate;
-import java.util.concurrent.*;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -12,30 +15,16 @@ public class Test {
 
     public static void main(String[] args) {
 
+        List<VO> list = Arrays.asList(new VO("1","aa"),new VO("2","bb"),new VO("2","cc"));
 
-        int a = "abc".hashCode();
+//        Map<String, VO> dbCardIdMap = list.stream().collect(Collectors.toMap(VO::getId, op -> op));
+        Map<String, VO> dbCardIdMap = list.stream().collect(Collectors.toMap(VO::getName, op -> op));
+
+        System.out.println(dbCardIdMap);
 
 
-
-        LocalDate startDate = LocalDate.now().minusDays(90);
-
-        ExecutorService executorService =
-                new ThreadPoolExecutor(2,2,0, TimeUnit.MILLISECONDS,new LinkedBlockingQueue<>());
-
-        for(;;) {
-            if(((ThreadPoolExecutor) executorService).getQueue().size()>100) {
-                System.out.println(((ThreadPoolExecutor) executorService).getQueue().size());
-                break;
-            }
-            executorService.execute(() -> {
-                try {
-                    System.out.println(Thread.currentThread().getName()+"start");
-                    TimeUnit.SECONDS.sleep(5);
-                    System.out.println(Thread.currentThread().getName()+"over");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
     }
+
+
+
 }
