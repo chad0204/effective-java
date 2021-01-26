@@ -47,8 +47,6 @@ public class FindAnagrams {
         int right = 0;
         int valid = 0;
 
-        int start = 0;
-
         while (right<s.length()) {
 
             char add = s.charAt(right);

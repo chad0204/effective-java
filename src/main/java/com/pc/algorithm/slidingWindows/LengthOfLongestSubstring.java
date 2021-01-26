@@ -19,7 +19,7 @@ public class LengthOfLongestSubstring {
     public static void main(String[] args) {
 
 
-        System.out.println(lengthOfLongestSubstring("abcabcbbefghi"));
+        System.out.println(lengthOfLongestSubstring("abcdefgc"));
         System.out.println(lengthOfLongestSubstring("abcabcbbe"));
     }
 
