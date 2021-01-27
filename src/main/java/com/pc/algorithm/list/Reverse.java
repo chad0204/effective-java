@@ -184,8 +184,8 @@ public class Reverse {
             }
             b = b.next;
         }
+        ListNode newHead = reverse1(a,b);
 
-        ListNode newHead = reverse(a,b);
         a.next = reverseKGroup(b,k);
         return newHead;
     }
@@ -201,6 +201,19 @@ public class Reverse {
             curr = next;
         }
         return prev;
+    }
+
+    public static ListNode reverse1(ListNode a, ListNode b) {
+        if(a.next==b) {
+            return a;
+        }
+
+        ListNode newHead = reverse1(a.next,b);
+
+        a.next.next = a;
+        a.next = null;
+
+        return newHead;
     }
 
 
