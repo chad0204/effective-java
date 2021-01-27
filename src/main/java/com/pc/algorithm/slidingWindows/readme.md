@@ -1,4 +1,9 @@
 
+
+
+
+
+
 ###1.缩小条件
 - 最小覆盖子串：vaild==needs
 - 最大无重复子串：windows.get(add)>1
