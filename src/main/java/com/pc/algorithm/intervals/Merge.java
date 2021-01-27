@@ -1,6 +1,8 @@
 package com.pc.algorithm.intervals;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 56. 合并区间
@@ -25,16 +27,41 @@ import java.util.Arrays;
  */
 public class Merge {
 
+
+    public static void main(String[] args) {
+        int[][] aa = new int[][]{{15,18},{1,3},{2,6},{8,10}};
+        int[][] bb = new int[][]{{1,4},{2,3}};
+        System.out.println(Arrays.toString(merge(aa)));
+        System.out.println(Arrays.toString(merge(bb)));
+    }
+
+
+
     public static int[][] merge(int[][] intervals) {
 
-        Arrays.sort(intervals, (a, b) -> {
-            if (a[0] == b[0]) {
-                return b[1] - a[1];
+        Arrays.sort(intervals,(a,b)-> a[0]!=b[0] ? (a[0]-b[0]) : (b[1]-a[1]));
+
+        List<int[]> res = new ArrayList<>();
+
+        int left = intervals[0][0];
+        int right = intervals[0][1];
+        for(int i=1;i<intervals.length;i++) {
+            int[] intvl = intervals[i];
+            //相交
+            if(right >= intvl[0] && right <= intvl[1]) {
+                right = intvl[1];
             }
-            return a[0] - b[0];
-        });
+            //分离
+            else if(right<intvl[0]) {
+                res.add(new int[]{left,right});
+                left = intvl[0];
+                right = intvl[1];
+            }
+            //覆盖不用更新
 
+        }
+        res.add(new int[]{left,right});
 
-        return new int[][]{};
+        return res.toArray(new int[res.size()][]);
     }
 }

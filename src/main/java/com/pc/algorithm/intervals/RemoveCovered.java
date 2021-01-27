@@ -26,7 +26,7 @@ import java.util.Comparator;
  * @author pengchao
  * @date 15:20 2021-01-11
  */
-public class RemoveCoveredIntervals {
+public class RemoveCovered {
 
 
     public static void main(String[] args) {
@@ -34,7 +34,7 @@ public class RemoveCoveredIntervals {
 
 
 
-        int[][] intervals = new int[][]{{1,4},{3,6},{2,8}};
+        int[][] intervals = new int[][]{{1,2},{1,4},{3,4}};
 
         System.out.println(removeCoveredIntervals(intervals));
 
@@ -43,11 +43,11 @@ public class RemoveCoveredIntervals {
 
     public static int removeCoveredIntervals(int[][] intervals) {
         // 按照起点升序排列，起点相同时降序排列
-        Arrays.sort(intervals, new Comparator<int[]>() {
-            public int compare(int[] interval1, int[] interval2) {
-                return interval1[0] - interval2[0];
-            }
+        Arrays.sort(intervals, (interval1, interval2) -> {
+            return interval1[0] == interval2[0] ? (interval1[0] - interval2[0]) : (interval2[1] - interval1[1]);
         });
+
+//        Arrays.sort(intervals,(a,b)-> a[0]!=b[0] ? (a[0]-b[0]) : (b[1]-a[1]));
 
         // 记录合并区间的起点和终点
         int left = intervals[0][0];
@@ -74,4 +74,5 @@ public class RemoveCoveredIntervals {
 
         return intervals.length - res;
     }
+
 }
