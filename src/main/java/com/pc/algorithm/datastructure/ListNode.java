@@ -8,7 +8,7 @@ package com.pc.algorithm.datastructure;
  */
 public class ListNode<T> {
     public T val;
-    public ListNode next;
+    public ListNode<T> next;
     public ListNode(T x) { val = x; }
 
 
@@ -27,17 +27,30 @@ public class ListNode<T> {
     }
 
 
-    public static ListNode buildStringPalindrome() {
+    public static ListNode<String> buildStringPalindromeString() {
         ListNode head = new ListNode<>("A");	//根节点A
 
         head.next = new ListNode<>("B");
         head.next.next = new ListNode<>("C");
-        head.next.next.next = new ListNode<>("C");
-        head.next.next.next.next = new ListNode<>("233");
-        head.next.next.next.next.next = new ListNode<>("A");
+//        head.next.next.next = new ListNode<>("C");
+//        head.next.next.next.next = new ListNode<>("233");
+//        head.next.next.next.next.next = new ListNode<>("A");
 
         return head;
     }
+
+    public static ListNode<Integer> buildStringPalindromeNum() {
+        ListNode head = new ListNode<>(1);
+
+        head.next = new ListNode<>(0);
+        head.next.next = new ListNode<>(0);
+//        head.next.next.next = new ListNode<>("C");
+//        head.next.next.next.next = new ListNode<>("233");
+//        head.next.next.next.next.next = new ListNode<>("A");
+
+        return head;
+    }
+
 
     public static ListNode buildCycle() {
         //创建链表
