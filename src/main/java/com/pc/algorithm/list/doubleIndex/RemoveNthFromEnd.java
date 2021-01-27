@@ -1,7 +1,6 @@
-package com.pc.algorithm.list;
+package com.pc.algorithm.list.doubleIndex;
 
 import com.pc.algorithm.datastructure.ListNode;
-import java.util.Arrays;
 
 /**
  * 19. 删除链表的倒数第 N 个结点
