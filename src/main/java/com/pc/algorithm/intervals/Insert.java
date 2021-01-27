@@ -1,9 +1,7 @@
 package com.pc.algorithm.intervals;
 
-import com.pc.something.Arr;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 /**

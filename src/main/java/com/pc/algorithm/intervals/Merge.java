@@ -47,11 +47,11 @@ public class Merge {
         int right = intervals[0][1];
         for(int i=1;i<intervals.length;i++) {
             int[] intvl = intervals[i];
-            //相交
+            //相交，更新
             if(right >= intvl[0] && right <= intvl[1]) {
                 right = intvl[1];
             }
-            //分离
+            //分离，增加
             else if(right<intvl[0]) {
                 res.add(new int[]{left,right});
                 left = intvl[0];

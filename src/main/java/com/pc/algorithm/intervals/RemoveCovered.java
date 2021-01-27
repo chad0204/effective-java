@@ -64,7 +64,7 @@ public class RemoveCovered {
             if (right >= intv[0] && right <= intv[1]) {
                 right = intv[1];
             }
-            // 情况三，完全不相交，更新起点和终点
+            // 情况三，完全不相交，更新起点和终点，（被合并区间覆盖也算覆盖）
             //上一个不可能被覆盖了，更新
             if (right < intv[0]) {
                 left = intv[0];
