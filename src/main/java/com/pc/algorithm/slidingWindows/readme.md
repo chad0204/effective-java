@@ -5,12 +5,12 @@
 
 
 ###1.缩小条件
-- 最小覆盖子串：vaild==needs
+- 最小覆盖子串：valid==needs
 - 最大无重复子串：windows.get(add)>1
 - 异位排列：right-left == p.length
 
 ###2.结果获取
-* 最小覆盖子串：vaild==needs
+* 最小覆盖子串：valid==needs
 * 最大无重复子串：没出现重复就一直加，出现重复就去掉重复重新开始加
 * 异位：长度一致后，判断vaild==needs
 
