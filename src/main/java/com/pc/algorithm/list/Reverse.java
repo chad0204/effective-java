@@ -1,9 +1,11 @@
 package com.pc.algorithm.list;
 
 import com.pc.algorithm.datastructure.ListNode;
+import java.util.List;
 
 /**
  *
+ *  206. 反转链表
  *  92.反转链表II（中等）
  * @author pengchao
  * @date 10:48 2021-01-12
@@ -15,19 +17,22 @@ public class Reverse {
         ListNode head = ListNode.buildList();
 
         for(ListNode p = head;p!=null;p = p.next) {
-
             System.out.print(p);
         }
         System.out.println();
 
 //        ListNode last = reverse(head);
 //        ListNode last = reverseN(head,4);
-        ListNode last = reverseBetween(head,4,6);
+//        ListNode last = reverseBetween(head,3,6);
+
+        ListNode last = reverseKGroup(head,2);
 
         for(ListNode p = last;p!=null;p = p.next) {
             System.out.print(p);
         }
         System.out.println();
+
+
 
 
     }
@@ -66,7 +71,7 @@ public class Reverse {
         ListNode newHead = reverse(head.next);
         //head = 5 4 3 2 1
         head.next.next = head;
-        head.next = null;
+        head.next = null;//不停的断开
         return newHead;
     }
 
@@ -106,7 +111,7 @@ public class Reverse {
             ListNode next = curr.next;
             //当前节点指向前驱节点
             curr.next = prev;
-            //前驱节点后移当当前节点
+            //前驱节点后移到当前节点
             prev = curr;
             //当前节点后移到当前节点的next
             curr = next;
@@ -133,9 +138,9 @@ public class Reverse {
         }
         // 以 head.next 为起点，需要反转前 n - 1 个节点
         ListNode last = reverseN(node.next, n - 1);
-
+        //更新head.next 的next
         node.next.next = node;
-        // 让反转之后的 head 节点和后面的节点连起来
+        //这里的next是前一个head的next.next
         node.next = successor;
         return last;
     }
@@ -157,9 +162,49 @@ public class Reverse {
             return reverseN(head, n);//反转从m到n的元素
         }
         // 前进到反转的起点触发 base case
-        ListNode successor = reverseBetween(head.next, m - 1, n - 1);
-        System.out.println(successor);
-        head.next = successor;
+        head.next = reverseBetween(head.next, m - 1, n - 1);
         return head;
     }
+
+    /**
+     * k个一组反转链表
+     */
+    public static ListNode reverseKGroup(ListNode head, int k) {
+        if(head==null) {
+            return null;
+        }
+
+        ListNode a,b;
+        a = b = head;
+
+        for(int i=0;i<k;i++) {
+            if(b==null) {
+                //不够k个，直接返回了
+                return head;
+            }
+            b = b.next;
+        }
+
+        ListNode newHead = reverse(a,b);
+        a.next = reverseKGroup(b,k);
+        return newHead;
+    }
+
+    public static ListNode reverse(ListNode a, ListNode b) {
+        ListNode prev,curr;
+        prev = null;
+        curr = a;
+        while (curr != b) {
+            ListNode next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
+
+
+
 }
+
+
