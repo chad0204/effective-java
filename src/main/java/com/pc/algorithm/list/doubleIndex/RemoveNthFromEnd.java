@@ -34,9 +34,10 @@ public class RemoveNthFromEnd {
         }
 
         if(fast==null) {
-            //说明快指针走到头了，说明倒数n个是第一个
+            //说明快指针走到头了，说明倒数n个是第一个，直接返回第二个开始的链表
             return head.next;
         }
+        //删除slow.next
         slow.next = slow.next.next;
 
         return head;

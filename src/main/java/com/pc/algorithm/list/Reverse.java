@@ -63,11 +63,12 @@ public class Reverse {
         if (head==null || head.next == null) {
             return head;
         }
-        //last在递归中是不变的，做为新的头节点
+
+        //记住，这个递归是将head.next之后的链表反转
         ListNode newHead = reverse(head.next);
-        //head = 5 4 3 2 1
+        //反转完之后，操作head
         head.next.next = head;
-        head.next = null;//不停的断开
+        head.next = null;
         return newHead;
     }
 

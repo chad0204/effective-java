@@ -78,6 +78,7 @@ public class Cycle {
             }
         }
 
+        //说明fast走完了还没相遇，直接返回
         if(fast == null || fast.next==null) {
             return null;
         }
