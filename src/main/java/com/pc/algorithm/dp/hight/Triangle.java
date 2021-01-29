@@ -14,7 +14,7 @@ import java.util.List;
  * i表示索引
  *
  * level = 0, res = [level][0]
- * max([level+1][i],)
+ * min([level+1][i],[level+1][i+1])
  *
  *
  * @author pengchao
@@ -29,7 +29,7 @@ public class Triangle {
                     Arrays.asList(6,5,7),
                     Arrays.asList(4,1,8,3));
 
-            System.out.println(minimumTotal(triangle));
+//            System.out.println(minimumTotal(triangle));
 
 
             System.out.println(dp(triangle));
@@ -92,7 +92,10 @@ public class Triangle {
         for(int i=triangle.size()-1;i>=0;i--) {//行
 
             for(int j=0;j<=triangle.get(i).size()-1;j++) {
-                //dp[4][0]、dp[4][1]、dp[4][2]、dp[4][3]、dp[4][4] == 0
+                /*
+                 * 设最后一层为level
+                 * dp[level+1][i] == 0
+                 */
                 dp[i][j] = Math.min(dp[i + 1][j], dp[i + 1][j + 1]) + triangle.get(i).get(j);
                 System.out.println("dp["+i+"]["+j+"]:"+dp[i][j]);
             }

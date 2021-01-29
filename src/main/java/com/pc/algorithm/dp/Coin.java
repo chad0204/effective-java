@@ -70,12 +70,12 @@ public class Coin {
         int min = Integer.MAX_VALUE;
         //选面值
         for(int coin : coins) {
-            int res = dfs(coins,amount-coin,member);
+            int res = dfs(coins,amount-coin,member);//这里不能直接+1,后面还得判断-1
             if(res==-1) {
                 continue;//分配不了的状态不考虑
             }
             //res>=0 ，表示能分配,==0正好分完，>0表示分完还有剩余的钱，继续循环
-            if(res >=0 && res < min) {
+            if(res >=0 && (res+1) < min) {
                 min = res+1;
             }
         }
