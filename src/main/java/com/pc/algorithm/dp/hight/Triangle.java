@@ -87,7 +87,7 @@ public class Triangle {
      */
     private static int dp(List<List<Integer>> triangle) {
 
-        int[][] dp = new int[triangle.size()+1][triangle.size()+1];
+        int[][] dp = new int[triangle.size()+1][triangle.size()+1];//要存i + 1层
 
         for(int i=triangle.size()-1;i>=0;i--) {//行
 
