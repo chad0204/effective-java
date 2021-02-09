@@ -18,9 +18,19 @@ public class LengthOfLIS {
     }
 
 
-    // f(i) = max{f(j)} + 1
+    /**
+     *
+     * f(i) = max{f(j)} + 1, 0<=j<i, num[i]>num[j]
+     *
+     * i是当前数组下标，j是之前某一个比i小的数组下标
+     *
+     * 得出dp数组的值，然后取出最小值
+     *
+     * @param nums
+     * @return
+     */
     public static int lengthOfLIS(int[] nums) {
-
+        //结果不是dp[len]，所以不用dp数组长度不用+1
         int[] dp = new int[nums.length];
 
         for(int i=0;i<nums.length;i++) {
@@ -31,7 +41,7 @@ public class LengthOfLIS {
 
             dp[i] = 1;//最小长度是1
             for(int j=0;j<i;j++) {
-                if(nums[i]>=nums[j]) {
+                if(nums[i]>nums[j]) {
                     dp[i] = Math.max(dp[j]+1,dp[i]);
                 }
 
@@ -44,5 +54,15 @@ public class LengthOfLIS {
         }
 
         return res;
+    }
+
+
+    public static int lengthOfLIS_II(int[] nums) {
+
+        int[][] dp = new int[nums.length][nums.length];
+
+
+
+        return 0;
     }
 }

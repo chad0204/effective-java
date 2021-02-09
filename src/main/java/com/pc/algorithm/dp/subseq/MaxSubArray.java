@@ -53,7 +53,7 @@ public class MaxSubArray {
      * @return
      */
     public int maxSubArrayDp(int[] nums) {
-
+        //结果不是dp[len]，所以不用dp数组长度不用+1
         int[] dp = new int[nums.length];
 
         for(int i=0;i<nums.length;i++) {
@@ -63,6 +63,7 @@ public class MaxSubArray {
             }
             dp[i] = Math.max(dp[i-1]+nums[i],nums[i]);
         }
+
 
         return maxValue(dp);
     }
