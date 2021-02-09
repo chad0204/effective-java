@@ -86,4 +86,41 @@ public class MinDistance {
         return dp[len1-1][len2-1];
 
     }
+
+    /**
+     * 583. 两个字符串的删除操作
+     *
+     * 删除任意一个字符串的字符
+     *
+     * @param word1
+     * @param word2
+     * @return
+     */
+    public int minDistanceOnlyDelete(String word1, String word2) {
+        int[][] dp = new int[word1.length()+1][word2.length()+1];
+
+        for(int i=0;i<=word1.length();i++) {
+
+            for(int j=0;j<=word2.length();j++) {
+                if(i==0) {
+                    dp[i][j] = j;
+                    continue;
+                }
+                if(j==0) {
+                    dp[i][j] = i;
+                    continue;
+                }
+
+                if(word1.charAt(i-1) == word2.charAt(j-1)) {
+                    dp[i][j] = dp[i-1][j-1];
+                } else {
+                    //任意删一个
+                    dp[i][j] = Math.min(dp[i-1][j],dp[i][j-1])+1;
+                }
+            }
+        }
+
+        return dp[word1.length()][word2.length()];
+
+    }
 }

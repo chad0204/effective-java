@@ -14,8 +14,7 @@ public class MaxSubArray {
 
 
     public static void main(String[] args) {
-        System.out.println();
-        maxSubArray(new int[]{-2,1,-3,4,-1,2,1,-5,4});
+        System.out.println(maxSubArrayDp(new int[]{-2,-1,3,-1,-2,-3,3,-4,-5}));
     }
 
 
@@ -48,19 +47,20 @@ public class MaxSubArray {
 
 
     /**
-     * 动态规划
+     * 自下而上 动态规划
      * @param nums
      * @return
      */
-    public int maxSubArrayDp(int[] nums) {
+    public static int maxSubArrayDp(int[] nums) {
         //结果不是dp[len]，所以不用dp数组长度不用+1
         int[] dp = new int[nums.length];
 
         for(int i=0;i<nums.length;i++) {
             if(i==0) {
-                dp[i] = nums[i];
+                dp[0] = nums[0];
                 continue;
             }
+            //
             dp[i] = Math.max(dp[i-1]+nums[i],nums[i]);
         }
 

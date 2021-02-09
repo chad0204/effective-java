@@ -47,11 +47,11 @@ public class LCS {
     }
 
 
-    public int longestCommonSubsequenceDp(String text1, String text2) {
+    public static int longestCommonSubsequenceDp(String text1, String text2) {
 
         int[][] dp = new int[text1.length()+1][text2.length()+1];
-        for(int i = 0;i<=text1.length();i++) {
-            for(int j = 0;j<=text2.length();j++) {
+        for(int i = 1;i<=text1.length();i++) {
+            for(int j = 1;j<=text2.length();j++) {
 
                 //这两个0可以省略，直接从1开始循环longestPalindrome
                 if(i==0) {
@@ -73,6 +73,10 @@ public class LCS {
         return dp[text1.length()][text2.length()];
     }
 
+
+    public static void main(String[] args) {
+        longestCommonSubsequenceDp("abcde","ace");
+    }
 
 
 }

@@ -1,5 +1,7 @@
 package com.pc.algorithm.dp.subseq;
 
+import java.util.Arrays;
+
 /**
  * 300. 最长递增子序列
  *
@@ -14,7 +16,7 @@ package com.pc.algorithm.dp.subseq;
 public class LengthOfLIS {
 
     public static void main(String[] args) {
-        lengthOfLIS(new int[]{10,9,2,5,3,7,101,18});
+        lengthOfLISDp(new int[]{10,9,2,5,3,7,101,18});
     }
 
 
@@ -24,25 +26,27 @@ public class LengthOfLIS {
      *
      * i是当前数组下标，j是之前某一个比i小的数组下标
      *
+     * dp[i] 表示以 nums[i] '这个数结尾'的最长递增子序列的长度
+     *
      * 得出dp数组的值，然后取出最小值
      *
      * @param nums
      * @return
      */
-    public static int lengthOfLIS(int[] nums) {
+    public static int lengthOfLISDp(int[] nums) {
         //结果不是dp[len]，所以不用dp数组长度不用+1
         int[] dp = new int[nums.length];
+        Arrays.fill(dp,1);
 
         for(int i=0;i<nums.length;i++) {
-            if(i==0) {
-                dp[i] = 1;
-                continue;
-            }
+//            if(i==0) {
+//                dp[i] = 1;
+//                continue;
+//            }
 
-            dp[i] = 1;//最小长度是1
             for(int j=0;j<i;j++) {
                 if(nums[i]>nums[j]) {
-                    dp[i] = Math.max(dp[j]+1,dp[i]);
+                    dp[i] = Math.max(dp[j]+1,dp[i]);//dp[i]初始为1
                 }
 
             }
@@ -54,15 +58,5 @@ public class LengthOfLIS {
         }
 
         return res;
-    }
-
-
-    public static int lengthOfLIS_II(int[] nums) {
-
-        int[][] dp = new int[nums.length][nums.length];
-
-
-
-        return 0;
     }
 }
