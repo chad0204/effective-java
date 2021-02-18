@@ -1,9 +1,11 @@
 package com.pc.algorithm.intervals;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * 435. 无重叠区间
+ * 452. 用最少数量的箭引爆气球
  *
  * 给定一个区间的集合，找到需要移除区间的最小数量，使剩余区间互不重叠。
  * @author pengchao
@@ -16,7 +18,6 @@ public class EraseOverlapIntervals {
         int[][] a = new int[][]{{1,8},{3,4},{7,9},{9,10}};
 
         System.out.println(eraseOverlapIntervals(a));
-
 
 
 
@@ -33,6 +34,16 @@ public class EraseOverlapIntervals {
 
     /**
      * 不相交的区间的最多个数
+     *
+     *  统计不重叠的区间
+     *  按照end排序，下一个区间的start大于等于end，表示不重叠，计数多少个不重叠，并更新上一个end
+     *
+     *  统计重叠的区间
+     *  按照end排序，下一个区间的start小于end，表示重叠，计数重叠数，否则记录更新上一个end
+     *
+     *  注意：区间边界触碰，不算重叠
+     *
+     *
      * @param intvs
      * @return
      */
@@ -61,4 +72,5 @@ public class EraseOverlapIntervals {
         }
         return count;
     }
+
 }
