@@ -1,4 +1,4 @@
-package com.pc.algorithm.dp.hight;
+package com.pc.algorithm.dp;
 
 import java.util.Arrays;
 import java.util.List;
@@ -81,6 +81,10 @@ public class Triangle {
      *
      *  base case
      *  dp[n+1][y] = 0 (设三角形的深度为n,当层数超过深度，节点不存在值为0)
+     *
+     *
+     *  自下而上可以规避边界问题 ,可以假设n+1层的值都为0
+     *  自上而下需要考虑dp[-1][j]的问题
      *
      *
      *

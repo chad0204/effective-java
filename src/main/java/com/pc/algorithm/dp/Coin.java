@@ -25,11 +25,11 @@ public class Coin {
 
     public static void main(String[] args) {
 
-        int[] coins = {2};
+        int[] coins = {5,7,8};
 
         System.out.println(coinChange(coins, 5));
-        System.out.println(dp2(coins, 5));
-        System.out.println(dp(coins, 5));
+        System.out.println(dp2(coins, 10));
+        System.out.println(dp(coins, 10));
 
 
     }
@@ -85,7 +85,12 @@ public class Coin {
     }
 
 
-
+    /**
+     * 这个解法不好，还是下面的dp2()中先给dp数组初始化最大值比较好
+     * @param coins
+     * @param amount
+     * @return
+     */
     public static int dp(int[] coins, int amount) {
         //金额amount最多只能被分成amount份
         int[] dp = new int[amount+1];
@@ -138,8 +143,6 @@ public class Coin {
                 if(coin > i) {
                     continue;
                 }
-
-
                 dp[i] = Math.min(dp[i],dp[i-coin]+1);
             }
         }

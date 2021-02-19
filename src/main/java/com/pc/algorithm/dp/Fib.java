@@ -3,7 +3,7 @@ package com.pc.algorithm.dp;
 import java.util.HashMap;
 
 /**
- * 斐波那契数列
+ * 509 斐波那契数列
  *
  * 0 1 1 2 3 5 8 13 21。。。
  *
@@ -28,7 +28,6 @@ public class Fib {
 
         System.out.println(dfs(n,new int[n+1]));
         System.out.println(dp(n));
-        System.out.println(dp(n));
         System.out.println(_dp(n));
 
 
@@ -36,6 +35,7 @@ public class Fib {
 
     /**
      * 自顶向下
+     *
      * @param n
      * @param memo
      * @return
@@ -83,7 +83,7 @@ public class Fib {
 
 
     /**
-     * 使用变量优化备忘录，压缩状态值
+     * 使用变量优化dp数组，压缩状态值
      * @param n
      * @return
      */

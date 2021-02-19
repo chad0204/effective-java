@@ -19,6 +19,8 @@ public class Rob {
 
 //        System.out.println(dp(new int[]{2,3,2}));
         System.out.println(dp(new int[]{1,2,3,1}));
+
+
     }
 
 
@@ -117,14 +119,51 @@ public class Rob {
         return dp_i;
     }
 
+    /**
+     * 下面这种解法和上面的区别是，自顶向下
+     *  需要考虑边界问题，也就是 dp[i-1] dp[i-2]的问题
+     *
+     *  如果自下而上，dp[i+1] dp[i+2] 默认可以为0 ,而dp[i-1] dp[i-2] 需要特殊处理
+     *
+     *
+     *
+     * @param nums
+     * @return
+     */
+    public int rob_(int[] nums) {
+
+        int[] dp = new int[nums.length+1];
+
+        for(int i=0;i<=nums.length;i++) {
+            if(i==0) {
+                dp[i] = 0;
+                continue;
+            }
+            if(i==1) {
+                dp[i] = nums[i-1];
+                continue;
+            }
+            if(i==2) {
+                dp[i] = Math.max(nums[i-1],nums[i-2]);
+                continue;
+            }
+            //抢和不抢
+            dp[i] = Math.max(dp[i-2]+nums[i-1],dp[i-1]);
+
+        }
+
+        return dp[nums.length];
+
+    }
+
 
     /**
      *
      * 2.环形数组，房屋首位是相连的
      *
      * 三种情况种选最大值
-     * 1一种直选第一个
-     * 2一种直选最后一个
+     * 1一种只选第一个
+     * 2一种只选最后一个
      * 3或者头尾都不要 （由于金额非负，所以这种情况肯定最小）
      *
      *
@@ -160,23 +199,22 @@ public class Rob {
      *
      *
      */
-    class Solution {
-        public int rob(TreeNode<Integer> root) {
-            if(root==null) {
-                return 0;
-            }
-            //抢根节点
-            int do_it = root.val+ // 根
-                    (root.left!=null ? rob(root.left.left) : 0) +  //左
-                    (root.right!=null ? rob(root.right.right) : 0);//右
-            //不抢根节点
-            int not_do =
-                    rob(root.left) +  //左
-                    rob(root.right);//右
-
-            return Math.max(do_it,not_do);
-
+    public int rob(TreeNode<Integer> root) {
+        if(root==null) {
+            return 0;
         }
+        //抢根节点,需要跳一个节点
+        int do_it = root.val
+                + (root.left == null ? 0 : rob(root.left.left) + rob(root.left.right))
+                + (root.right == null ? 0 : rob(root.right.left) + rob(root.right.right));
+
+        //不抢根节点，不需要跳一个节点
+        int not_do =
+                rob(root.left) +  //左
+                rob(root.right);//右
+
+        return Math.max(do_it,not_do);
+
     }
 
 

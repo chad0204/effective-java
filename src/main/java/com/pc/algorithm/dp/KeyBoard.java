@@ -9,14 +9,14 @@ import java.util.HashMap;
  * # A
  * dp(n-1,a_num+1,copy)
  *
- * # C_A、C_C 选中和复制必然是联合使用
+ * # C_A、C_C 选中和复制必然是联合使用才能产生A
  * dp(n-2,a_num,a_num)
  *
  * # C_V
  * dp(n-1,a_num+copy,copy)
  *
  * 状态转移方程
- * f(n) = max(dp(n-1,a_num+1,copy),dp(n-2,a_num,a_num),dp(n-1,a_num+copy,copy))
+ * f(n) = max{dp(n-1,a_num+1,copy),dp(n-2,a_num,a_num),dp(n-1,a_num+copy,copy)}
  *
  *
  * n = 0 结束
@@ -36,7 +36,6 @@ public class KeyBoard {
 
 
     }
-
 
 
     /**
@@ -73,6 +72,9 @@ public class KeyBoard {
         }
         return max;
     }
+
+
+
 
 
 

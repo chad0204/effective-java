@@ -60,7 +60,7 @@ public class MaxSubArray {
                 dp[0] = nums[0];
                 continue;
             }
-            //
+            //nums[i]为正数，加入到之前的连续子序列中，nums[i]为负数，另起炉灶创建新的连续子序列
             dp[i] = Math.max(dp[i-1]+nums[i],nums[i]);
         }
 

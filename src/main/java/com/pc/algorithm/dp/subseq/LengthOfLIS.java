@@ -38,15 +38,13 @@ public class LengthOfLIS {
         int[] dp = new int[nums.length];
         Arrays.fill(dp,1);
 
-        for(int i=0;i<nums.length;i++) {
-//            if(i==0) {
-//                dp[i] = 1;
-//                continue;
-//            }
+        for(int i=1;i<nums.length;i++) {
 
+            //找出所有索引小于i,且值比nums[i]小的子序列长度，然后取最长的一个
             for(int j=0;j<i;j++) {
                 if(nums[i]>nums[j]) {
-                    dp[i] = Math.max(dp[j]+1,dp[i]);//dp[i]初始为1
+                    //dp[i]初始为1，逐渐替换赋值为dp[j]+1
+                    dp[i] = Math.max(dp[j]+1,dp[i]);
                 }
 
             }
