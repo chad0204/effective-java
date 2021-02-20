@@ -43,7 +43,7 @@ public class LRUCache {
      * [[1,1,1],[1,2,2],[1,3,2],[2,1],[1,4,4],[2,2]],3
      *
      * opt = 1,为set操作，后面两个数为set(x,y)
-     * opt = 2,为get操作，后面两个数为get(x)
+     * opt = 2,为get操作，后面两个数为get(x)，并返回一个结果
      *
      * @param operators
      * @param k
@@ -58,7 +58,7 @@ public class LRUCache {
         head.next = tail;
         tail.prev = head;
 
-        //有多少个结果
+        //计算返回多少个结果，也就是计算多少个get操作
         int len = 0;
         for (int[] operator : operators) {
             if (operator[0] == 2) {
@@ -77,13 +77,16 @@ public class LRUCache {
         return res;
     }
 
-    int capacity;
-    int size;
 
-    Map<Integer,Node> cache = new HashMap<>();
 
-    Node head;
-    Node tail;
+
+
+    private Map<Integer,Node> cache = new HashMap<>();
+    private int capacity;//容量
+    private int size;//大小
+    private Node head;//头
+    private Node tail;//尾
+
 
     public LRUCache(int capacity) {
         this.capacity = capacity;
