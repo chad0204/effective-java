@@ -6,6 +6,21 @@ import java.util.Map;
 /**
  * HashMap+双向链表
  *
+ *
+ *
+ * put , 更新 ->移动到队尾, 新增->链入队尾 ，判断容量 删除队头
+ *
+ * get , 移动到队尾
+ *
+ * remove ，删除队头
+ *
+ *
+ * 删除节点
+ * 移动节点
+ * 链入队尾
+ *
+ *
+ *
  * @author pengchao
  * @date 19:38 2021-01-20
  */
@@ -14,11 +29,52 @@ public class LRUCache {
     public static void main(String[] args) {
         LRUCache lru = new LRUCache(1);
 
-        lru.put(2,1);
+        lru.set(2,1);
 
         System.out.println(lru.get(2));
 
 
+    }
+
+
+    /**
+     * 牛客网 方法签名
+     *
+     * [[1,1,1],[1,2,2],[1,3,2],[2,1],[1,4,4],[2,2]],3
+     *
+     * opt = 1,为set操作，后面两个数为set(x,y)
+     * opt = 2,为get操作，后面两个数为get(x)
+     *
+     * @param operators
+     * @param k
+     * @return
+     */
+    public int[] LRU (int[][] operators, int k) {
+
+        this.capacity = k;
+        this.size = 0;
+        this.head = new Node();
+        this.tail = new Node();
+        head.next = tail;
+        tail.prev = head;
+
+        //有多少个结果
+        int len = 0;
+        for (int[] operator : operators) {
+            if (operator[0] == 2) {
+                len++;
+            }
+        }
+
+        int[] res = new int[len];
+        for(int i = 0, j = 0; i < operators.length; i++) {
+            if(operators[i][0] == 1) {
+                set(operators[i][1], operators[i][2]);
+            } else {
+                res[j++] = get(operators[i][1]);
+            }
+        }
+        return res;
     }
 
     int capacity;
@@ -76,7 +132,7 @@ public class LRUCache {
      * @param key
      * @param value
      */
-    public void put(int key, int value) {
+    public void set(int key, int value) {
         Node node = cache.get(key);
         if(node != null) {
             //已存在，更新，移动到队尾
@@ -105,7 +161,7 @@ public class LRUCache {
      *  |    |  <-- prev-- ｜    ｜ <-- prev--  ｜    ｜
      *  +----+             +----+               +----+
      */
-    public void moveToLast(Node node) {
+    private void moveToLast(Node node) {
         //原位置删除
         removeNode(node);
         //添加到队尾
@@ -115,7 +171,7 @@ public class LRUCache {
     /**
      * 添加到队尾
      */
-    public void addToLast(Node node) {
+    private void addToLast(Node node) {
         node.next = tail;
         node.prev = tail.prev;
         tail.prev.next = node;
@@ -126,11 +182,13 @@ public class LRUCache {
     /**
      * 删除队头
      */
-    public Node removeHead() {
+    private Node removeHead() {
         Node del = head.next;
         removeNode(del);
         return del;
     }
+
+
 
     /**
      * 删除节点
@@ -141,7 +199,7 @@ public class LRUCache {
      *
      *
      */
-    public void removeNode(Node node) {
+    private void removeNode(Node node) {
         node.prev.next = node.next;
         node.next.prev = node.prev;
     }
