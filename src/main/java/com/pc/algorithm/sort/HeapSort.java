@@ -53,6 +53,7 @@ public class HeapSort {
         array = new int[] {7,1,4,3,10,5,2,8,9,6,0};
         heapSort(array);
 
+        System.out.println();
 
 
     }

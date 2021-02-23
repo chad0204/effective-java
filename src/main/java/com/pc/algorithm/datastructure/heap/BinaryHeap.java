@@ -116,7 +116,7 @@ public class BinaryHeap {
                 childIndex++;
             }
 
-            //⚠️如果父节点的值大于等于任何一个孩子的值，直接跳出，说明下沉结束，不是每次都下沉到最底
+            //⚠️如果顶点父节点的值大于等于任何一个孩子的值，直接跳出，说明下沉结束，不是每次都下沉到最底
             if(temp>=array[childIndex]) {
                 break;
             }

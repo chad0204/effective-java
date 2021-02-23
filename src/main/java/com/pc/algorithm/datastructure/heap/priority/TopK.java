@@ -31,7 +31,7 @@ public class TopK {
 
 
     public static void main(String[] args) {
-//        System.out.println(Arrays.toString(getLeastNumbersWithQuick(new int[]{6, 8, 4, 1, 3, 2, 7, 5}, 3)));
+        System.out.println(Arrays.toString(getLeastNumbersWithQuick(new int[]{0,0,0,2,0,5}, 0)));
 
 
 
@@ -100,6 +100,11 @@ public class TopK {
      * 切割，直到找到k，然后copy数组0-k段
      *
      *
+     * 最少的k个数，用正序。
+     *
+     * 第k大的用倒序。
+     *
+     *
      * @param arr
      * @param k
      * @return
@@ -109,17 +114,17 @@ public class TopK {
             return new int[0];
         }
         // 最后一个参数表示我们要找的是下标为k-1的数
-        return quickSearch(arr, 0, arr.length - 1, k - 1);
+        return quickSearch(arr, 0, arr.length - 1, k);
     }
 
     private static int[] quickSearch(int[] nums, int lo, int hi, int k) {
         // 每快排切分1次，找到排序后下标为j的元素，如果j恰好等于k就返回j以及j左边所有的数；
         int j = QuickSort.partitionUseIndexSwap(nums, lo, hi);
-        if (j == k) {
-            return Arrays.copyOf(nums, j + 1);
+        if (j+1 == k) {
+            return Arrays.copyOf(nums, j+1);
         }
         // 否则根据下标j与k的大小关系来决定继续切分左段还是右段。
-        return j > k? quickSearch(nums, lo, j - 1, k): quickSearch(nums, j + 1, hi, k);
+        return j+1 > k? quickSearch(nums, lo, j - 1, k): quickSearch(nums, j + 1, hi, k);
     }
 
 
