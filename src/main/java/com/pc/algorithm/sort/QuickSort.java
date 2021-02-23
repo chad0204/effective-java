@@ -92,7 +92,7 @@ public class QuickSort {
      *
      *
      */
-    private static int partitionUseIndexSwap(int[] arr, int startIndex, int endIndex) {
+    public static int partitionUseIndexSwap(int[] arr, int startIndex, int endIndex) {
 
         int pivot = arr[startIndex];//选第一个元素为基准值
 
