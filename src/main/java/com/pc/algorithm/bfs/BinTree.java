@@ -17,6 +17,9 @@ public class BinTree {
         System.out.println(minDepth(TreeNode.buildNum()));
 
 
+        System.out.println(levelOrder(TreeNode.buildNum()));
+
+
     }
 
     /**
@@ -124,6 +127,37 @@ public class BinTree {
             level++;
             System.out.println(temp);
         }
+    }
+
+
+
+    public static ArrayList<ArrayList<Integer>> levelOrder (TreeNode<Integer> root) {
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        if(root==null) {
+            return res;
+        }
+
+        LinkedList<TreeNode> queue = new LinkedList<>();
+
+        queue.add(root);
+        while(!queue.isEmpty()) {
+            ArrayList<Integer> level = new ArrayList<>();
+            int size = queue.size();
+            for(int i=0;i<size;i++) {
+                TreeNode<Integer> node = queue.remove();
+                queue.peek();
+                level.add(node.val);
+                if(node.left!=null) {
+                    queue.add(node.left);
+                }
+                if(node.right!=null) {
+                    queue.add(node.right);
+                }
+            }
+            res.add(level);
+        }
+
+        return res;
     }
 
 }

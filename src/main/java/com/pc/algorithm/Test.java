@@ -1,6 +1,8 @@
 package com.pc.algorithm;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -67,6 +69,13 @@ public class Test {
         map.put("aa",4);
 
         System.out.println(map);
+
+
+        List<Integer> list = Arrays.asList(1,2,4,5);
+
+        int[] nums = list.stream().mapToInt(Integer::intValue).toArray();
+
+
 
 
     }

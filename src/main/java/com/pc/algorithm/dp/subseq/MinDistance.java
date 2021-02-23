@@ -74,7 +74,7 @@ public class MinDistance {
                     dp[i][0] = i;
                     continue;
                 }
-                //如果用word1.charAt(i)超长了
+
                 if(word1.charAt(i-1) == word2.charAt(j-1)) {
                     dp[i][j] = dp[i-1][j-1];
                 } else {

@@ -12,8 +12,6 @@ import java.util.Map;
  *
  * get , 移动到队尾
  *
- * remove ，删除队头
- *
  *
  * 删除节点
  * 移动节点
@@ -26,16 +24,12 @@ import java.util.Map;
  */
 public class LRUCache {
 
-    public static void main(String[] args) {
-        LRUCache lru = new LRUCache(1);
 
-        lru.set(2,1);
-
-        System.out.println(lru.get(2));
-
-
-    }
-
+    private Map<Integer,Node> cache = new HashMap<>();//缓存
+    private int capacity;//容量
+    private int size = 0;//大小
+    private Node head;//头
+    private Node tail;//尾
 
     /**
      * 牛客网 方法签名
@@ -52,7 +46,6 @@ public class LRUCache {
     public int[] LRU (int[][] operators, int k) {
 
         this.capacity = k;
-        this.size = 0;
         this.head = new Node();
         this.tail = new Node();
         head.next = tail;
@@ -79,18 +72,8 @@ public class LRUCache {
 
 
 
-
-
-    private Map<Integer,Node> cache = new HashMap<>();
-    private int capacity;//容量
-    private int size;//大小
-    private Node head;//头
-    private Node tail;//尾
-
-
     public LRUCache(int capacity) {
         this.capacity = capacity;
-        this.size = 0;
         this.head = new Node();
         this.tail = new Node();
         head.next = tail;
@@ -116,9 +99,11 @@ public class LRUCache {
 
 
     /**
-     * 用过之后要移动到队尾
+     * 1.不存在，返回 -1
+     * 2.存在，返回value ,并移动到队尾
+     *
      * @param key
-     * @return
+     * @return -1
      */
     public int get(int key) {
         Node node = cache.get(key);
@@ -131,7 +116,11 @@ public class LRUCache {
     }
 
     /**
-     * 插入之后，要判断容量并删除队头
+     *
+     * 1.如果包含，需要更新，更新后移动到队尾
+     * 2.添加到队尾，判断size,删除队头
+     *
+     *
      * @param key
      * @param value
      */
@@ -144,13 +133,14 @@ public class LRUCache {
         } else {
             //加入队尾
             Node newNode = new Node(key,value);
-            addToLast(newNode);
+            linkLast(newNode);
             cache.put(key,newNode);
             size++;
             //判断容量，删除队头
             if(size>capacity) {
-                Node head = removeHead();
-                cache.remove(head.key);
+                Node first = head.next;
+                removeNode(first);
+                cache.remove(first.key);
                 size--;
             }
         }
@@ -158,39 +148,17 @@ public class LRUCache {
 
 
     /**
-     * 移动到队尾
-     *  +----+              +----+              +----+
-     *  |head|  -- next--> ｜prev｜ -- next-->  ｜tail｜
-     *  |    |  <-- prev-- ｜    ｜ <-- prev--  ｜    ｜
-     *  +----+             +----+               +----+
+     * 链入队尾，即链入到tail.prev
      */
-    private void moveToLast(Node node) {
-        //原位置删除
-        removeNode(node);
-        //添加到队尾
-        addToLast(node);
-    }
-
-    /**
-     * 添加到队尾
-     */
-    private void addToLast(Node node) {
+    private void linkLast(Node node) {
+        //node
         node.next = tail;
         node.prev = tail.prev;
+        //prev
         tail.prev.next = node;
+        //tail
         tail.prev = node;
     }
-
-
-    /**
-     * 删除队头
-     */
-    private Node removeHead() {
-        Node del = head.next;
-        removeNode(del);
-        return del;
-    }
-
 
 
     /**
@@ -205,6 +173,20 @@ public class LRUCache {
     private void removeNode(Node node) {
         node.prev.next = node.next;
         node.next.prev = node.prev;
+    }
+
+    /**
+     * 移动到队尾
+     *  +----+              +----+              +----+
+     *  |head|  -- next--> ｜prev｜ -- next-->  ｜tail｜
+     *  |    |  <-- prev-- ｜    ｜ <-- prev--  ｜    ｜
+     *  +----+             +----+               +----+
+     */
+    private void moveToLast(Node node) {
+        //原位置删除
+        removeNode(node);
+        //添加到队尾
+        linkLast(node);
     }
 
 }

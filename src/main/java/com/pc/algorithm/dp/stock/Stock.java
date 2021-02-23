@@ -1,6 +1,9 @@
 package com.pc.algorithm.dp.stock;
 
 /**
+ *
+ * 以 188. 买卖股票的最佳时机 IV 为例
+ *
  * 给定一个整数数组 prices ，它的第 i 个元素 prices[i] 是一支给定的股票在第 i 天的价格。
  *
  * 买卖是交替执行的，先买后卖
@@ -20,7 +23,7 @@ package com.pc.algorithm.dp.stock;
  *
  * n为天数
  * K为交易数
- * s为rest情况下持有股票和不持有股票
+ * s为rest情况下持有股票和不持有股票的状态
  * for(0<=i<n) {
  *     for(0<=k<K) {
  *         for(s :0,1) {
@@ -300,6 +303,8 @@ public class Stock {
 
 
     /**
+     *
+     * 188. 买卖股票的最佳时机 IV
      *
      * 状态转移方程
      * dp[i][k][0] = max(dp[i-1][k][0],dp[i-1][k][1]+prices[i])

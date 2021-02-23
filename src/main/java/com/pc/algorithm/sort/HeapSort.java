@@ -66,10 +66,11 @@ public class HeapSort {
         }
 
         //循环替换堆顶元素
-        /*这里-i表示移动到堆尾的不用调整，-1是因为一开始就移动了一个元素到堆尾，堆大小从length-1开始*/
+
         for(int i =0;i<array.length;i++) {
             //头尾替换
             int temp = array[0];
+            /*⚠️这里-i表示移动到堆尾的不用调整，-1是因为一开始就移动了一个元素到堆尾，堆大小从length-1开始*/
             array[0] = array[array.length-1-i];
             array[array.length-1-i] = temp;
             //调整堆，替换到堆尾的不用参与调整,每次parentIndex都是0,变的只有长度
