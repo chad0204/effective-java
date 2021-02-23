@@ -1,4 +1,4 @@
-package com.pc.algorithm.list;
+package com.pc.algorithm.list.reverse;
 
 import com.pc.algorithm.datastructure.ListNode;
 

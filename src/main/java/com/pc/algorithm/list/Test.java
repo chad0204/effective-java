@@ -1,6 +1,7 @@
 package com.pc.algorithm.list;
 
 import com.pc.algorithm.datastructure.ListNode;
+import java.util.Stack;
 
 /**
  *
@@ -15,8 +16,7 @@ public class Test {
 
         ListNode head = ListNode.buildList();
 
-
-
+        Stack stack = new Stack();
     }
 
 
