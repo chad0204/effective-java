@@ -78,12 +78,13 @@ public class Cycle {
             }
         }
 
-        //说明fast走完了还没相遇，直接返回
+        //⚠️ 如果上面的循环不是fast==slow跳出的， 说明fast走完了还没相遇，直接返回
         if(fast == null || fast.next==null) {
             return null;
         }
 
         fast=head;
+        //⚠️ 这里一开始肯定是不相等的
         while (fast!=slow) {
             fast = fast.next;
             slow = slow.next;

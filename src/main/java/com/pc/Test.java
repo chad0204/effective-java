@@ -41,4 +41,17 @@ public class Test {
 
 
 
+    public void deadCycle() {
+        List<VO> list = new ArrayList<>();
+        list.add(new VO("begin","name"));
+
+        for (int i = 0; i < list.size(); i ++) {
+            if (i == list.size() - 1) {
+                list.add(new VO(""+i,""+i));
+            }
+        }
+    }
+
+
+
 }

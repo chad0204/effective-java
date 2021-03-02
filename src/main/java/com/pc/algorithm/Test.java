@@ -1,5 +1,6 @@
 package com.pc.algorithm;
 
+import com.pc.algorithm.datastructure.ListNode;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -61,22 +62,48 @@ public class Test {
 
     public static void main(String[] args) {
 
-        HashMap<String,Integer> map = new HashMap<>();
-
-        map.put("aa",1);
-        map.put("aa",2);
-        map.put("aa",3);
-        map.put("aa",4);
-
-        System.out.println(map);
+        reverseKGroup(ListNode.buildList(),3);
 
 
-        List<Integer> list = Arrays.asList(1,2,4,5);
-
-        int[] nums = list.stream().mapToInt(Integer::intValue).toArray();
 
 
 
 
     }
+
+    public static ListNode reverseKGroup (ListNode head, int k) {
+
+        ListNode tail = head;
+        for(int i=0;i<k;i++) {
+            tail = tail.next;
+            if(tail==null) {
+                return head;
+            }
+        }
+
+        ListNode newHead = reverse(head,tail);
+
+        //反转
+        head.next = reverseKGroup(tail,k);
+
+
+        return newHead;
+    }
+
+    public static ListNode reverse(ListNode head, ListNode tail) {
+        if(head==null) {
+            return null;
+        }
+        if(head.next==tail) {
+            return head;
+        }
+
+        ListNode newHead = reverse(head.next,tail);
+        head.next.next = head;
+        head.next = null;
+        return newHead;
+    }
+
+
+
 }

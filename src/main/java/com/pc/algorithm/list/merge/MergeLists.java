@@ -1,6 +1,7 @@
 package com.pc.algorithm.list.merge;
 
 import com.pc.algorithm.datastructure.ListNode;
+import java.util.Arrays;
 import java.util.PriorityQueue;
 
 /**
@@ -127,6 +128,53 @@ public class MergeLists {
         ListNode right = merge(lists,mid+1,end);
 
         return mergeTwoLists(left,right);
+    }
+
+
+    public static void main(String[] args) {
+
+//        int[] a = new int[]{-10,-10,-9,-9,-9,-8,-8,-7,-7,-7,-6,-6,-6,-6,-6,-6,-6,-5,-5,-5,-4,-4,-4,-3,-3,-2,-2,-1,-1,0,1,1,1,2,2,2,3,3,3,4,5,5,6,6,6,6,7,7,7,7,8,9,9,9,9};
+//        int[] b = new int[]{-10,-10,-9,-9,-9,-9,-8,-8,-8,-8,-8,-7,-7,-7,-7,-7,-7,-7,-7,-6,-6,-6,-6,-5,-5,-5,-5,-5,-4,-4,-4,-4,-4,-3,-3,-3,-2,-2,-2,-2,-2,-2,-2,-1,-1,-1,0,0,0,0,0,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,4,4,4,4,4,4,4,5,5,5,5,5,5,6,6,6,6,6,7,7,7,7,7,7,7,8,8,8,8,9,9,9,9};
+        int[] a = new int[]{};
+        int[] b = new int[]{1};
+        merge(a,0,b, 1);
+    }
+
+
+    public static  void merge(int A[], int m, int B[], int n) {
+        int[] temp = new int[m+n];
+        int left = 0;
+        int right = 0;
+        int p = 0;
+
+        while(left< m && right<n) {
+            if(A[left] <= B[right]) {
+                temp[p] = B[left];
+                left++;
+            } else {
+                temp[p] = B[right];
+                right++;
+            }
+            p++;
+        }
+
+        while(left< m) {
+            temp[p] = A[left];
+            left++;
+            p++;
+        }
+        while(right< n) {
+            temp[p] = B[right];
+            right++;
+            p++;
+        }
+
+//        for(int i=0;i<m+n;i++) {
+            A = temp;
+//        }
+
+
+        System.out.println(Arrays.toString(A));
     }
 
 
