@@ -6,7 +6,7 @@ import java.util.PriorityQueue;
 
 /**
  * 21. 合并两个有序链表
- * 23. 合并K个升序链表
+ * 23. 合并K个升序链表 ，归并排序思想
  *
  * 类似：617. 合并二叉树
  *
@@ -141,6 +141,13 @@ public class MergeLists {
     }
 
 
+    /**
+     * 合并数组
+     * @param A
+     * @param m
+     * @param B
+     * @param n
+     */
     public static  void merge(int A[], int m, int B[], int n) {
         int[] temp = new int[m+n];
         int left = 0;

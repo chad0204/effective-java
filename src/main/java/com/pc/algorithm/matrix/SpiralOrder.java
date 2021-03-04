@@ -60,8 +60,6 @@ public class SpiralOrder {
             top++;
             bottom--;
         }
-
-
         return res;
 
     }
