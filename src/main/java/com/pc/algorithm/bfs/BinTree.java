@@ -1,6 +1,7 @@
 package com.pc.algorithm.bfs;
 
 import com.pc.algorithm.datastructure.TreeNode;
+import com.pc.enumpackage.Food;
 import java.util.*;
 
 /**
@@ -14,10 +15,13 @@ public class BinTree {
 
     public static void main(String[] args) {
 
-        System.out.println(minDepth(TreeNode.buildNum()));
+//        System.out.println(minDepth(TreeNode.buildNum()));
+//
+//
+//        System.out.println(levelOrder(TreeNode.buildNum()));
 
 
-        System.out.println(levelOrder(TreeNode.buildNum()));
+        System.out.println(zigzagLevelOrder(TreeNode.buildNum()));
 
 
     }
@@ -129,6 +133,44 @@ public class BinTree {
         }
     }
 
+    /**
+     * 牛客 - 之字打印
+     * @param root
+     * @return
+     */
+    public static ArrayList<ArrayList<Integer>> zigzagLevelOrder (TreeNode<Integer> root) {
+        if(root==null) {
+            return new ArrayList<>();
+        }
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int level = 0;
+        while(!queue.isEmpty()) {
+            LinkedList<Integer> list = new LinkedList<>();
+            int size = queue.size();
+            for(int i=0;i<size;i++) {
+                TreeNode<Integer> rmv = queue.remove();
+
+                if(level%2==0) {
+                    list.addLast(rmv.val);
+                } else {
+                    list.addFirst(rmv.val);
+                }
+
+                if(rmv.left!=null) {
+                    queue.add(rmv.left);
+                }
+                if(rmv.right!=null) {
+                    queue.add(rmv.right);
+                }
+            }
+            level++;
+            res.add(new ArrayList<>(list));
+        }
+        return res;
+    }
+
 
 
     public static ArrayList<ArrayList<Integer>> levelOrder (TreeNode<Integer> root) {
@@ -145,7 +187,6 @@ public class BinTree {
             int size = queue.size();
             for(int i=0;i<size;i++) {
                 TreeNode<Integer> node = queue.remove();
-                queue.peek();
                 level.add(node.val);
                 if(node.left!=null) {
                     queue.add(node.left);

@@ -86,12 +86,12 @@ public class BinarySearch {
 
 
         if (left >= nums.length) {
-            //所有元素都比target小 left >= nums.length
+            //所有元素都比target小，最终left会超出nums.length-1
             return -1;
         }
 
         if(nums[left] != target) {
-            //所有元素都比target大 nums[left] != target
+            //所有元素都比target大，最终nums[left]也不会是target
             return -1;
         }
 

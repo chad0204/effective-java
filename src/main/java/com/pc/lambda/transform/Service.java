@@ -12,7 +12,7 @@ public class Service {
     public UserVo getBy(Long id) {
         UserDto userDto = new UserDto();
         userDto.setId(1001L);
-        userDto.setName("aaa");
+        userDto.setName("other");
         return DTO_2_VO.apply(userDto);
     }
 

@@ -11,7 +11,7 @@ package com.pc.annotation.spring;
  * @author pengchao
  * @date 08:23 2020-05-28
  */
-@Profile("aaa")
+@Profile("other")
 public class UseProfile {
 
 

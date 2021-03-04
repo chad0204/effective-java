@@ -117,6 +117,41 @@ public class LCS {
         return dp[text1.length()][text2.length()];
     }
 
+    /**
+     * 牛客  NC127	最长公共子串
+     *
+     * 求出最长公共子串
+     *  不是子序列，子串是连续的
+     *  要求返回出子串，不是长度值
+     *
+     * @param str1
+     * @param str2
+     * @return
+     */
+    public String LCS (String str1, String str2) {
+        int len1 = str1.length();
+        int len2 = str2.length();
+        int[][] dp = new int[len1+1][len2+1];
+
+        int maxLen = 0;
+        int end = 0;
+        for(int i=1;i<=len1;i++) {
+            for(int j=1;j<=len2;j++) {
+                if(str1.charAt(i-1) == str2.charAt(j-1)) {
+                    dp[i][j] = dp[i-1][j-1]+1;
+                } else {
+                    dp[i][j] = 0;
+                }
+
+                if(dp[i][j]>=maxLen) {
+                    maxLen = dp[i][j];
+                    end = i;
+                }
+            }
+        }
+        return str1.substring(end-maxLen,end);
+    }
+
 
 
     public static void main(String[] args) {

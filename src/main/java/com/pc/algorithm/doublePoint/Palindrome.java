@@ -10,6 +10,12 @@ public class Palindrome {
 
     public static void main(String[] args) {
         System.out.println(longestPalindrome("a"));
+
+
+
+        int a = 15/10;
+
+        System.out.println(a);
     }
 
     private static String longestPalindrome(String s) {
@@ -21,6 +27,9 @@ public class Palindrome {
             res = res.length() > s1.length() ? res : s1;
             res = res.length() > s2.length() ? res : s2;
         }
+
+
+
 
         return res;
 
