@@ -17,7 +17,8 @@ public class OOM {
         List<VO> list = new ArrayList<>();
         list.add(new VO("begin","name"));
 
-        for (int i = 0; i < list.size(); i ++) {
+//        for (int i = 0; i < list.size(); i ++) {//OOM
+        for (int i = list.size(); i >=0 ; i --) {//正确
             if (i == list.size() - 1) {
                 list.add(new VO(""+i,""+i));
             }

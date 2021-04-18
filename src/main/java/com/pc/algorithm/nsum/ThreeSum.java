@@ -21,29 +21,52 @@ import java.util.List;
 public class ThreeSum {
 
     public static void main(String[] args) {
+        List<Integer> list = new ArrayList<>();
+        int a = -1;
+        list.add(a);
 
+
+        System.out.println(threeSum(new int[]{-1,0,1,2,-1,-4}));
 
     }
 
 
+    /**
+     *
+     *  思路： 穷举，先找一个，然后用重复元素twoSum的思路来解决
+     *
+     * @param nums
+     * @return
+     */
+    public  static List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        if(nums.length==0) {
+            return res;
+        }
 
-//    public  static List<List<Integer>> threeSum(int[] nums) {
-//        List<List<Integer>> res = new ArrayList<>();
-//        if(nums.length==0) {
-//            return res;
-//        }
-//
-//        Arrays.sort(nums);
-//
-//
-//        for(int i=0;i<nums.length;i++) {
-//
-//            int target =
-//
-//
-//
-//        }
-//
-//
-//    }
+        Arrays.sort(nums);
+
+
+        for(int i=0;i<nums.length;i++) {
+
+            int target = 0 - nums[i];
+
+            //求两数求和
+            List<List<Integer>> twoSums = TwoSum.twoSumNoDup(nums,i+1,target);
+
+            for(List<Integer> list :twoSums ) {
+                list.add(nums[i]);
+                res.add(list);
+            }
+
+            //跳过第一个数字重复的情况，否则会出现重复结果
+            while(i<nums.length-1 && nums[i]==nums[i+1]) {
+                i++;
+            }
+
+        }
+
+        return res;
+
+    }
 }

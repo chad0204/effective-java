@@ -67,7 +67,7 @@ public class BinaryHeap {
      *
      *
      *  tips:由于最大堆的堆顶一定是最大值，删除元素，也就是删除堆顶，经过调整，堆顶就变成第二大元素，所以不停的删除堆顶，堆顶就倒序变小。
-     *  反之最小堆，不停的删除堆顶，堆顶值不断变大，就是正序。
+     *  反之最小堆，不停的删除堆顶，堆顶值不断变大
      *
      */
     public static void downAdjust(int[] array, int parentIndex, int length) {

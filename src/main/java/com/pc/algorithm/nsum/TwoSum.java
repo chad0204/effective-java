@@ -30,7 +30,10 @@ public class TwoSum {
         System.out.println(Arrays.toString(twoSum(new int[]{2,7,11,15},9)));
 
         System.out.println(Arrays.toString(twoSumWithIndex(new int[]{3,2,4}, 6)));
-        System.out.println(twoSumNoDup(new int[]{1,1,1,2,2,2,3,3,3,}, 4));
+//        System.out.println(twoSumNoDup(new int[]{1,1,1,2,2,2,3,3,3,}, 0,4));
+
+
+        System.out.println(twoSumNoDup(new int[]{1,3,3,2,2,1,1,3}, 0,4));
     }
 
 
@@ -51,7 +54,7 @@ public class TwoSum {
 
         for(int i=0;i<nums.length;i++) {
             int complement = target - nums[i];
-            if(map.containsKey(complement) && map.get(i) != complement) {
+            if(map.containsKey(complement) && map.get(complement) != i) {
                 return new int[]{i,map.get(complement)};
             }
 
@@ -90,11 +93,11 @@ public class TwoSum {
      * @param target
      * @return
      */
-    public static List<List<Integer>> twoSumNoDup(int[] nums, int target) {
+    public static List<List<Integer>> twoSumNoDup(int[] nums, int start ,int target) {
         List<List<Integer>> res = new ArrayList<>();
-        //先排序
+        //先排序,从小到大排序，防止交替重复
         Arrays.sort(nums);
-        int left = 0;
+        int left = start;//start = 0
         int right = nums.length-1;
 
         while (left<right) {
@@ -103,16 +106,13 @@ public class TwoSum {
             int sum = l + r;
 
             if(sum==target) {
-                res.add(Arrays.asList(nums[left],nums[right]));
-
+                res.add(new ArrayList<>(Arrays.asList(nums[left],nums[right])));
                 while (left<right && l==nums[left]) {
                     left++;
                 }
                 while (left<right && r==nums[right]) {
                     right--;
                 }
-
-                left++;right--;
             }
             if(sum<target) {
                 while (left<right && l==nums[left]) {

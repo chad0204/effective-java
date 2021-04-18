@@ -81,6 +81,9 @@ public class BuildTree {
         }
 
 
+        // ⚠️ 当前很重要，不能用0，length等值
+
+
         int rootValue = preorder[preStart];
         // rootVal 在中序遍历数组中的索引
         int index = 0;

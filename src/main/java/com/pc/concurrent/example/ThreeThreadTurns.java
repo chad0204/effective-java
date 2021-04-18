@@ -19,6 +19,7 @@ public class ThreeThreadTurns {
     private static Condition condition2 = lock.newCondition();
     private static Condition condition3 = lock.newCondition();
 
+    // 1 2 3，控制三种条件下的等待
     private static int flag = 1;
 
     private static int result = 0;

@@ -89,12 +89,12 @@ public class Test {
 
         /**
          * 无最大线程数，无任务缓存，提交任务就开启线程执行或者获取任务执行，线程执行完60秒回收。
-         * 如果每个线程都执行很慢，那么一直放入任务线程也会一直增多，因为SynchronousQueue随时都是满的。
+         * 如果每个线程都执行很慢，那么一直放入任务线程也会一直增多，因为SynchronousQueue没有容量。
          */
         ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
         ExecutorService cachedThreadPool1 = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
                 60L, TimeUnit.SECONDS,
-                new SynchronousQueue<>());//SynchronousQueue没有容量，即存即用
+                new SynchronousQueue<>());//SynchronousQueue没有容量，相当于是满的，即存即用
 
 
         /**
@@ -117,7 +117,6 @@ public class Test {
         ExecutorService scheduledThreadPool1=new ScheduledThreadPoolExecutor(corePoolSize);
 //        new ThreadPoolExecutor(corePoolSize, Integer.MAX_VALUE, 0, NANOSECONDS,
 //                new ScheduledThreadPoolExecutor.DelayedWorkQueue());
-
 
 
 

@@ -20,7 +20,7 @@ public class CountDownLatchDemo implements Runnable {
         try {
             //模拟执行时间不同的任务
             Thread.sleep(new Random().nextInt(10) * 1000);
-            System.out.println(Thread.currentThread().getName()+"execute complete");
+            System.out.println(Thread.currentThread().getName()+" execute complete");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {

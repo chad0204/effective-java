@@ -19,7 +19,7 @@ public class MergeLists {
 
 
     /**
-     * 迭代
+     * 递归
      * @param l1
      * @param l2
      * @return
@@ -42,7 +42,7 @@ public class MergeLists {
 
 
     /**
-     * 递归
+     * 迭代
      * @param l1
      * @param l2
      * @return
@@ -119,6 +119,7 @@ public class MergeLists {
             return null;
         }
         if(start==end) {
+            //说明只有一个
             return lists[start];
         }
 

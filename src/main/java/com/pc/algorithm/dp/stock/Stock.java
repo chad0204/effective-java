@@ -22,7 +22,7 @@ package com.pc.algorithm.dp.stock;
  *
  *
  * n为天数
- * K为交易数
+ * K为交易数，买卖为一次，卖k不变，买k-1
  * s为rest情况下持有股票和不持有股票的状态
  * for(0<=i<n) {
  *     for(0<=k<K) {
@@ -69,7 +69,8 @@ package com.pc.algorithm.dp.stock;
  * dp[-1][k][1] = dp[i][0][1] = -infinity
  *
  *
- *
+ * 结果
+ * dp[n-1][k][0] ，n从0开始遍历
  *
  *
  * @author pengchao

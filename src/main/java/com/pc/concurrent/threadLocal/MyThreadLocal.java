@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  *      A a = new A();
  *      B b = new B(a);
  *      a = null;
- *      上面的代码，a=null，依然不会被GC,因为被b强引用了。
+ *      上面的代码，a=null，对象A依然不会被GC,因为被b强引用了。
  *      A a = new A();
  *      WeakReference b = new WeakReference(a);
  *      a = null;
@@ -80,10 +80,11 @@ public class MyThreadLocal {
 
         new Thread(() -> {
 
-            //一个Thread只有一个ThreadLocalMap,存放(threadLocal,value)键值,一个ThreadLocal实例set多次则会覆盖
+            //一个Thread只有一个ThreadLocalMap,存放(threadLocal,value)键值,一个ThreadLocal实例set多次则会覆盖,key就是threadLocal
 
             //如果Thread的threadLocalMap已经初始化，那么另一个ThreadLocal实例则不会创建ThreadLocalMap,而是将(threadLocal2,value)键值加入到原先的map中
 
+            //每个线程都只有一个threadLocalMap,一个线程用一个threadLocal对象只能操作tlm新增一个k-v元素；使用多个threadLocal才能给tlm新增多个元素
             threadLocal.set(1);
             threadLocal.set(2);
             threadLocal2.set(1);
@@ -92,6 +93,7 @@ public class MyThreadLocal {
             System.out.println((Integer) threadLocal.get());
             System.out.println((Integer) threadLocal2.get());
 
+            threadLocal.remove();
 
 
         },"Thread-more").start();
