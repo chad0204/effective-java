@@ -8,7 +8,7 @@ import com.github.brainlag.nsq.lookup.NSQLookup;
 import java.util.concurrent.Executor;
 
 /**
- * TODO
+ * 测试NsqConsumer
  *
  * @author pengchao
  * @date 01:10 2021-04-18
