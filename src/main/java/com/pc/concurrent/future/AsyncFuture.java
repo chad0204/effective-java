@@ -1,7 +1,7 @@
 package com.pc.concurrent.future;
 
 import com.google.common.collect.Maps;
-import com.twodfire.share.result.Result;
+//import com.twodfire.share.result.Result;
 import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
