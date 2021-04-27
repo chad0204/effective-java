@@ -1,0 +1,183 @@
+@startuml
+
+'蓝色虚线表示消息
+'灰色虚线表示返回
+'红色实线表示内部调用
+'红色虚线表示外部调用
+
+title __BCP时序图__
+autonumber
+
+
+Nsq-[#blue]-/NsqConsumer: 领域事件topic触发
+
+NsqConsumer->DomainProcessor: 领域事件驱动解析领域事件
+
+note right DomainEventParser #aqua
+msg解析成Map.class
+(部分老的topic解析成领域实体)
+end note
+DomainProcessor->DomainEventParser:解析领域事件
+DomainProcessor <-[#grey]- DomainEventParser : 返回领域事件实体or Map
+
+DomainProcessor-> DomainProcessor : loadDomainData(detail)生成context
+
+DomainProcessor->CheckTaskExecAssembler:组装消息并分发
+
+note right CheckTaskExecAssembler #aqua
+DB查询CheckTaskList
+资源加载配置resourceLoaderConfigList
+规则配置checkRuleList
+采样逻辑配置
+报警配置
+订正工具等
+end note
+CheckTaskExecAssembler -> CheckTaskExecAssembler:组装CheckTaskList
+
+
+note right CheckTaskExecAssembler #yellow
+这里有个切流
+1.mock、retry、非切流dispatch_2_work_task_list配置的topic走老流程，dispatch2LocalDelayQueue
+2.dispatch_2_work_task_list配置的走bcp-worker和tsp
+注意：只有实时任务才有延迟时间，定时任务不需要延迟时间
+end note
+
+
+CheckTaskExecAssembler-> CheckTaskExecAssembler : 老流程分发任务
+
+note right CheckTaskExecAssembler #aqua
+老流程分发分单源和多源
+单源 加载rpc,采样,分发到本地延迟队列
+手动重试 ->TSP,bcp_manual_retry_trigger
+end note
+
+CheckTaskExecAssembler-> CheckTaskDispatcher : 单源对账分发
+
+note right CheckTaskDispatcher #aqua
+自动重试 立即执行任务->CheckTaskExecutor
+手动重试 ->TSP
+end note
+CheckTaskDispatcher -> DelayQueue : 实时任务，本地延迟队列
+'CheckTaskDispatcher -> NsqProducer : 定时任务，NsqOfflineTaskMsg发到nsq
+
+
+note right CheckTaskExecAssembler #aqua
+解析组装对账点，binlog需判断采样字段是否变化、业务领域消息直接设置
+判断对账点是否符合采样逻辑
+生成rowKey，对账执行时通过rowKey实时加载hbase
+end note
+CheckTaskExecAssembler-> NsqProducer : 多源对账分发，ToCompareNodeInfoMsg
+
+
+CheckTaskExecAssembler-> DelayQueueDispatcherFacade : 新流程分发到nsq和tsp
+
+
+DelayQueueDispatcherFacade -> BizPendingCompareRouterProducerFacade : curr-add>delay,超过延迟,发到Nsq
+note left BizPendingCompareRouterProducerFacade #yellow
+动态加载biz_task_map_pending_topic
+配置的延迟队列生产者。
+消息消费者在bcp-worker，bcp_tocompared_topic_group_configs
+end note
+
+BizPendingCompareRouterProducerFacade -> NsqProducer : MQ延迟消息，DelayTaskPendingMsg
+
+note right TSP #yellow
+配置：bcp_biz_delay_queue
+Tsp通过RPC触发延迟任务
+TspDelayTaskConsumerRouterService#dispatch2BizPendingQueue
+end note
+DelayQueueDispatcherFacade ---/ TSP : curr-add<=delay,没到延迟，发到TSP
+
+
+
+NsqProducer -[#blue]-/ Nsq : 发送待执行多源任务、切流新消息
+
+
+Nsq -[#blue]-/ NsqConsumer : 消费多源对账消息，ToCompareNodeInfoMsg
+
+NsqConsumer->MultiDriveEventProcessor :NsqToExecMsgConsumer准备数据执行对账
+
+MultiDriveEventProcessor -> CheckTaskExecutor : 执行对账逻辑
+
+Nsq -[#blue]-/ NsqConsumer : 消费新切流的消息，DelayTaskPendingMsg
+
+NsqConsumer->NsqProcessor : 切到bcp-worker处理
+
+
+note right CheckTaskExecutor #aqua
+加载外部资源，rpc,hbase
+执行脚本
+保存对账结果
+end note
+NsqProcessor-> CheckTaskExecutor : 执行对账逻辑
+
+note left CheckTaskExecutor #aqua
+如果执行失败，发送自动重消息
+
+注意：核对失败、手动重试、自动重试是需要区分的,重试最终还是会走到执行逻辑
+重试失败不需要再次发起tsp调度。
+
+end note
+CheckTaskExecutor -> NsqProducer : 重试ExecutionAutoRetryMsg
+
+
+NsqProducer -[#blue]-/ Nsq: 发送重试消息
+
+Nsq -[#blue]-> NsqConsumer : 重试消息ExecutionAutoRetryMsg
+
+
+NsqConsumer -> ExecutionAutoRetryProcessor : 创建tsp重试任务bcp_auto_retry_trigger
+
+note right TSP #yellow
+配置：bcp_auto_retry_trigger
+Tsp通过RPC触发延时任务进行重试
+CheckTaskExecutionService#autoRetryCallBack
+end note
+ExecutionAutoRetryProcessor--> TSP : 创建重试tsp任务
+
+
+TSP --> ExecutionAutoRetryProcessor:触发重试
+
+note right ExecutionAutoRetryProcessor #yellow
+批次任务不重试
+超过最大次数不重试
+执行重试
+报警
+end note
+ExecutionAutoRetryProcessor->ExecutionAutoRetryProcessor : 执行重试逻辑
+
+note left ExecutionAutoRetryProcessor #red
+q:这里有个疑问，重试消息是bcp创建tsp触发
+重试执行到CheckTaskExecutor如果失败是会创建tsp重试任务的
+但是ExecutionAutoRetryProcessor重试逻辑走完，如果失败，也会创建tsp重试
+这样是不是重复操作了？
+a:不会。参考CheckResultTypeEnum状态，第一次创建重试任务状态是核对失败CHECK_FAILURE，后续重试
+状态为重试中DO_RETRY
+
+
+注意：核对失败、手动重试、自动重试是需要区分的，重试失败不需要再次发起tsp调度
+
+
+end note
+ExecutionAutoRetryProcessor -> CheckTaskExecutor : 多源重试直接执行
+
+ExecutionAutoRetryProcessor -> DomainProcessor : 单源重试走领域驱动
+
+note right ExecutionAutoRetryProcessor #aqua
+成功则更新记录
+失败进行报警和订正
+
+单源计算延时时间：超过最大重试次数，报警；否则计算延时创建Tsp延时重试任务
+多源计算存疑时间：超过存疑时间，报警；否则计算延时创建Tsp延时重试任务
+
+end note
+ExecutionAutoRetryProcessor -[#blue]-/ NsqProducer :InconsistentExecutionMsg订正消息
+
+ExecutionAutoRetryProcessor --> TSP : 创建延时重试任务
+
+ExecutionAutoRetryProcessor --> ZanAlertClient : 报警
+
+
+
+
+@enduml
