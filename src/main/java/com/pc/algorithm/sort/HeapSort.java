@@ -54,20 +54,17 @@ public class HeapSort {
         heapSort(array);
 
         System.out.println();
-
-
     }
 
 
     public static void heapSort(int[] array) {
 
-        //构建最大堆
+        //构建最大堆,从小到大
         for(int i=(array.length-2)/2; i>=0; i--) {
             BinaryHeap.downAdjustBig(array,i,array.length);
         }
 
         //循环替换堆顶元素
-
         for(int i =0;i<array.length;i++) {
             //头尾替换
             int temp = array[0];

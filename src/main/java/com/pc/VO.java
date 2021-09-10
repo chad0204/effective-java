@@ -1,5 +1,7 @@
 package com.pc;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  *
  * @author pengchao
@@ -19,6 +21,13 @@ public class VO {
     }
 
     public String getId() {
+
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(Thread.currentThread().getName());
         return id;
     }
 

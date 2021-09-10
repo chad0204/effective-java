@@ -37,14 +37,19 @@ public class RateLimitService {
     }
 
     public static void main(String[] args) throws InterruptedException {
+        testSmoothwarmingUp();
 
+    }
+
+
+    public static void testSmoothBursty() throws InterruptedException {
         RateLimitService accessLimitService = new RateLimitService();
         ExecutorService executorService = Executors.newCachedThreadPool();
 
 
+        System.out.println(rateLimiter.getRate());
 
         TimeUnit.SECONDS.sleep(10);//阻塞一会，让令牌桶攒满50个
-
 
 
         long start = System.currentTimeMillis();
@@ -62,7 +67,7 @@ public class RateLimitService {
                             System.out.println("获取许可证，执行业务逻辑。时间："+(System.currentTimeMillis()-start));
 
                             //计数
-                            System.out.println(acquireCount.incrementAndGet());
+                            System.out.println("获取令牌统计"+acquireCount.incrementAndGet());
                             try {
                                 Thread.sleep(20);
                             } catch (InterruptedException ex) {
@@ -87,6 +92,34 @@ public class RateLimitService {
         }
 
         executorService.shutdown();
+    }
+
+
+    public static void testSmoothwarmingUp() {
+        RateLimiter r = RateLimiter.create(10, 30, TimeUnit.SECONDS);
+//        RateLimiter r = RateLimiter.create(5);
+        while (true)
+        {
+            System.out.println("get 5 tokens: " + r.acquire(5) + "s");
+            System.out.println("get 1 tokens: " + r.acquire(1) + "s");
+            System.out.println("get 1 tokens: " + r.acquire(1) + "s");
+            System.out.println("get 1 tokens: " + r.acquire(1) + "s");
+            System.out.println("get 1 tokens: " + r.acquire(1) + "s");
+            System.out.println("get 1 tokens: " + r.acquire(1) + "s");
+            System.out.println("end");
+            /**
+             * output:
+             * get 1 tokens: 0.0s
+             * get 1 tokens: 1.329289s
+             * get 1 tokens: 0.994375s
+             * get 1 tokens: 0.662888s  上边三次获取的时间相加正好为3秒
+             * end
+             * get 1 tokens: 0.49764s  正常速率0.5秒一个令牌
+             * get 1 tokens: 0.497828s
+             * get 1 tokens: 0.49449s
+             * get 1 tokens: 0.497522s
+             */
+        }
     }
 
 

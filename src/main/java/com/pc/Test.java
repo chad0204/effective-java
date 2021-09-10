@@ -1,57 +1,53 @@
 package com.pc;
 
+import com.pc.test.A;
+import com.pc.test.Demo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
- *
- * @author dongxie
- * @date 10:24 2019-12-24
+ * @author pengchao
+ * @description: TODO 类描述
+ * @date 2021-05-07 10:12 上午
  */
 public class Test {
 
-    public static void main(String[] args) {
+    static class Demo {
+        private List<String> res = new ArrayList<>();
 
-//        List<VO> list = Arrays.asList(new VO("1","aa"),new VO("2","bb"),new VO("2","cc"));
-//
-////        Map<String, VO> dbCardIdMap = list.stream().collect(Collectors.toMap(VO::getId, op -> op));
-//        Map<String, VO> dbCardIdMap = list.stream().collect(Collectors.toMap(VO::getName, op -> op));
-//
-//        System.out.println(dbCardIdMap);
+        public List<String> getRes() {
+            return res;
+        }
 
-
-        testOom();
-
-
-
-
-        System.out.println();
-
-
-    }
-
-
-    public static void testOom() {
-        new OOM().oom();
-    }
-
-
-
-    public void deadCycle() {
-        List<VO> list = new ArrayList<>();
-        list.add(new VO("begin","name"));
-
-        for (int i = 0; i < list.size(); i ++) {
-            if (i == list.size() - 1) {
-                list.add(new VO(""+i,""+i));
-            }
+        public void setRes(List<String> res) {
+            this.res = res;
         }
     }
 
 
+    public static void main(String[] args) {
 
+        Demo demo = new Demo();
+
+        if(demo==null || demo.getRes().size()==0) {
+            System.out.println("1");
+        }
+
+
+
+    }
+
+
+
+    public String testFinally() {
+        String res = "aaa";
+
+        try {
+            System.out.println("try");
+            return res;
+        } finally {
+            System.out.println("finally");
+        }
+    }
 }

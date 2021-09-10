@@ -12,10 +12,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class TestBlockQueue {
 
+
+
     private static AtomicInteger atomicInteger = new AtomicInteger(0);
 
+    static LinkedBlockingQueue<String> blockingQueue = new LinkedBlockingQueue<>(100);
+
     private static final ExecutorService executorService =
-            new ThreadPoolExecutor(1, 10, 0L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(5), r -> {
+            new ThreadPoolExecutor(10, 10, 0L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(5), r -> {
                 Thread t = new Thread(r);
                 t.setName("PC-Thread-" +atomicInteger.incrementAndGet());
                 return t;
@@ -24,10 +28,15 @@ public class TestBlockQueue {
     public static void main(String[] args) {
 
 
-        ArrayBlockingQueue<String> blockingQueue = new ArrayBlockingQueue<>(10);
+
 
         executorService.execute(new Producer(blockingQueue));
         executorService.execute(new Producer(blockingQueue));
+        executorService.execute(new Producer(blockingQueue));
+        executorService.execute(new Producer(blockingQueue));
+//        executorService.execute(new Consumer(blockingQueue));
+//        executorService.execute(new Consumer(blockingQueue));
+//        executorService.execute(new Consumer(blockingQueue));
         executorService.execute(new Consumer(blockingQueue));
 
 //        executorService.submit(new Producer(blockingQueue));

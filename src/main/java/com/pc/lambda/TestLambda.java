@@ -1,8 +1,9 @@
 package com.pc.lambda;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import com.pc.test.A;
+
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -14,11 +15,20 @@ public class TestLambda {
     public static void main(String[] args) {
 
 
-        List<Model> list = Arrays.asList(
-                new Model(1L,"a",null),
-                new Model(2L,"bb",2.2),
-                new Model(2L,"cc",null),
-                new Model(3L,"dd",1.1));
+
+
+//        List<Model> list = Arrays.asList(
+//                new Model(1L,"a",null),
+//                new Model(2L,"bb",2.2),
+//                new Model(2L,"cc",null),
+//                new Model(3L,"dd",1.1));
+        List<Model> list = new ArrayList<>();
+
+
+
+        Model result = list.stream().filter(x->x.getMile()!=null).max(Comparator.comparingLong(Model::getId)).orElse(null);
+
+
 
 
         Double d =list.stream().filter(x->x.getMile()!=null).filter(x->x.getMile()!=2.2).mapToDouble(Model::getMile).sum();

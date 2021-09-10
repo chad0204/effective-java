@@ -1,0 +1,22 @@
+@startuml
+
+'蓝色虚线表示消息
+'灰色虚线表示返回
+'红色实线表示内部调用
+'红色虚线表示外部调用
+
+title __批次时序图__
+autonumber
+
+TSP定时 -> OfflineTaskProcessor:
+
+DP-[#blue]-/NsqBinlogDp2BcpCompleteConsumer: stat insert
+
+NsqBinlogDp2BcpCompleteConsumer  -> OfflineTaskProcessor: 离线统计数据：source_data_type
+
+OfflineTaskProcessor -> db : 生成批次
+
+
+
+
+@enduml

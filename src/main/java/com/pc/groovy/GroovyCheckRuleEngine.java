@@ -18,40 +18,6 @@ import java.util.Stack;
 public class GroovyCheckRuleEngine {
 
 
-    public static void main(String[] args) {
-
-        GroovyCheckRuleEngine engine = new GroovyCheckRuleEngine();
-
-        String msg = "{\n" +
-                "\"id\":233,\n" +
-                "\"name\":\"1111\"\n" +
-                "}";
-
-        String content = "\n" +
-                "class EnhancedNumber {\n" +
-                "\n" +
-                "\tstatic def originalLeftShift = org.codehaus.groovy.runtime.DefaultGroovyMethods.&rightShift\n" +
-                "\tstatic Number rightShift(Number self, Number operand) {\n" +
-                "\t\tself.class == BigInteger ? self.shiftRight(operand) : originalRightShift(self, operand)\n" +
-                "\t}\n" +
-                "}\n" +
-                "\n" +
-                "Number.mixin(EnhancedNumber);"+
-                "return msg;\n";
-
-
-
-        for (;;) {
-            Map<String,Object> param = new HashMap<>();
-            param.put("msg",msg);
-            Object res = engine.executeRule(content,param,"TEST");
-        }
-
-
-
-
-    }
-
 
     /**
      * Binding多线程并发问题；同一线程多次调用规则的上下文问题

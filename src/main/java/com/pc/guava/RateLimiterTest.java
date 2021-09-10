@@ -21,18 +21,14 @@ public class RateLimiterTest {
     }
 
     public static void main(String[] args) {
-        RateLimiter rateLimiter = RateLimiter.create(100, Duration.ofMillis(100));
+        RateLimiter rateLimiter = RateLimiter.create(0.1);
 
-        rateLimiter.acquire();
+        while(true) {
+            rateLimiter.acquire();
 
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for(int i=0;i<1000;i++) {
-            stringBuilder.append(i).append(",");
-
+            System.out.println("ok");
         }
 
-        System.out.println(stringBuilder.toString());
 
 
     }

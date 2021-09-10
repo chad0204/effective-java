@@ -69,7 +69,7 @@ public class Test {
 
         //任务数<=maximumPoolSize+queue.size
         for(int i =0;i<13;i++) {
-            executorService.execute(() -> {
+            Future<?> future = executorService.submit(() -> {
                 try {
                     System.out.println(Thread.currentThread().getName()+"...start");
                     TimeUnit.SECONDS.sleep(20);
@@ -79,9 +79,6 @@ public class Test {
             });
         }
 
-        executorService.submit(() -> {
-
-        });
 
 
         int nThreads = 10;
@@ -97,11 +94,12 @@ public class Test {
                 new SynchronousQueue<>());//SynchronousQueue没有容量，相当于是满的，即存即用
 
 
+
         /**
          *  缓存队列，最大线程数为nThreads，因为无界maximumPoolSize和拒绝策略无效，执行完立即回收
          */
         ExecutorService fixedThreadPool = Executors.newFixedThreadPool(nThreads);
-        ExecutorService fixedThreadPool1 = new ThreadPoolExecutor(nThreads, nThreads,
+        ThreadPoolExecutor fixedThreadPool1 = new ThreadPoolExecutor(nThreads, nThreads,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<>());
 

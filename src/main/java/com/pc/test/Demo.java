@@ -1,7 +1,10 @@
 package com.pc.test;
 
+import com.google.common.collect.Sets;
+
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -14,57 +17,36 @@ import java.util.stream.Collectors;
  */
 public class Demo {
 
+    private static Set<Long> printLogTaskIds = Sets.newHashSet();
+
+    static {
+        printLogTaskIds.add(1L);
+        printLogTaskIds.add(2L);
+
+
+    }
+
+
+
+
+    public static void info(Long checkTaskId) {
+        if (!printLogTaskIds.contains(checkTaskId)) {
+            return ;
+        }
+
+        System.out.println("打印:"+checkTaskId);
+    }
+
 
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public static void main(String[] args) {
 
 
-        System.out.println(1);
-
-
-        executor.submit(new Runnable() {
-            @Override
-            public void run() {
-
-                try {
-                    System.out.println(1/0);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        System.out.println(2);
-
-        //invoke com.dfire.pay.center.service.payment.IPaymentService.payRefundQuery('99228109',['992281098El3yzZmQWrbMJgihIAAIs'])
-
-
-        Demo demo = new Demo();
-        demo.setName("aa");
-        demo.setValue(2);
-
-        List<Demo> list = Arrays.asList(demo,new Demo(),new Demo());
+        Demo.info(2L);
 
 
 
-        List<Demo> list1 = list.stream().filter(x->"aa".equals(x.getName())).collect(Collectors.toList());
-
-        System.out.println(list1.get(0).getName());
-
-
-        int a = 1;
-        int ratio = 96;
-
-        double radio = ratio / 10.0;
-
-
-
-        if(a==1) {
-            radio = (100-ratio) / 10.0;
-        }
-
-        System.out.println(radio);
 
 
 

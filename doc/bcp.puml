@@ -38,8 +38,9 @@ CheckTaskExecAssembler -> CheckTaskExecAssembler:组装CheckTaskList
 note right CheckTaskExecAssembler #yellow
 这里有个切流
 1.mock、retry、非切流dispatch_2_work_task_list配置的topic走老流程，dispatch2LocalDelayQueue
-2.dispatch_2_work_task_list配置的走bcp-worker和tsp
+2.dispatch_2_work_task_list等配置的走bcp-worker和tsp
 注意：只有实时任务才有延迟时间，定时任务不需要延迟时间
+目前新流程不支持多源数据
 end note
 
 
@@ -47,7 +48,7 @@ CheckTaskExecAssembler-> CheckTaskExecAssembler : 老流程分发任务
 
 note right CheckTaskExecAssembler #aqua
 老流程分发分单源和多源
-单源 加载rpc,采样,分发到本地延迟队列
+单源 加载rpc（ResourceLoadTimeTypeEnum.IN_PRODUCE）,采样,分发到本地延迟队列
 手动重试 ->TSP,bcp_manual_retry_trigger
 end note
 
@@ -62,7 +63,7 @@ CheckTaskDispatcher -> DelayQueue : 实时任务，本地延迟队列
 
 
 note right CheckTaskExecAssembler #aqua
-解析组装对账点，binlog需判断采样字段是否变化、业务领域消息直接设置
+解析组装对账点，binlog消息需判断采样字段是否变化、业务领域消息直接解析生成对账点
 判断对账点是否符合采样逻辑
 生成rowKey，对账执行时通过rowKey实时加载hbase
 end note
@@ -86,7 +87,7 @@ note right TSP #yellow
 Tsp通过RPC触发延迟任务
 TspDelayTaskConsumerRouterService#dispatch2BizPendingQueue
 end note
-DelayQueueDispatcherFacade ---/ TSP : curr-add<=delay,没到延迟，发到TSP
+DelayQueueDispatcherFacade ---/ TSP : curr-add<=delay,没到延迟，创建TSP
 
 
 
@@ -105,7 +106,8 @@ NsqConsumer->NsqProcessor : 切到bcp-worker处理
 
 
 note right CheckTaskExecutor #aqua
-加载外部资源，rpc,hbase
+加载外部资源，rpc（ResourceLoadTimeTypeEnum.IN_COMSUME）
+多源数据需要加载待采集点的hbase
 执行脚本
 保存对账结果
 end note
@@ -150,9 +152,10 @@ note left ExecutionAutoRetryProcessor #red
 q:这里有个疑问，重试消息是bcp创建tsp触发
 重试执行到CheckTaskExecutor如果失败是会创建tsp重试任务的
 但是ExecutionAutoRetryProcessor重试逻辑走完，如果失败，也会创建tsp重试
+也就是重试逻辑包含了重试，执行失败后又重试。
 这样是不是重复操作了？
 a:不会。参考CheckResultTypeEnum状态，第一次创建重试任务状态是核对失败CHECK_FAILURE，后续重试
-状态为重试中DO_RETRY
+执行失败状态为重试中FAIL_RETRY_RESULT。执行时只有CHECK_FAILURE状态才会创建tsp
 
 
 注意：核对失败、手动重试、自动重试是需要区分的，重试失败不需要再次发起tsp调度

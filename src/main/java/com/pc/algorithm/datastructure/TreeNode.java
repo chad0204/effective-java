@@ -12,6 +12,22 @@ import java.util.Queue;
  */
 public class TreeNode<T> {
 
+
+    public static void main(String[] args) {
+
+        TreeNode root = buildNum();
+
+        preTraversal(root);
+        System.out.println();
+        inTraversal(root);
+        System.out.println();
+        postTraversal(root);
+        System.out.println();
+        levelTraversal(root);
+
+
+    }
+
     public T val;
     public TreeNode left;
     public TreeNode right;
