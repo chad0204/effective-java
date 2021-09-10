@@ -13,6 +13,8 @@ public class Rebase {
 
         System.out.println(2);
 
+        System.out.println(3);
+
     }
 
 }
