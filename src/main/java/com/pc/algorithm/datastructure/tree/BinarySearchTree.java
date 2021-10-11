@@ -307,7 +307,12 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
         return isValidBST(root, null, null);
     }
 
-    /* 限定以 root 为根的子树节点必须满足 max.val > root.val > min.val */
+    /* 限定以 root 为根的子树节点必须满足 max.key > root.key > min.key */
+
+    /*
+     * 一个节点，只能管到左右节点，保证左小右大。
+     * 还要保证整棵左子树都比当前节点小，整棵右子树都比当前节点大，就需要传递这个约束。
+     */
     boolean isValidBST(Node x, K min, K max) {
         // base case
         if (x == null) return true;
@@ -316,8 +321,8 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
         if (min != null && x.key.compareTo(min)<=0) return false;
         if (max != null && x.key.compareTo(max)>=0) return false;
         // 限定左子树的最大值是 root.key，右子树的最小值是 root.val
-        return isValidBST(root.left, min, x.key)
-                && isValidBST(root.right, x.key, max);
+        return isValidBST(x.left, min, x.key)
+                && isValidBST(x.right, x.key, max);
     }
 
 
