@@ -3,7 +3,8 @@ package com.pc.dts;
 import com.google.common.base.Function;
 import com.pc.VO;
 import com.pc.test.Demo;
-import com.sun.tools.javac.util.Pair;
+//import javafx.util.Pair;
+//import com.sun.tools.javac.util.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,7 +24,9 @@ public class TestMatch {
         Long a = null;
         String.valueOf(a);
 
-        Pair<String,String> pair = Pair.of("aaa","bbb");
+//        Pair<String,String> pair1 = Pair.of("aaa","bbb");
+//        Pair<String,String> pair2 = new Pair<>("aaa","bbb");
+
 
         System.out.println();
 
