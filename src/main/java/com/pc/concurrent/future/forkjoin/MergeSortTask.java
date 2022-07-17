@@ -27,7 +27,7 @@ public class MergeSortTask extends RecursiveAction {
             MergeSortTask sortRight = new MergeSortTask(arr, mid + 1, end);
             ForkJoinTask.invokeAll(Lists.newArrayList(sortLeft, sortRight));
             //TODO 这里需不需要join?
-//            sortLeft.join();
+            sortLeft.join();
 //            sortRight.join();
 
             merge(arr, start, mid, end);
@@ -35,17 +35,6 @@ public class MergeSortTask extends RecursiveAction {
             //处理
             merge(arr, start, mid, end);
         }
-    }
-
-    public void mergesort(int[] arr, int start, int end) {
-        if (start <= end) {
-            return;
-        }
-
-        int mid = (end + start)/2;
-        mergesort(arr, start, mid);
-        mergesort(arr, mid + 1, end);
-        merge(arr, start, mid, end);
     }
 
     private void merge(int[] arr, int start, int mid,int end) {
