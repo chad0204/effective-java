@@ -1,19 +1,14 @@
-package com.pc.lianlian.mevl.demo;
+package com.pc.lianlian.mevl.demo.entity;
 
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
 
 /**
- * @author liuwm@lianlianpay.com
- * @description 用户规则条件
- * @date 2022/6/18 3:58
+ *
+ * @author pengchao
+ * @since 2022/8/18 14:31
  */
 @Data
-@Slf4j
-public class RuleCondition implements java.io.Serializable {
-    private static final long serialVersionUID = 1L;
+public class RuleConditionDO {
 
     /**
      * 主键
@@ -42,9 +37,7 @@ public class RuleCondition implements java.io.Serializable {
     private String action;
 
     /**
-     * 因子
+     * 变量因子json 其实建议做成关联表 不然后期扩展字段会毕竟难受
      */
-    private List<ConditionFactorDO> factors;
-
-
+    private String factors;
 }

@@ -1,4 +1,4 @@
-package com.pc.lianlian.mevl.demo;
+package com.pc.lianlian.mevl.demo.entity;
 
 import lombok.Data;
 
@@ -51,12 +51,16 @@ public class FactorDO {
 
     /**
      * 必填入参list （inputParameter解析得到）
+     *
+     * 是否只支持基本类型
+     *
+     *
+     * 比如需要商户号、商户名称两个因子，本身可以一个queryClass获取。如果基本类型，则需要执行两次.所以应该是一个pojo
+     *
+     *
      */
     private List<RpcParamConfig> inputParameterList;
 
-    /**
-     *
-     */
 
     /**
      * 所属产品线

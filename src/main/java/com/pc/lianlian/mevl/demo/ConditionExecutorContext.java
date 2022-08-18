@@ -1,18 +1,26 @@
 package com.pc.lianlian.mevl.demo;
 
+import com.pc.lianlian.mevl.demo.model.RuleConditionModel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
 /**
  *
+ * 条件执行上下文
  * @author pengchao
  * @since 2022/8/17 18:01
  */
 @Data
-public class RuleConditionContext {
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class ConditionExecutorContext {
 
-    private RuleCondition ruleCondition;
+    private RuleConditionModel ruleConditionModel;
 
     /**
      * 触发事件

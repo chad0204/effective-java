@@ -1,4 +1,4 @@
-package com.pc.lianlian.mevl.demo;
+package com.pc.lianlian.mevl.demo.entity;
 
 import lombok.Data;
 
@@ -13,8 +13,13 @@ import lombok.Data;
  * 因子的优先级
  *
  *
- * 因子名称和原变量名称相同
- * 多个因子同名？不可以
+ * 因子名称和消息原变量名称相同
+ * 多个因子同名？不可以的
+ *
+ *
+ *
+ * 如果只存一个json，那么可以不用新建表
+ *
  *
  * @author pengchao
  * @since 2022/8/17 17:28
@@ -39,6 +44,12 @@ public class ConditionFactorDO {
     private String factorAliasName;
 
     /**
+     * 关联的因子
+     */
+    private Long factorId;
+
+
+    /**
      * 优先级
      */
     private Integer priority;
@@ -53,10 +64,6 @@ public class ConditionFactorDO {
      */
     private String postProcessorExp;
 
-    /**
-     * 对应的因子
-     */
-    private FactorDO factorDO;
 
 
 }
