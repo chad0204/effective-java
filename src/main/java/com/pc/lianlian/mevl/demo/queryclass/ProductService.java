@@ -4,6 +4,7 @@ import com.pc.lianlian.mevl.demo.FactorResult;
 import com.pc.something.User;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,20 +13,20 @@ import java.util.Map;
  * @author pengchao
  * @since 2022/8/18 15:52
  */
-public class ProductService {
+public class ProductService extends QueryService<ProductService.Product>  {
 
-    public FactorResult query(Map<String, Object> param) {
 
+    @Override
+    public Product doQuery(Map<String, Object> params) {
         Product product = new Product();
         product.setName("特斯拉");
         product.setPrice(300000L);
-        product.setUser((User) param.get("user"));
+        //强制转换，所以需要
+        product.setUser((User) params.get("user"));
 
-        System.out.println(param);
-        return FactorResult.builder()
-                .value(product)
-                .code("SUCCESS")
-                .build();
+        System.out.println(params);
+
+        return product;
     }
 
     @Data

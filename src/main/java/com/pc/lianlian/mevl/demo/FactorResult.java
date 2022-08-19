@@ -14,9 +14,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FactorResult {
+public class FactorResult<T> {
 
-    private Object value;
+    private T data;
 
     private String code;
+
 }

@@ -26,13 +26,13 @@ public class ConditionExecutor {
 
 
     public boolean executor(ConditionExecutorContext ruleConditionContext) {
-        //加载参数
+        //加载因子
         Boolean execute = loadFactors(ruleConditionContext);
         if (!execute) {
             return Boolean.FALSE;
         }
 
-        //执行表达式
+        //执行最终表达式
         Object eval = MVEL.eval(ruleConditionContext.getRuleConditionModel().getRuleConditionMvel(), ruleConditionContext.getParamMap());
 
         return (boolean) eval;
@@ -45,36 +45,23 @@ public class ConditionExecutor {
      * @return
      */
     private Boolean loadFactors(ConditionExecutorContext ruleConditionContext) {
-        //遍历处理因子, 后继的因子计算可能需要前面的因子的值
         List<ConditionFactorDO> factors = ruleConditionContext.getRuleConditionModel().getFactorList();
-
-        //封装因子详情
-        FactorDO product = new FactorDO();
-        FactorDO user = new FactorDO();
-        Map<Long, FactorDO> map = new HashMap<>();
-        map.put(1001L, product);
-        map.put(1002L, user);
-
+        Map<Long, FactorDO> factorMap = PojoQueryUtil.getFactorMap(factors.stream().map(ConditionFactorDO::getFactorId).collect(Collectors.toList()));
 
         //优先级及封装
         List<FactorModel> sortedFactors = factors.stream()
                 .sorted(Comparator.comparing(ConditionFactorDO::getPriority))
                 .map(cf -> FactorModel.builder()
-                        .factorDO(map.get(cf.getFactorId()))
+                        .factorDO(factorMap.get(cf.getFactorId()))
                         .build())
                 .collect(Collectors.toList());
 
-
-
-
         for (FactorModel factor: sortedFactors) {
-            //包含完整的factor( conditionFactor + factor)
             FactorModel factorModel = FactorModel.builder()
                     .factorAliasName(factor.getFactorAliasName())
                     .postProcessorExp(factor.getPostProcessorExp())
                     .preProcessorExp(factor.getPreProcessorExp())
                     .build();
-
 
             loadFactor(ruleConditionContext, factorModel);
 
@@ -95,30 +82,44 @@ public class ConditionExecutor {
     private void loadFactor(ConditionExecutorContext ruleConditionContext, FactorModel factor) {
         Map<String, Object> paramMap = ruleConditionContext.getParamMap();
 
-        //需要加载
-        if (factor.getFactorDO().getDataSourceType() == 1) {
+        if (factor.getFactorDO().getDataSourceType().equals(FactorTypeEnum.ASSEMBLE.getCode())) {
             //匹配到类
             String queryClass = factor.getFactorDO().getQueryClass();
 
-            //必填入参类型
-            List<FactorDO.RpcParamConfig> inputParameterList = factor.getFactorDO().getInputParameterList();
-
             //调用方法
-            FactorResult query;
             if (queryClass.equals("userService")) {
-                query = new UserService().query(ruleConditionContext.getParamMap());
+                FactorResult<UserService.User> user = new UserService().query(
+                        ruleConditionContext.getParamMap(),
+                        factor.getFactorDO().getInputParameters(),
+                        factor.getFactorDO().getDataType());
+                paramMap.put(factor.getFactorAliasName(), user.getData());
             } else {
-                query = new ProductService().query(ruleConditionContext.getParamMap());
+                FactorResult<ProductService.Product> product = new ProductService().query(
+                        ruleConditionContext.getParamMap(),
+                        factor.getFactorDO().getInputParameters(),
+                        factor.getFactorDO().getDataType());
+                paramMap.put(factor.getFactorAliasName(), product.getData());
             }
 
-            //返回结果类型
-            String dataType = factor.getFactorDO().getDataType();//返回类型
 
-            paramMap.put(factor.getFactorAliasName(), query.getValue());
+            //pojo没法复用，转map，如何匹配到入参的名字？？？？？？
+
+
+
+
+        } else {
+            //原始参数，从消息中来
+            //所以这里是否可以不定义因子，直接存入 event = msg（规则是否都是消息,如果是api调用，存入参数）
+            //新加一个事件，本来可以直接用组装因子即可，现在却需要配置多个原始因子
+            Map<String, Object> eventParams = ruleConditionContext.getEventParams();
+
+
+
         }
 
         //后置处理
         MVEL.eval(factor.getPostProcessorExp(), ruleConditionContext.getParamMap());
+
     }
 
 

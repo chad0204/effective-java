@@ -13,7 +13,7 @@ import lombok.Data;
  * 因子的优先级
  *
  *
- * 因子名称和消息原变量名称相同
+ * 如果是ORIGINAL类型的因子，比如两个msg的参数名称相同，那么就必须定义别名来区分唯一。
  * 多个因子同名？不可以的
  *
  *
@@ -40,6 +40,9 @@ public class ConditionFactorDO {
     /**
      * alias
      * 定义别名 可以作为下一个因子的参数
+     *
+     * 如果是
+     *
      */
     private String factorAliasName;
 

@@ -61,6 +61,8 @@ public class FactorDO {
      */
     private List<RpcParamConfig> inputParameterList;
 
+    private List<String> inputParameters;
+
 
     /**
      * 所属产品线

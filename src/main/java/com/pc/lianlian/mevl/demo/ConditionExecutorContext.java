@@ -1,5 +1,6 @@
 package com.pc.lianlian.mevl.demo;
 
+import com.pc.lianlian.mevl.demo.biz.Msg;
 import com.pc.lianlian.mevl.demo.model.RuleConditionModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,9 +24,9 @@ public class ConditionExecutorContext {
     private RuleConditionModel ruleConditionModel;
 
     /**
-     * 触发事件
+     * 触发事件参数
      */
-    private String event;
+    private Map<String, Object> eventParams;
 
     /**
      * 活动
