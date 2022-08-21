@@ -1,6 +1,7 @@
 package com.pc.lianlian.mevl.demo.entity;
 
 import lombok.Data;
+import java.util.List;
 
 /**
  *
@@ -39,10 +40,9 @@ public class ConditionFactorDO {
 
     /**
      * alias
-     * 定义别名 可以作为下一个因子的参数
+     * 定义别名，防止和事件中的入参变量名冲突。
      *
-     * 如果是
-     *
+     * 因子和因子通过数据库唯一键去重，但是无法保证因子和事件中的变量名重复，且在定义因子时无法预见。
      */
     private String factorAliasName;
 
@@ -58,6 +58,11 @@ public class ConditionFactorDO {
     private Integer priority;
 
     /**
+     * 因子入参解析器
+     */
+    private List<FactorParamParseConfig> inputParametersConfig;
+
+    /**
      * 前置处理
      */
     private String preProcessorExp;
@@ -66,6 +71,24 @@ public class ConditionFactorDO {
      * 后置处理
      */
     private String postProcessorExp;
+
+
+
+
+    @Data
+    public static class FactorParamParseConfig {
+
+        /**
+         * 对应因子入参名称
+         */
+        private String paramName;
+
+        /**
+         * 参数表达式
+         */
+        private String parseExpression;
+
+    }
 
 
 

@@ -1,6 +1,8 @@
 package com.pc.lianlian.mevl.demo.queryclass;
 
 import com.pc.lianlian.mevl.demo.FactorResult;
+import com.pc.lianlian.mevl.demo.entity.FactorDO;
+import com.pc.lianlian.mevl.demo.model.FactorModel;
 
 import java.util.List;
 import java.util.Map;
@@ -13,12 +15,15 @@ import java.util.Map;
 public abstract class QueryService<T> {
 
     public FactorResult<T> query(Map<String, Object> paramValues,
-                                 List<String> inputParamNames,
+                                 List<FactorModel.FactorParamConfig> inputParamNames,
                                  String dataType) {
 
         //TODO 校验入参类型
-        for(String param : inputParamNames) {
-            if (!paramValues.containsKey(param) || paramValues.get(param) != null) {
+        for(FactorModel.FactorParamConfig param : inputParamNames) {
+            if (param.getParamValue() == null) {
+                throw new IllegalArgumentException();
+            }
+            if (param.getParamValue().getClass().equals(param.getParamValue())) {
                 throw new IllegalArgumentException();
             }
         }

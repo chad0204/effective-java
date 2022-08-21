@@ -40,13 +40,13 @@ import java.util.Map;
 
 
  问题1: 重复查询，查完r1， 还要在r2中再次查r1。r3中再次查r1,r2。
- 条件原本需要r1，r2, r3三个因子, 如果可以(最终表达式无需三个条件进行"||"判断或者contains判断)，现在只需要r3即可，则不会重复查询多次。
+ 条件原本需要r1，r2, r3三个因子, 只有在特定情况下(最终表达式无需三个条件进行"||"判断或者contains判断，只需要r3即可)不会重复查询多次。
 
  问题2：
  由于因子粒度比较大，导致如果事件不满足因子所需的参数，就需要开发新的因子。本来建三个因子，可以组合使用。现在代码重复比较多。
 
  问题3：
- 创建因子时，不知道如何确认粒度
+ 创建因子时，不知道如何确认粒度，容易陷入遇到新的条件或者事件，就需要开发新的因子这种情况。
 
 
  方案2
@@ -57,8 +57,10 @@ import java.util.Map;
 
  因子 r3 参数 r1, r2, e
 
+ 注：入参必须是基本类型，因子可以是pojo
 
- 问题1：关联时校验复杂，在事件选择条件时，原先只需校验所有因子的参数即可，现在需要在参数中剔除前面已经出现的因子再进行校验。
+
+ 问题1：关联时校验复杂，在事件选择条件时，原先只需校验所有因子的参数即可，现在需要在参数中剔除前面已经出现的因子再进行校验。（可以通过在创建条件时，就进行事件选择进行，跳过参数匹配度校验）
  问题2： 创建因子时，不好判断因子需要的参数的粒度，粒度过细（比如查产品因子就用产品id，但是产品id不在事件中，需要从用户-》账单-》产品）可能需要过多前置因子。
  如果方案1, 一样不好评估因子的参数，因为你也不知道因子被哪个事件用到。而且使用方案2，因子的查询粒度基本就是外部接口或者数据库单表的粒度(参数为基本类型)，复用度比较高，无非是需要创建比较多的条件，而这是符合预期的（无需编码）。
 
@@ -70,13 +72,35 @@ import java.util.Map;
 
 
 
-
-
  优化：具备后置条件的因子必须配置优先级。无后置条件的因子可以并行加载。
 
 
 
  https://r7f0jq.axshare.com/#g=1&p=%E8%A7%84%E5%88%99%E6%9D%A1%E4%BB%B6
+
+
+ [
+ {
+ "factorAliasName":"user",
+ "factorId":1002,
+ "factorName":"user",
+ "priority":0,
+ "preProcessorExp":"user.age >= 18"
+ },
+ {
+ "factorAliasName":"product",
+ "factorId":1001,
+ "factorName":"product",
+ "priority":1,
+ "preProcessorExp":"product.name == '特斯拉'",
+ "inputParametersConfig":[
+ {
+ "paramName":"userId",
+ "parseExpression":"user.id"
+ }
+ ]
+ }
+ ]
 
 
  *
@@ -88,13 +112,20 @@ public class Client {
 
     public static void main(String[] args) {
 
+
+
+
+
         /*
 
         成年人才能买特斯拉，并且钱要够
 
         1. factors :
-        product, product.name == 特斯拉 判断是不是特斯拉
+
         user,  user.age>=18 判断是否成年
+
+        product, product.name == 特斯拉 判断是不是特斯拉
+
 
         2. condition
 
@@ -124,6 +155,11 @@ public class Client {
 
         Map<String, Object> msg = new HashMap<>();
         conditionExecutorContext.setEventParams(msg);
-        conditionExecutor.executor(conditionExecutorContext);
+        //将事件参数设置到执行上下文中
+        conditionExecutorContext.getParamMap().putAll(msg);
+
+        boolean res = conditionExecutor.executor(conditionExecutorContext);
+
+
     }
 }

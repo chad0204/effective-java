@@ -30,5 +30,9 @@ public class MvelClient {
         Object res = MVEL.eval("user.name; a==b;c;", param);
         System.out.println(res);
 
+
+        Object eval = MVEL.eval("user.name", param);
+        System.out.println(eval);
+
     }
 }

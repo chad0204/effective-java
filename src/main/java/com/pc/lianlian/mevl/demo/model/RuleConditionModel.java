@@ -77,7 +77,7 @@ public class RuleConditionModel implements java.io.Serializable {
                 })
                 .sorted(Comparator.comparing(ConditionFactorDO::getPriority))
                 .map(cf -> FactorModel.builder()
-                        .factorDO(factorMap.get(cf.getFactorId()))
+//                        .factorDO(factorMap.get(cf.getFactorId()))
                         .build())
                 .collect(Collectors.toList());
 

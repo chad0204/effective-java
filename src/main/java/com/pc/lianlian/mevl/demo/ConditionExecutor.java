@@ -52,7 +52,7 @@ public class ConditionExecutor {
         List<FactorModel> sortedFactors = factors.stream()
                 .sorted(Comparator.comparing(ConditionFactorDO::getPriority))
                 .map(cf -> FactorModel.builder()
-                        .factorDO(factorMap.get(cf.getFactorId()))
+                        // TODO .factorDO(factorMap.get(cf.getFactorId())) 整合条件因子和因子
                         .build())
                 .collect(Collectors.toList());
 
@@ -63,15 +63,32 @@ public class ConditionExecutor {
                     .preProcessorExp(factor.getPreProcessorExp())
                     .build();
 
+
+            //解析入参
+            parseParams(ruleConditionContext.getParamMap(), factor);
+
             loadFactor(ruleConditionContext, factorModel);
 
             if (StringUtils.isNotEmpty(factor.getPreProcessorExp())) {
-                //后置处理
-                MVEL.eval(factor.getPreProcessorExp(), ruleConditionContext.getParamMap());
-                return Boolean.FALSE;
+                //后置处理器
+                Object res = MVEL.eval(factor.getPreProcessorExp(), ruleConditionContext.getParamMap());
+                return (Boolean) res;
             }
         }
         return Boolean.TRUE;
+    }
+
+    private void parseParams(Map<String, Object> paramMap, FactorModel factor) {
+        factor.getInputParameterList().forEach(param -> {
+            if (StringUtils.isNotEmpty(param.getParseExpression())) {
+                //通过参数解析器从上下文中获取
+                Object value = MVEL.eval(param.getParseExpression(), paramMap);
+                param.setParamValue(value);
+            } else {
+                //直接从上下文参数中拿, 没有表达式说明应该是从事件中拿，一般建议都设置一个
+                param.setParamValue(paramMap.get(param.getParamName()));
+            }
+        });
     }
 
     /**
@@ -82,30 +99,25 @@ public class ConditionExecutor {
     private void loadFactor(ConditionExecutorContext ruleConditionContext, FactorModel factor) {
         Map<String, Object> paramMap = ruleConditionContext.getParamMap();
 
-        if (factor.getFactorDO().getDataSourceType().equals(FactorTypeEnum.ASSEMBLE.getCode())) {
+        if (factor.getDataSourceType().equals(FactorTypeEnum.ASSEMBLE.getCode())) {
             //匹配到类
-            String queryClass = factor.getFactorDO().getQueryClass();
+            String queryClass = factor.getQueryClass();
 
             //调用方法
             if (queryClass.equals("userService")) {
                 FactorResult<UserService.User> user = new UserService().query(
                         ruleConditionContext.getParamMap(),
-                        factor.getFactorDO().getInputParameters(),
-                        factor.getFactorDO().getDataType());
+                        factor.getInputParameterList(),
+                        factor.getDataType());
+                //这里用别名，是防止因子名和事件变量名称重复
                 paramMap.put(factor.getFactorAliasName(), user.getData());
             } else {
                 FactorResult<ProductService.Product> product = new ProductService().query(
                         ruleConditionContext.getParamMap(),
-                        factor.getFactorDO().getInputParameters(),
-                        factor.getFactorDO().getDataType());
+                        factor.getInputParameterList(),
+                        factor.getDataType());
                 paramMap.put(factor.getFactorAliasName(), product.getData());
             }
-
-
-            //pojo没法复用，转map，如何匹配到入参的名字？？？？？？
-
-
-
 
         } else {
             //原始参数，从消息中来
@@ -113,12 +125,9 @@ public class ConditionExecutor {
             //新加一个事件，本来可以直接用组装因子即可，现在却需要配置多个原始因子
             Map<String, Object> eventParams = ruleConditionContext.getEventParams();
 
-
+            paramMap.put(factor.getFactorAliasName(), eventParams.get(factor.getFactorAliasName()));
 
         }
-
-        //后置处理
-        MVEL.eval(factor.getPostProcessorExp(), ruleConditionContext.getParamMap());
 
     }
 

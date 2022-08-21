@@ -28,7 +28,7 @@ public class PojoQueryUtil {
         product.setFactorName("product");
         product.setQueryClass("productService");
         product.setDataSourceType(FactorTypeEnum.ASSEMBLE.getCode());
-        product.setInputParameters(Lists.newArrayList("user", "productId"));
+        product.setInputParameters(Lists.newArrayList("userId", "productId"));
         FactorDO user = new FactorDO();
         user.setId(1002L);
         product.setDataType("com.pc.lianlian.mevl.demo.queryclass.UserService.User");

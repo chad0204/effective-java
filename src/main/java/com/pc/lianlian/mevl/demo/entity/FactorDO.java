@@ -59,7 +59,7 @@ public class FactorDO {
      *
      *
      */
-    private List<RpcParamConfig> inputParameterList;
+    private List<FactorParam> inputParameterList;
 
     private List<String> inputParameters;
 
@@ -76,11 +76,14 @@ public class FactorDO {
 
 
     @Data
-    public static class RpcParamConfig {
+    public static class FactorParam {
 
-        private String paramValue;
+        private String paramName;
+
+        private String paramAlisaName;
 
         private String paramType;
+
     }
 
 
