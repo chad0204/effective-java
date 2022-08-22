@@ -47,7 +47,7 @@ public class FactorDO {
     /**
      * 必填入参json
      */
-    private String inputParameter;
+    private String inputParameters;
 
     /**
      * 必填入参list （inputParameter解析得到）
@@ -59,9 +59,8 @@ public class FactorDO {
      *
      *
      */
-    private List<FactorParam> inputParameterList;
+//    private List<FactorParam> inputParameterList;
 
-    private List<String> inputParameters;
 
 
     /**
@@ -77,13 +76,10 @@ public class FactorDO {
 
     @Data
     public static class FactorParam {
-
+        //因子的参数名不能重复
         private String paramName;
 
-        private String paramAlisaName;
-
         private String paramType;
-
     }
 
 

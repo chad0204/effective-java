@@ -1,10 +1,21 @@
 package com.pc.lianlian.mevl.demo;
 
 
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
+import com.pc.lianlian.mevl.demo.entity.ConditionFactorDO;
+import com.pc.lianlian.mevl.demo.entity.FactorDO;
+import com.pc.lianlian.mevl.demo.entity.RuleConditionDO;
+import com.pc.lianlian.mevl.demo.model.FactorModel;
 import com.pc.lianlian.mevl.demo.model.RuleConditionModel;
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -43,7 +54,7 @@ import java.util.Map;
  条件原本需要r1，r2, r3三个因子, 只有在特定情况下(最终表达式无需三个条件进行"||"判断或者contains判断，只需要r3即可)不会重复查询多次。
 
  问题2：
- 由于因子粒度比较大，导致如果事件不满足因子所需的参数，就需要开发新的因子。本来建三个因子，可以组合使用。现在代码重复比较多。
+ 由于因子粒度比较大，导致如果事件不满足因子所需的参数，就需要开发新的因子（退回到硬编码）。本来建三个因子，可以组合使用。现在代码重复比较多。
 
  问题3：
  创建因子时，不知道如何确认粒度，容易陷入遇到新的条件或者事件，就需要开发新的因子这种情况。
@@ -103,6 +114,11 @@ import java.util.Map;
  ]
 
 
+ 问题1. 活动关联规则时选择条件校验。建议修改成创建条件时选择事件。
+ 这里的校验，1.需要额外维护事件的参数信息; 2.不好区分出因子的入参是否是来自营销系统。3.关联时，选择多个事件时，大概率没有合适的因子组成的条件，需要开发因子（退回到硬编码）。 建议改成在创建条件时，选择事件，将条件挂在事件下，不用校验，创建条件是开发人员的动作。然后用户使用时，选择了事件，下拉展示合适的条件
+
+
+
  *
  *
  * @author pengchao
@@ -111,41 +127,56 @@ import java.util.Map;
 public class Client {
 
     public static void main(String[] args) {
-
-
-
-
-
         /*
 
-        成年人才能买特斯拉，并且钱要够
+        输入账单, 成年人才能买特斯拉, 最好判断钱够不够
+
+        msg： billId
 
         1. factors :
 
-        user,  user.age>=18 判断是否成年
+        bill: 入参billId, 返回productIds, userId, 无后置处理.
 
-        product, product.name == 特斯拉 判断是不是特斯拉
+        product: 入参bill.productIds, 返回产品信息, 后置处理 判断是否有productName == '特斯拉'
 
+        user: 入参bill.userId, 返回用户信息, 后置处理 user.age>=18
 
         2. condition
+
 
         user.money > product.price
 
          */
 
 
-        //msg user要买车， 定义用户 定义产品 ，原始因子是userId
+        RuleConditionDO ruleConditionDO = new RuleConditionDO();
+        ruleConditionDO.setId(111L);
+        ruleConditionDO.setRuleConditionName("条件名称-成年人才能买车");
+        ruleConditionDO.setRuleConditionMvel("total = 0 ;foreach (x : product) {total+=x.price};user.money >= total;");
+        ruleConditionDO.setAction("策略");
+        ruleConditionDO.setProductCode("productCode");
 
-        String factors = "[{\"factorAliasName\":\"product\",\"factorId\":1001,\"factorName\":\"product\",\"priority\":0,\"preProcessorExp\":\"product.name == '特斯拉'\"},{\"factorAliasName\":\"user\",\"factorId\":1002,\"factorName\":\"user\",\"priority\":1,\"preProcessorExp\":\"user.age >= 18\"}]";
+
+        //factor condition ext
+        List<ConditionFactorDO> cfs = PojoQueryUtil.getConditionFactorExt();
+        //factor
+        Map<Long, FactorDO> factorMap = PojoQueryUtil.getFactorMap(cfs.stream().map(ConditionFactorDO::getFactorId).collect(Collectors.toList()));
+
+        List<FactorModel> sortedFactors = cfs.stream()
+                .sorted(Comparator.comparing(ConditionFactorDO::getPriority))
+                .map(cf -> buildFactorModel(cf, factorMap.get(cf.getFactorId())))
+                .collect(Collectors.toList());
+
+
+        //do -> dto
         RuleConditionModel ruleConditionModel = RuleConditionModel.builder()
-                .id(111L)
-                .ruleConditionName("条件名称")
-                .action("策略")
-                .productCode("productCode")
-                .ruleConditionMvel("user.money >= product.price")
-                .factors(factors)
+                .id(ruleConditionDO.getId())
+                .ruleConditionName(ruleConditionDO.getRuleConditionName())
+                .action(ruleConditionDO.getAction())
+                .productCode(ruleConditionDO.getProductCode())
+                .ruleConditionMvel(ruleConditionDO.getRuleConditionMvel())
+                .factorList(sortedFactors)
                 .build();
-
 
         ConditionExecutor conditionExecutor = new ConditionExecutor();
 
@@ -154,12 +185,60 @@ public class Client {
 
 
         Map<String, Object> msg = new HashMap<>();
-        conditionExecutorContext.setEventParams(msg);
+        msg.put("billId", 2333L);
+
         //将事件参数设置到执行上下文中
         conditionExecutorContext.getParamMap().putAll(msg);
 
         boolean res = conditionExecutor.executor(conditionExecutorContext);
+        System.out.println(res);
+    }
 
 
+    private static FactorModel buildFactorModel(ConditionFactorDO cf, FactorDO factorDO) {
+       return  FactorModel.builder()
+               //condition'
+               .preProcessorExp(cf.getPreProcessorExp())
+               .postProcessorExp(cf.getPostProcessorExp())
+               .factorAliasName(cf.getFactorAliasName())
+               .conditionId(cf.getConditionId())
+               .priority(cf.getPriority())
+               //factor'
+               .queryClass(factorDO.getQueryClass())
+               .inputParameterList(buildFactoryParamModelModelList(factorDO.getInputParameters(), cf.getInputParamParser()))
+               .dataSourceType(factorDO.getDataSourceType())
+               .dataType(factorDO.getDataType())
+               .productCode(factorDO.getProductCode())
+               .build();
+    }
+
+    private static List<FactorModel.FactorInputParamConfig> buildFactoryParamModelModelList(String inputParameterConfig,
+                                                                           String inputParameterParseConfig) {
+        List<FactorDO.FactorParam> factorParams =
+                JSON.parseArray(inputParameterConfig, FactorDO.FactorParam.class);
+
+        if (StringUtils.isEmpty(inputParameterParseConfig)) {
+            return factorParams.stream()
+                    .map(factorParam -> buildFactoryParamModelModel(factorParam, null))
+                    .collect(Collectors.toList());
+        }
+
+        List<ConditionFactorDO.FactorParamParseConfig> factorParseParams =
+                JSON.parseArray(inputParameterParseConfig, ConditionFactorDO.FactorParamParseConfig.class);
+        Map<String, ConditionFactorDO.FactorParamParseConfig> factorParamParseMap = factorParseParams.stream()
+                .collect(Collectors.toMap(ConditionFactorDO.FactorParamParseConfig::getParamName, f -> f));
+
+        return factorParams.stream()
+                .map(factorParam -> buildFactoryParamModelModel(factorParam, factorParamParseMap.get(factorParam.getParamName())))
+                .collect(Collectors.toList());
+    }
+
+    private static FactorModel.FactorInputParamConfig buildFactoryParamModelModel(FactorDO.FactorParam factorParam,
+                                                          ConditionFactorDO.FactorParamParseConfig factorParamParseConfig) {
+        return FactorModel.FactorInputParamConfig.builder()
+                .paramName(factorParam.getParamName())
+                .paramType(factorParam.getParamType())
+                .parseExpression(factorParamParseConfig != null ? factorParamParseConfig.getParseExpression() : null)
+                .build();
     }
 }

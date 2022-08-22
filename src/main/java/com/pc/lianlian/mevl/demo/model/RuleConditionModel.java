@@ -55,31 +55,15 @@ public class RuleConditionModel implements java.io.Serializable {
     private String action;
 
     /**
-     * 因子json
+     * 因子
+     *
+     * 应该拆分成顺序执行和并发执行两类
+     *
      */
-    private String factors;
-
-
-    public List<ConditionFactorDO> getFactorList() {
-        return JSON.parseArray(factors, ConditionFactorDO.class);
-    }
+    private List<FactorModel> factorList;
 
     public List<ConditionFactorDO> getNecessaryFactorList() {
-        List<ConditionFactorDO> factorDOS = JSON.parseArray(factors, ConditionFactorDO.class);
-        Map<Long, FactorDO> factorMap = PojoQueryUtil.getFactorMap(null);
 
-        List<FactorModel> sortedFactors = factorDOS.stream()
-                .sorted(new Comparator<ConditionFactorDO>() {
-                    @Override
-                    public int compare(ConditionFactorDO o1, ConditionFactorDO o2) {
-                        return 0;
-                    }
-                })
-                .sorted(Comparator.comparing(ConditionFactorDO::getPriority))
-                .map(cf -> FactorModel.builder()
-//                        .factorDO(factorMap.get(cf.getFactorId()))
-                        .build())
-                .collect(Collectors.toList());
 
         //先加载所有因子
 
@@ -89,7 +73,7 @@ public class RuleConditionModel implements java.io.Serializable {
         //汇总去重
 
 
-        return JSON.parseArray(factors, ConditionFactorDO.class);
+        return null;
     }
 
 

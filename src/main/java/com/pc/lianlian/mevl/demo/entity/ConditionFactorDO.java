@@ -58,9 +58,14 @@ public class ConditionFactorDO {
     private Integer priority;
 
     /**
+     * 因子入参解析器(json)
+     */
+    private String inputParamParser;
+
+    /**
      * 因子入参解析器
      */
-    private List<FactorParamParseConfig> inputParametersConfig;
+//    private List<FactorParamParseConfig> inputParamParserList;
 
     /**
      * 前置处理

@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,23 +22,19 @@ import java.util.Map;
 @Builder
 public class ConditionExecutorContext {
 
-    private RuleConditionModel ruleConditionModel;
-
     /**
-     * 触发事件参数
-     */
-    private Map<String, Object> eventParams;
-
-    /**
-     * 活动
+     * 活动详情
      */
     private String activity;
 
     /**
-     * 因子加载的结果
-     * 别名 - 结果
-     *
-     * 考虑使用这个结果作为下一个因子的参数
+     * 条件详情
      */
-    private Map<String, Object> paramMap;
+    private RuleConditionModel ruleConditionModel;
+
+
+    /**
+     * 包含事件和因子
+     */
+    private Map<String, Object> paramMap = new HashMap<>();
 }

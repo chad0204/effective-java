@@ -1,42 +1,40 @@
 package com.pc.lianlian.mevl.demo.queryclass;
 
+import com.pc.lianlian.mevl.demo.ConditionExecutorContext;
 import com.pc.lianlian.mevl.demo.FactorResult;
-import com.pc.lianlian.mevl.demo.entity.FactorDO;
 import com.pc.lianlian.mevl.demo.model.FactorModel;
 
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
- *
  * @author pengchao
  * @since 2022/8/19 14:40
  */
 public abstract class QueryService<T> {
 
-    public FactorResult<T> query(Map<String, Object> paramValues,
-                                 List<FactorModel.FactorParamConfig> inputParamNames,
-                                 String dataType) {
+    public FactorResult load(ConditionExecutorContext context,
+                     FactorModel factor) {
 
-        //TODO 校验入参类型
-        for(FactorModel.FactorParamConfig param : inputParamNames) {
-            if (param.getParamValue() == null) {
-                throw new IllegalArgumentException();
-            }
-            if (param.getParamValue().getClass().equals(param.getParamValue())) {
-                throw new IllegalArgumentException();
-            }
-        }
+        Map<String, Object> inputParamMap = factor.getInputParameterList()
+                .stream().collect(Collectors.toMap(
+                        FactorModel.FactorInputParamConfig::getParamName,
+                        FactorModel.FactorInputParamConfig::getParamValue));
 
-        T data = doQuery(paramValues);
+        T data = doQuery(inputParamMap, context.getActivity());
 
         //TODO 校验返回值类型
-        if (!data.getClass().getName().equals(dataType)) {
+        if (!data.getClass().getName().equals(factor.getDataType())) {
             throw new IllegalArgumentException();
         }
-
-        return new FactorResult<>(data, "SUCCESS");
+        return FactorResult.builder().data(data).code("SUCCESS").build();
     }
 
-    public abstract T doQuery(Map<String, Object> params);
+    /**
+     *
+     * @param inputParamMap 配置的入参, 取值来自事件或者其他因子
+     * @param activity 活动详情
+     * @return
+     */
+    public abstract T doQuery(Map<String, Object> inputParamMap, String activity);
 }

@@ -1,6 +1,5 @@
 package com.pc.lianlian.mevl.demo.model;
 
-import com.pc.lianlian.mevl.demo.entity.FactorDO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -80,10 +79,10 @@ public class FactorModel {
 
 
     /**
-     * 必填入参list （inputParameter解析得到）
+     * 必填入参list
      *
      */
-    private List<FactorParamConfig> inputParameterList;
+    private List<FactorInputParamConfig> inputParameterList;
 
     /**
      * 所属产品线
@@ -97,7 +96,10 @@ public class FactorModel {
 
 
     @Data
-    public static class FactorParamConfig {
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class FactorInputParamConfig {
 
         private String paramName;
 
@@ -106,9 +108,6 @@ public class FactorModel {
         private String parseExpression;//user.id
 
         private Object paramValue;//
-
     }
-
-
 
 }

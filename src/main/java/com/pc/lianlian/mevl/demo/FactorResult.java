@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FactorResult<T> {
+public class FactorResult {
 
-    private T data;
+    private Object data;
 
     private String code;
 
