@@ -2,14 +2,25 @@ package com.pc.lianlian.mevl.demo;
 
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import com.pc.lianlian.mevl.demo.model.FactorModel;
 import com.pc.lianlian.mevl.demo.queryclass.BillService;
 import com.pc.lianlian.mevl.demo.queryclass.ProductService;
 import com.pc.lianlian.mevl.demo.queryclass.UserService;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.StopWatch;
+import org.apache.commons.lang3.tuple.Pair;
 import org.mvel2.MVEL;
 
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -41,7 +52,36 @@ public class ConditionExecutor {
      * @param ruleConditionContext
      * @return
      */
+
+    private volatile boolean suspend = false;
+
     private Boolean loadFactors(ConditionExecutorContext ruleConditionContext) {
+
+        List<FactorModel> parallel = ruleConditionContext.getRuleConditionModel().getFactorList().stream()
+                .filter(factorModel -> factorModel.getPriority() < 0)
+                .filter(factorModel -> StringUtils.isEmpty(factorModel.getPostProcessorExp()))
+                .collect(Collectors.toList());
+
+        //整体阻塞执行
+        //拿到所有结果
+        parallelConsume(parallel.size(), parallel, new Consumer<FactorModel>() {
+            @Override
+            public void accept(FactorModel factor) {
+
+
+                parseParamValue(ruleConditionContext.getParamMap(), factor);
+                loadFactor(ruleConditionContext, factor);
+                if (StringUtils.isNotEmpty(factor.getPostProcessorExp())) {
+                    //后置处理器
+                    Boolean res = (Boolean) MVEL.eval(factor.getPostProcessorExp(), ruleConditionContext.getParamMap());
+                    if (!res) {
+                        System.out.println("后置处理器校验失败: 输出因子和上下文" + factor);
+                    }
+                }
+
+            }
+        });
+
 
         for (FactorModel factor: ruleConditionContext.getRuleConditionModel().getFactorList()) {
             //解析入参的值, 实现因子加载结果复用
@@ -106,5 +146,57 @@ public class ConditionExecutor {
 
     }
 
+
+    private static  <T> void parallelConsume(int parallelism, Collection<T> collection, Consumer<T> consumer) {
+//        log.info("Create pool with size : " + parallelism);
+        ForkJoinPool pool = new ForkJoinPool(1024);
+        try {
+            pool.invoke(ForkJoinTask.adapt(() -> collection.parallelStream().forEach(consumer)));
+        } finally {
+            pool.shutdown();
+        }
+    }
+
+
+
+    protected static final AtomicInteger completedCount = new AtomicInteger(0);
+
+    private static Random random = new Random(47);
+
+    protected final static CopyOnWriteArrayList<Pair<FactorModel, String>> fails = new CopyOnWriteArrayList<>();
+
+    public static void main(String[] args) {
+
+        List<FactorModel> list = Lists.newArrayList(
+                FactorModel.builder().factorAliasName("aaa").build(),
+                FactorModel.builder().factorAliasName("bbb").build(),
+                FactorModel.builder().factorAliasName("ccc").build(),
+                FactorModel.builder().factorAliasName("ddd").build(),
+                FactorModel.builder().factorAliasName("eee").build());
+
+
+        StopWatch sw = StopWatch.createStarted();
+        parallelConsume(list.size(), list, new Consumer<FactorModel>() {
+            @SneakyThrows
+            @Override
+            public void accept(FactorModel factorModel) {
+                try {
+                    int i = random.nextInt(19);
+                    if (i > 1) {
+                        throw new IllegalArgumentException("太大了");
+                    }
+                    TimeUnit.SECONDS.sleep(i);
+                    System.out.println(Thread.currentThread().getName() + " 执行因子 " +factorModel.getFactorAliasName() + ", 耗时: " + i);
+                    completedCount.incrementAndGet();
+                } catch (Exception e) {
+                    fails.add(Pair.of(factorModel, e.getMessage()));
+                }
+            }
+        });
+
+        sw.stop();
+
+        System.out.println("总耗时：" + sw.getTime());
+    }
 
 }

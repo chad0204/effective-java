@@ -1,14 +1,12 @@
 package com.pc.lianlian.mevl.demo;
 
-import com.pc.lianlian.mevl.demo.biz.Msg;
 import com.pc.lianlian.mevl.demo.model.RuleConditionModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -36,5 +34,5 @@ public class ConditionExecutorContext {
     /**
      * 包含事件和因子
      */
-    private Map<String, Object> paramMap = new HashMap<>();
+    private ConcurrentHashMap<String, Object> paramMap = new ConcurrentHashMap<>();
 }
