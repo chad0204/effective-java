@@ -5,21 +5,6 @@ import java.util.List;
 
 /**
  *
- * 条件因子
- *
- * 条件关联因子后生成
- *
- * 因子的别名
- * 因子的后置处理
- * 因子的优先级
- *
- *
- * 如果是ORIGINAL类型的因子，比如两个msg的参数名称相同，那么就必须定义别名来区分唯一。
- * 多个因子同名？不可以的
- *
- *
- *
- * 如果只存一个json，那么可以不用新建表
  *
  *
  * @author pengchao
@@ -60,7 +45,7 @@ public class ConditionFactorDO {
     /**
      * 因子入参解析器(json)
      */
-    private String inputParamParser;
+    private String inputParametersParser;
 
     /**
      * 因子入参解析器
@@ -81,7 +66,7 @@ public class ConditionFactorDO {
 
 
     @Data
-    public static class FactorParamParseConfig {
+    public static class FactorParamParseConfigModel {
 
         /**
          * 对应因子入参名称

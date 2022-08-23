@@ -46,9 +46,7 @@ public class ConditionExecutor {
         for (FactorModel factor: ruleConditionContext.getRuleConditionModel().getFactorList()) {
             //解析入参的值, 实现因子加载结果复用
             parseParamValue(ruleConditionContext.getParamMap(), factor);
-
             loadFactor(ruleConditionContext, factor);
-
             if (StringUtils.isNotEmpty(factor.getPostProcessorExp())) {
                 //后置处理器
                 Boolean res = (Boolean) MVEL.eval(factor.getPostProcessorExp(), ruleConditionContext.getParamMap());
@@ -87,10 +85,10 @@ public class ConditionExecutor {
      * @param factor
      */
     private void loadFactor(ConditionExecutorContext ruleConditionContext, FactorModel factor) {
-        if (factor.getDataSourceType().equals(FactorTypeEnum.ASSEMBLE.getCode())) {
-            //匹配到类
+        if (factor.getDataSourceType().equals(FactorTypeEnum.PROCESSED.getCode())) {
+            //匹配注入的类
             String queryClass = factor.getQueryClass();
-            //TODO 策略模式
+
             FactorResult result;
             if (queryClass.equals("userService")) {
                 result = new UserService().load(ruleConditionContext, factor);
@@ -101,7 +99,7 @@ public class ConditionExecutor {
             }
             ruleConditionContext.getParamMap().put(factor.getFactorAliasName(), result.getData());
         } else {
-            //TODO 探头因子, 不用维护, 如果是事件参数已存在于paramMap, 如果是活动参数,包含在activity中。
+            //TODO 探头因子, 不用维护, 如果是事件参数则已存在于paramMap, 如果是活动参数,包含在activity中。
             // 比如 当前apollo配置的B2C_PLATFORM_ID_LIST, productCodeList这些可以在条件中设置
             Map<String, Object> eventParams = ruleConditionContext.getParamMap();
         }

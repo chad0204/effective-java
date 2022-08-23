@@ -82,7 +82,7 @@ public class FactorModel {
      * 必填入参list
      *
      */
-    private List<FactorInputParamConfig> inputParameterList;
+    private List<FactorInputParamConfigModel> inputParameterList;
 
     /**
      * 所属产品线
@@ -94,20 +94,5 @@ public class FactorModel {
      */
     private String queryClass;
 
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    public static class FactorInputParamConfig {
-
-        private String paramName;
-
-        private String paramType;
-
-        private String parseExpression;//user.id
-
-        private Object paramValue;//
-    }
 
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.pc.lianlian.mevl.demo.entity.ConditionFactorDO;
 import com.pc.lianlian.mevl.demo.entity.FactorDO;
+import com.pc.lianlian.mevl.demo.model.FactorInputParamConfigModel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,10 +25,10 @@ public class PojoQueryUtil {
         bill.setPriority(0);
 
         ConditionFactorDO user = new ConditionFactorDO();
-        ConditionFactorDO.FactorParamParseConfig userParam = new ConditionFactorDO.FactorParamParseConfig();
+        FactorInputParamConfigModel userParam = new FactorInputParamConfigModel();
         userParam.setParamName("userId");
         userParam.setParseExpression("bill.userId");
-        user.setInputParamParser(JSON.toJSONString(Lists.newArrayList(userParam)));
+        user.setInputParametersParser(JSON.toJSONString(Lists.newArrayList(userParam)));
         user.setFactorAliasName("user");
         user.setFactorId(1002L);
         user.setPriority(1);
@@ -35,10 +36,10 @@ public class PojoQueryUtil {
 
 
         ConditionFactorDO product = new ConditionFactorDO();
-        ConditionFactorDO.FactorParamParseConfig productParam = new ConditionFactorDO.FactorParamParseConfig();
+        FactorInputParamConfigModel productParam = new FactorInputParamConfigModel();
         productParam.setParamName("productIds");
         productParam.setParseExpression("bill.productIds");
-        product.setInputParamParser(JSON.toJSONString(Lists.newArrayList(productParam)));
+        product.setInputParametersParser(JSON.toJSONString(Lists.newArrayList(productParam)));
         product.setFactorAliasName("product");
         product.setFactorId(1003L);
         product.setPriority(2);
@@ -59,8 +60,8 @@ public class PojoQueryUtil {
         bill.setDataType("com.pc.lianlian.mevl.demo.queryclass.BillService$Bill");
         bill.setFactorName("bill");
         bill.setQueryClass("billService");
-        bill.setDataSourceType(FactorTypeEnum.ASSEMBLE.getCode());
-        FactorDO.FactorParam billParam1 = new FactorDO.FactorParam();
+        bill.setDataSourceType(FactorTypeEnum.PROCESSED.getCode());
+        FactorInputParamConfigModel billParam1 = new FactorInputParamConfigModel();
         billParam1.setParamName("billId");
         billParam1.setParamType("java.lang.Long");
         bill.setInputParameters(JSON.toJSONString(Lists.newArrayList(billParam1)));
@@ -71,9 +72,9 @@ public class PojoQueryUtil {
         user.setDataType("com.pc.lianlian.mevl.demo.queryclass.UserService$User");
         user.setFactorName("user");
         user.setQueryClass("userService");
-        user.setDataSourceType(FactorTypeEnum.ASSEMBLE.getCode());
+        user.setDataSourceType(FactorTypeEnum.PROCESSED.getCode());
         //设置入参
-        FactorDO.FactorParam userParam1 = new FactorDO.FactorParam();
+        FactorInputParamConfigModel userParam1 = new FactorInputParamConfigModel();
         userParam1.setParamName("userId");
         userParam1.setParamType("java.lang.Long");
         user.setInputParameters(JSON.toJSONString(Lists.newArrayList(userParam1)));
@@ -85,9 +86,9 @@ public class PojoQueryUtil {
         product.setDataType("java.util.ArrayList");
         product.setFactorName("product");
         product.setQueryClass("productService");
-        product.setDataSourceType(FactorTypeEnum.ASSEMBLE.getCode());
+        product.setDataSourceType(FactorTypeEnum.PROCESSED.getCode());
         //设置入参
-        FactorDO.FactorParam productParam1 = new FactorDO.FactorParam();
+        FactorInputParamConfigModel productParam1 = new FactorInputParamConfigModel();
         productParam1.setParamName("productIds");
         productParam1.setParamType("java.util.ArrayList");
         product.setInputParameters(JSON.toJSONString(Lists.newArrayList(productParam1)));

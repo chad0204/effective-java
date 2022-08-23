@@ -37,7 +37,19 @@ public class RuleConditionDO {
     private String action;
 
     /**
-     * 变量因子json 其实建议做成关联表 不然后期扩展字段会毕竟难受
+     * 创建时间
      */
-    private String factors;
+    private String createTime;
+
+    /**
+     * 更新时间
+     */
+    private String modifyTime;
+
+    /**
+     * 删除标志
+     */
+    private Integer isDeleted;
+
+
 }

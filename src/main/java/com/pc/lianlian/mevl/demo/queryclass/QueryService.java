@@ -2,6 +2,7 @@ package com.pc.lianlian.mevl.demo.queryclass;
 
 import com.pc.lianlian.mevl.demo.ConditionExecutorContext;
 import com.pc.lianlian.mevl.demo.FactorResult;
+import com.pc.lianlian.mevl.demo.model.FactorInputParamConfigModel;
 import com.pc.lianlian.mevl.demo.model.FactorModel;
 
 import java.util.Map;
@@ -18,8 +19,8 @@ public abstract class QueryService<T> {
 
         Map<String, Object> inputParamMap = factor.getInputParameterList()
                 .stream().collect(Collectors.toMap(
-                        FactorModel.FactorInputParamConfig::getParamName,
-                        FactorModel.FactorInputParamConfig::getParamValue));
+                        FactorInputParamConfigModel::getParamName,
+                        FactorInputParamConfigModel::getParamValue));
 
         T data = doQuery(inputParamMap, context.getActivity());
 

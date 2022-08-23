@@ -10,9 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -62,28 +60,22 @@ public class RuleConditionModel implements java.io.Serializable {
      */
     private List<FactorModel> factorList;
 
-    public List<ConditionFactorDO> getNecessaryFactorList() {
 
-
-        //先加载所有因子
-
-        //先处理无优先级的，去掉入参中的因子
-        //再按照优先级从后往前, 逐步剔除入参中的因子
-
-        //汇总去重
-
-
-        return null;
-    }
-
-
-    public static void main(String[] args) {
-        String factors = "[{\"factorAliasName\":\"aaa\",\"factorName\":\"a\",\"priority\":1,\"preProcessorExp\":\"aaa > 1\"},{\"factorAliasName\":\"bbb\",\"factorName\":\"b\",\"priority\":1,\"preProcessorExp\":\"bbb> 1\"}]";
-
-        List<ConditionFactorDO> conditionFactorDOS = JSON.parseArray(factors, ConditionFactorDO.class);
-
-
-        System.out.println();
+    /**
+     *
+     * 加载因子必要的外部参数
+     *
+     * 用于校验事件参数是否满足条件的因子
+     * @return
+     */
+    public List<FactorInputParamConfigModel> getNecessaryFactorParams() {
+        //去掉无入参数解析的因子的入参
+        Set<FactorInputParamConfigModel> inputParams = factorList.stream()
+                .map(FactorModel::getInputParameterList)
+                .flatMap(Collection::stream)
+                .filter(x -> x.getParseExpression() == null)//表示直接从事件中获得的参数
+                .collect(Collectors.toSet());
+        return new ArrayList<>(inputParams);
     }
 
 }

@@ -7,7 +7,7 @@ package com.pc.lianlian.mevl.demo;
  */
 public enum FactorTypeEnum {
     ORIGINAL(0, "原始参数"),
-    ASSEMBLE(1, "组装参数");
+    PROCESSED(1, "加工参数");
 
     private Integer code;
     private String type;

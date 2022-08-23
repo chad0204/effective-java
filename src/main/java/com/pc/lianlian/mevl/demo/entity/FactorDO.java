@@ -75,8 +75,8 @@ public class FactorDO {
 
 
     @Data
-    public static class FactorParam {
-        //因子的参数名不能重复
+    public static class FactorParamModel {
+
         private String paramName;
 
         private String paramType;

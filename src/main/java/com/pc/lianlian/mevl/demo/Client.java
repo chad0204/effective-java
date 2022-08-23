@@ -2,13 +2,12 @@ package com.pc.lianlian.mevl.demo;
 
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.collect.Lists;
 import com.pc.lianlian.mevl.demo.entity.ConditionFactorDO;
 import com.pc.lianlian.mevl.demo.entity.FactorDO;
 import com.pc.lianlian.mevl.demo.entity.RuleConditionDO;
+import com.pc.lianlian.mevl.demo.model.FactorInputParamConfigModel;
 import com.pc.lianlian.mevl.demo.model.FactorModel;
 import com.pc.lianlian.mevl.demo.model.RuleConditionModel;
-import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;
@@ -156,7 +155,6 @@ public class Client {
         ruleConditionDO.setAction("策略");
         ruleConditionDO.setProductCode("productCode");
 
-
         //factor condition ext
         List<ConditionFactorDO> cfs = PojoQueryUtil.getConditionFactorExt();
         //factor
@@ -205,17 +203,17 @@ public class Client {
                .priority(cf.getPriority())
                //factor'
                .queryClass(factorDO.getQueryClass())
-               .inputParameterList(buildFactoryParamModelModelList(factorDO.getInputParameters(), cf.getInputParamParser()))
+               .inputParameterList(buildFactoryParamModelModelList(factorDO.getInputParameters(), cf.getInputParametersParser()))
                .dataSourceType(factorDO.getDataSourceType())
                .dataType(factorDO.getDataType())
                .productCode(factorDO.getProductCode())
                .build();
     }
 
-    private static List<FactorModel.FactorInputParamConfig> buildFactoryParamModelModelList(String inputParameterConfig,
-                                                                           String inputParameterParseConfig) {
-        List<FactorDO.FactorParam> factorParams =
-                JSON.parseArray(inputParameterConfig, FactorDO.FactorParam.class);
+    private static List<FactorInputParamConfigModel> buildFactoryParamModelModelList(String inputParameterConfig,
+                                                                                     String inputParameterParseConfig) {
+        List<FactorInputParamConfigModel> factorParams =
+                JSON.parseArray(inputParameterConfig, FactorInputParamConfigModel.class);
 
         if (StringUtils.isEmpty(inputParameterParseConfig)) {
             return factorParams.stream()
@@ -223,19 +221,19 @@ public class Client {
                     .collect(Collectors.toList());
         }
 
-        List<ConditionFactorDO.FactorParamParseConfig> factorParseParams =
-                JSON.parseArray(inputParameterParseConfig, ConditionFactorDO.FactorParamParseConfig.class);
-        Map<String, ConditionFactorDO.FactorParamParseConfig> factorParamParseMap = factorParseParams.stream()
-                .collect(Collectors.toMap(ConditionFactorDO.FactorParamParseConfig::getParamName, f -> f));
+        List<FactorInputParamConfigModel> factorParseParams =
+                JSON.parseArray(inputParameterParseConfig, FactorInputParamConfigModel.class);
+        Map<String, FactorInputParamConfigModel> factorParamParseMap = factorParseParams.stream()
+                .collect(Collectors.toMap(FactorInputParamConfigModel::getParamName, f -> f));
 
         return factorParams.stream()
                 .map(factorParam -> buildFactoryParamModelModel(factorParam, factorParamParseMap.get(factorParam.getParamName())))
                 .collect(Collectors.toList());
     }
 
-    private static FactorModel.FactorInputParamConfig buildFactoryParamModelModel(FactorDO.FactorParam factorParam,
-                                                          ConditionFactorDO.FactorParamParseConfig factorParamParseConfig) {
-        return FactorModel.FactorInputParamConfig.builder()
+    private static FactorInputParamConfigModel buildFactoryParamModelModel(FactorInputParamConfigModel factorParam,
+                                                                           FactorInputParamConfigModel factorParamParseConfig) {
+        return FactorInputParamConfigModel.builder()
                 .paramName(factorParam.getParamName())
                 .paramType(factorParam.getParamType())
                 .parseExpression(factorParamParseConfig != null ? factorParamParseConfig.getParseExpression() : null)
