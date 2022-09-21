@@ -26,13 +26,16 @@ public class MvelClient {
         userDTO.setName("myname");
 
         param.put("user", userDTO);
+        param.put("user1", userDTO);
 
         Object res = MVEL.eval("user.name; a==b;c;", param);
         System.out.println(res);
 
 
-        Object eval = MVEL.eval("user.name", param);
+        Object eval = MVEL.eval("user1", param);
         System.out.println(eval);
+
+
 
     }
 }
