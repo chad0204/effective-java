@@ -1,6 +1,7 @@
 package com.pc.concurrent.future;
 
-import com.pc.enumpackage.Food;
+import com.pc.concurrent.future.futuretask.MyFutureTask;
+
 import java.util.concurrent.*;
 
 /**
@@ -69,7 +70,7 @@ public class Test {
 //        System.out.println(System.currentTimeMillis()+":"+future.isDone());
 
 
-        PFutureTask<String> future1 = new PFutureTask<>(new Callable<String>() {
+        MyFutureTask<String> future1 = new MyFutureTask<>(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 try {

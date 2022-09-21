@@ -1,4 +1,4 @@
-package com.pc.concurrent.future.dubbo;
+package com.pc.concurrent.future.dubbofuture;
 
 /**
  *
@@ -30,6 +30,9 @@ public class Test {
 
 
         new Thread(future).start();
+
+
+        System.out.println("主线程可以做点别的什么事情");
 
         //
         System.out.println("get result:"+future.get(40000));
