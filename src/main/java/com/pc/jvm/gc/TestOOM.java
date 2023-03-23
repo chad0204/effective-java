@@ -17,7 +17,7 @@ public class TestOOM {
 
 
     public static void main(String[] args) throws InterruptedException {
-        new TestOOM().deadCycleII();
+        new TestOOM().deadCycle();
 
     }
 
@@ -28,6 +28,7 @@ public class TestOOM {
 
         for (int i = 0; i < list.size(); i ++) {
             TimeUnit.MILLISECONDS.sleep(1000L);
+            System.out.println(Runtime.getRuntime().totalMemory() + " B");
             if (i == list.size() - 1) {
                 list.add(new byte[8 * _10MB]);
             }
