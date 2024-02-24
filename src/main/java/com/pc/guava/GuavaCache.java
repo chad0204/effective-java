@@ -38,26 +38,23 @@ public class GuavaCache {
 
     public static void main(String[] args) throws ExecutionException {
 
+
         for(int i=0;i<100;i++) {
             String res = get("aa", 100, new Supplier<String>() {
                 @Override
                 public String get() {
-                    System.out.println("db ops");
+                    System.out.println(Thread.currentThread().getName() + ": db ops");
                     return "result";
                 }
             });
 
         }
-
-
-
     }
 
 
     public static String get(String key, long ttl, Supplier<String> supplier) throws ExecutionException {
         String value;
-        //先从缓存中获取数据，命中则返回
-
+        //先从redis缓存中获取数据，命中则返回
         value = get(key);
 
         if (value != null) {

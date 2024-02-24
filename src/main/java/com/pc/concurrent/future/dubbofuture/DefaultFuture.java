@@ -1,4 +1,4 @@
-package com.pc.concurrent.future.dubbo;
+package com.pc.concurrent.future.dubbofuture;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

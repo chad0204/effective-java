@@ -1,10 +1,11 @@
 package com.pc;
 
-import com.pc.test.A;
-import com.pc.test.Demo;
+import com.alibaba.fastjson.JSON;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author pengchao
@@ -27,6 +28,19 @@ public class Test {
 
 
     public static void main(String[] args) {
+
+
+        Map<String, String> map = new HashMap<>();
+        map.put("aa", "bb");
+
+        String s = JSON.toJSONString(map);
+        Map map1 = JSON.parseObject(s, Map.class);
+
+        System.out.println(JSON.toJSONString(map));
+
+        System.out.println();
+
+
 
         Demo demo = new Demo();
 

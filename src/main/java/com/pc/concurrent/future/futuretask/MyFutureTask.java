@@ -33,7 +33,7 @@
  * http://creativecommons.org/publicdomain/zero/1.0/
  */
 
-package com.pc.concurrent.future;
+package com.pc.concurrent.future.futuretask;
 import sun.misc.Unsafe;
 import java.lang.reflect.Field;
 import java.util.concurrent.*;
@@ -63,7 +63,7 @@ import java.util.concurrent.locks.LockSupport;
  * @author Doug Lea
  * @param <V> The result type returned by this FutureTask's {@code get} methods
  */
-public class PFutureTask<V> implements RunnableFuture<V> {
+public class MyFutureTask<V> implements RunnableFuture<V> {
     /*
      * Revision notes: This differs from previous versions of this
      * class that relied on AbstractQueuedSynchronizer, mainly to
@@ -138,7 +138,7 @@ public class PFutureTask<V> implements RunnableFuture<V> {
      * @param  callable the callable task
      * @throws NullPointerException if the callable is null
      */
-    public PFutureTask(Callable<V> callable) {
+    public MyFutureTask(Callable<V> callable) {
         if (callable == null)
             throw new NullPointerException();
         this.callable = callable;
@@ -157,7 +157,7 @@ public class PFutureTask<V> implements RunnableFuture<V> {
      * {@code Future<?> f = new FutureTask<Void>(runnable, null)}
      * @throws NullPointerException if the runnable is null
      */
-    public PFutureTask(Runnable runnable, V result) {
+    public MyFutureTask(Runnable runnable, V result) {
         this.callable = Executors.callable(runnable, result);//适配器模式将Runnable转成Callable
         this.state = NEW;       // ensure visibility of callable
     }
@@ -181,7 +181,7 @@ public class PFutureTask<V> implements RunnableFuture<V> {
                 try {
                     Thread t = runner;
                     if (t != null)
-                        t.interrupt();//中断
+                        t.interrupt();//设置中断
                 } finally { // final state
                     UNSAFE.putOrderedInt(this, stateOffset, INTERRUPTED);
                 }
@@ -391,7 +391,7 @@ public class PFutureTask<V> implements RunnableFuture<V> {
     private void finishCompletion() {
         // assert state > COMPLETING;
         for (WaitNode q; (q = waiters) != null;) {
-            //使用cas将头节点置空，使用cas都是怕cancel,失败会再次尝试
+            //使用cas将头节点置空，使用cas都因为cancel并发修改,失败会再次尝试
             if (UNSAFE.compareAndSwapObject(this, waitersOffset, q, null)) {
                 for (;;) {
                     Thread t = q.thread;
@@ -520,7 +520,7 @@ public class PFutureTask<V> implements RunnableFuture<V> {
             f.setAccessible(true);
             UNSAFE = (Unsafe) f.get(null);
 
-            Class<?> k = PFutureTask.class;
+            Class<?> k = MyFutureTask.class;
             stateOffset = UNSAFE.objectFieldOffset
                 (k.getDeclaredField("state"));
             runnerOffset = UNSAFE.objectFieldOffset
