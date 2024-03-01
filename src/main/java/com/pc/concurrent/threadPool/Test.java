@@ -64,8 +64,23 @@ public class Test {
             }, new ThreadPoolExecutor.AbortPolicy());
 
 
+    private static final ThreadPoolExecutor executor =
+            new ThreadPoolExecutor(3, 10, 0L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(2), r -> {
+                Thread t = new Thread(r);
+                t.setName("PC-Thread-" +atomicInteger.incrementAndGet());
+                return t;
+            }, new ThreadPoolExecutor.AbortPolicy());
+
+
 
     public static void main(String[] args) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
 
         //任务数<=maximumPoolSize+queue.size
         for(int i =0;i<13;i++) {
@@ -115,6 +130,13 @@ public class Test {
         ExecutorService scheduledThreadPool1=new ScheduledThreadPoolExecutor(corePoolSize);
 //        new ThreadPoolExecutor(corePoolSize, Integer.MAX_VALUE, 0, NANOSECONDS,
 //                new ScheduledThreadPoolExecutor.DelayedWorkQueue());
+
+
+
+
+        //
+        executorService.shutdown();
+        executorService.shutdownNow();
 
 
 
