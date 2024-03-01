@@ -42,7 +42,7 @@ public class TestQueue {
 
 
         ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
-        ExecutorService cachedThreadPool1 = new ThreadPoolExecutor(0, 10,
+        ExecutorService cachedThreadPool1 = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
                 60L, TimeUnit.SECONDS,
                 new SynchronousQueue<>(), new RejectedExecutionHandler() {
             @Override
