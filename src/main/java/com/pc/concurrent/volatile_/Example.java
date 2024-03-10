@@ -33,7 +33,7 @@ public class Example {
 
 
 
-    private /*volatile*/ boolean initialized;
+    private volatile boolean initialized;
     private Config config;
 
     public void init() throws InterruptedException {

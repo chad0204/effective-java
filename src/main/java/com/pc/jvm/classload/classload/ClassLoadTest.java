@@ -22,28 +22,13 @@ public class ClassLoadTest {
     public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
 
         //自定义ClassLoader
-        ClassLoader myLoader = new ClassLoader() {
-            @Override
-            public Class<?> loadClass(String name) throws ClassNotFoundException {
-                try {
-                    String fileName = name.substring(name.lastIndexOf(".") + 1)+".class";
-                    InputStream is = getClass().getResourceAsStream(fileName);
-                    if (is == null) {
-                        return super.loadClass(name); }
-                    byte[] b = new byte[is.available()]; is.read(b);
-                    return defineClass(name, b, 0, b.length);
-
-                } catch (IOException e) {
-                    throw new ClassNotFoundException(name);
-                }
-            }
-        };
+        ClassLoader customLoader = new CustomClassLoader();
         //自定义类加载器加载
-        Object myObj = myLoader.loadClass("com.pc.classload.ClassLoadTest").newInstance();
+        Object myObj = customLoader.loadClass("com.pc.jvm.classload.classload.ClassLoadTest").newInstance();
 
         //AppClassLoad加载
         ClassLoader classLoader = Test.class.getClassLoader();
-        Object jvmObj = classLoader.loadClass("com.pc.classload.ClassLoadTest").newInstance();
+        Object jvmObj = classLoader.loadClass("com.pc.jvm.classload.classload.ClassLoadTest").newInstance();
 
         //对象确实是ClassLoadTest实例
         System.out.println(myObj.getClass());
@@ -53,5 +38,42 @@ public class ClassLoadTest {
         System.out.println(myObj.getClass().isInstance(jvmObj));//false
         System.out.println(myObj instanceof ClassLoadTest);//false
         System.out.println(jvmObj instanceof ClassLoadTest);//true
+
+
+        //同一个类加载器类型的不同实例加载的类也是不同的
+        ClassLoader customLoader1 = new CustomClassLoader();
+        Object myObj1 = customLoader1.loadClass("com.pc.jvm.classload.classload.ClassLoadTest").newInstance();
+        System.out.println(myObj.equals(myObj1));//false
+        System.out.println(myObj.getClass().isInstance(myObj1));//false
+
+
+        //同一个类加载器类型的不同实例加载的类也是不同的
+        Class<?> moduleClass1 = Class.forName("com.pc.jvm.classload.classload.ClassLoadTest", true, customLoader);
+        Class<?> moduleClass2 = Class.forName("com.pc.jvm.classload.classload.ClassLoadTest", true, customLoader1);
+
+        System.out.println(moduleClass1.equals(moduleClass2));//false
+        System.out.println(moduleClass1.isInstance(moduleClass2));//false
+    }
+
+    public void printClassLoader() {
+        System.out.println(this.getClass().getClassLoader());
+    }
+
+}
+
+class CustomClassLoader extends ClassLoader {
+    @Override
+    public Class<?> loadClass(String name) throws ClassNotFoundException {
+        try {
+            String fileName = name.substring(name.lastIndexOf(".") + 1)+".class";
+            InputStream is = getClass().getResourceAsStream(fileName);
+            if (is == null) {
+                return super.loadClass(name); }
+            byte[] b = new byte[is.available()]; is.read(b);
+            return defineClass(name, b, 0, b.length);
+
+        } catch (IOException e) {
+            throw new ClassNotFoundException(name);
+        }
     }
 }
