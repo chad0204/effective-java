@@ -20,7 +20,11 @@ import java.io.InputStream;
 public class ClassLoadTest {
 
     public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        diffClassLoaderType();
+    }
 
+
+    public static void diffClassLoaderType() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         //自定义ClassLoader
         ClassLoader customLoader = new CustomClassLoader();
         //自定义类加载器加载
@@ -38,21 +42,46 @@ public class ClassLoadTest {
         System.out.println(myObj.getClass().isInstance(jvmObj));//false
         System.out.println(myObj instanceof ClassLoadTest);//false
         System.out.println(jvmObj instanceof ClassLoadTest);//true
+        ((ClassLoadTest)jvmObj).printClassLoader();//正常
+    }
 
-
-        //同一个类加载器类型的不同实例加载的类也是不同的
+    //同一个类加载器类型的不同实例加载的类也是不同的
+    public void sameClassLoaderType() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        //自定义ClassLoader
         ClassLoader customLoader1 = new CustomClassLoader();
-        Object myObj1 = customLoader1.loadClass("com.pc.jvm.classload.classload.ClassLoadTest").newInstance();
-        System.out.println(myObj.equals(myObj1));//false
-        System.out.println(myObj.getClass().isInstance(myObj1));//false
-
+        //自定义类加载器加载
+        Object obj1 = customLoader1.loadClass("com.pc.jvm.classload.classload.ClassLoadTest").newInstance();
 
         //同一个类加载器类型的不同实例加载的类也是不同的
-        Class<?> moduleClass1 = Class.forName("com.pc.jvm.classload.classload.ClassLoadTest", true, customLoader);
-        Class<?> moduleClass2 = Class.forName("com.pc.jvm.classload.classload.ClassLoadTest", true, customLoader1);
+        ClassLoader customLoader2 = new CustomClassLoader();
+        Object obj2 = customLoader2.loadClass("com.pc.jvm.classload.classload.ClassLoadTest").newInstance();
+        System.out.println(obj1.equals(obj2));//false
+        System.out.println(obj1.getClass().isInstance(obj2));//false
+        System.out.println(obj1 instanceof ClassLoadTest);//false 因为ClassLoadTest是jvm加载的
+        System.out.println(obj2 instanceof ClassLoadTest);//false
+        ((ClassLoadTest)obj2).printClassLoader();//会报错
+    }
 
-        System.out.println(moduleClass1.equals(moduleClass2));//false
-        System.out.println(moduleClass1.isInstance(moduleClass2));//false
+    //同一个类加载器类型的不同实例加载的类也是不同的, 反射加载
+    public void sameClassLoaderTypeV2() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        //自定义ClassLoader
+        ClassLoader customLoader1 = new CustomClassLoader();
+        //自定义ClassLoader
+        ClassLoader customLoader2 = new CustomClassLoader();
+
+        //同一个类加载器类型的不同实例加载的类也是不同的
+        Object obj1 = Class.forName("com.pc.jvm.classload.classload.ClassLoadTest", true, customLoader1).newInstance();
+        Object obj2 = Class.forName("com.pc.jvm.classload.classload.ClassLoadTest", true, customLoader2).newInstance();
+
+        //对象确实是ClassLoadTest实例
+        System.out.println(obj1.getClass());
+        System.out.println(obj2.getClass());
+        //比较对象
+        System.out.println(obj1.equals(obj2));//false
+        System.out.println(obj1.getClass().isInstance(obj2));//false
+        System.out.println(obj1 instanceof ClassLoadTest);//false 因为ClassLoadTest是jvm加载的
+        System.out.println(obj2 instanceof ClassLoadTest);//false
+        ((ClassLoadTest)obj2).printClassLoader();//会报错
     }
 
     public void printClassLoader() {
